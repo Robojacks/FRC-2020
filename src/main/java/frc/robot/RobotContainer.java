@@ -49,7 +49,7 @@ import java.util.Arrays;
  */
 public class RobotContainer {
   // Drive Controller
-  XboxController xbox = new XboxController(Constants.kControllerPort);
+  XboxController xbox = new XboxController(Constants.kXboxPort);
 
     //Update PID values
     Update update = new Update();

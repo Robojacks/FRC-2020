@@ -25,7 +25,7 @@ public final class Constants {
 	public static final int kLeftRearPort = 2;
   public static final int kRightRearPort = 4;
 
-  public static final int kControllerPort = 0;
+  public static final int kXboxPort = 0;
 
   public static final int kSpinnerPort = 8; 
 
