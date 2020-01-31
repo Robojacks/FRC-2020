@@ -24,6 +24,7 @@ import frc.robot.turret.Turret;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
+import frc.robot.wheel.SpinnNTimes;
 import frc.robot.wheel.Spinner;
 import frc.robot.climber.Arm;
 import frc.robot.drive.RevDrivetrain;
@@ -113,7 +114,7 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
-    new JoystickButton(xbox, Button.kB.value)
+    new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> shooter.setVoltage(shooterVolts))
     .whenReleased(() -> shooter.setVoltage(0));
 
@@ -124,16 +125,25 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> arm.switchArm(), arm);
 
-    new JoystickButton(xbox, Button.kX.value)
+    new JoystickButton(xbox, Button.kB.value)
     .whileHeld(new FollowTarget());
-   /*
+  
     new JoystickButton(xbox, Button.kX.value)
-    .whenPressed(() -> spinner.toSelectedColor(DriverStation.getInstance().getGameSpecificMessage()), spinner);
+    .whenPressed(() -> spinner.toSelectedColor
+    (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
-  */
+    new JoystickButton(xbox, Button.kStart.value)
+    .whenPressed(new SpinnNTimes());
+    
+
+  /*
   new JoystickButton(xbox, Button.kX.value)
     .whenPressed(() -> spinner.toSelectedColor("Y"), spinner);
+  
+  */
   }
+
+
 
   public void periodic() {
     update.logContinuous();

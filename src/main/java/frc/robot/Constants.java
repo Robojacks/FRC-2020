@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.util.Units;
 public final class Constants {
 
   // Port Numbers
-	public static final int kLeftFrontPort = 0;
+	public static final int kLeftFrontPort = 8;
 	public static final int kRightFrontPort = 1;
 	public static final int kLeftRearPort = 2;
   public static final int kRightRearPort = 4;

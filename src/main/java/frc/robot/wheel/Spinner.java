@@ -53,24 +53,29 @@ public class Spinner extends SubsystemBase {
     if ( colorSense.getColorChar() == objective.getCapital() ){
       SpinnerMotor.set(0);
     }
+  
+
+  }
+  public void toSelectedColor2(Colour message) {
+    SpinnerMotor.set(0.1);
+    if ( colorSense.getColour() == message ){
+      SpinnerMotor.set(0);
+    }
+  }
+
+
+  public void nextColor(Colour nowColor){
+    SpinnerMotor.set(0.1);
+    if (nowColor != colorSense.getColour()){
+      SpinnerMotor.set(0);
+    
+    }
     
   }
 
 
   public void measuredSpin(final double rotations) {
     spinController.setReference(rotations, ControlType.kPosition);  
-
-  }
-
-  public void toSelectedRotation_Color(int nSpin){
-    
-    
-
-  
-  }
- 
-
-  public void toSelectedRotation_Ratio(int nSpin){
 
   }
 
