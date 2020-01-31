@@ -122,6 +122,12 @@ public final class Constants {
     public static double Kp = 0.1;
     public static double Ki = 0;
     public static double Kd = 0;
+
+  public static class spinnerWheel{
+    public static double Kp = 0.1;
+    public static double Ki = 0;
+    public static double Kd = 0;
+  }
   }
 
   // Ramsete controller constants

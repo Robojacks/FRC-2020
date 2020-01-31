@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.platform.DeviceType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -33,39 +34,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
-public class Spinner extends SubsystemBase {
+public class SpinnerTalon extends SubsystemBase {
 
   private final SenseColor colorSense = new SenseColor();
   private final Colour colorSensed = colorSense.getColour();
-  private final CANSparkMax SpinnerMotor = new CANSparkMax(kSpinnerPort, MotorType.kBrushless);
-  private final CANPIDController spinController = SpinnerMotor.getPIDController();
+  private final TalonSRX spinnerMotor= new TalonSRX(0);
   /*DriverStation.getInstance().getGameSpecificMessage();*/
  
 
-  public Spinner() {
-    spinController.setP(spinnerWheel.Kp);
-    spinController.setI(spinnerWheel.Ki);
-    spinController.setD(spinnerWheel.Kd);
+  public SpinnerTalon() {
+  
   }
 
   public void toSelectedColor(String message) {
     Colour objective = Colour.fromChar(message.charAt(0)).nextIn(2);
-    SpinnerMotor.set(0.1);
+    spinnerMotor.set(ControlMode.PercentOutput,0.1);
     if ( colorSense.getColorChar() == objective.getCapital() ){
-      SpinnerMotor.set(0);
+      spinnerMotor.set(ControlMode.PercentOutput,0);
     }
     
   }
 
 
-  public void measuredSpin(final double rotations) {
-    spinController.setReference(rotations, ControlType.kPosition);  
-
-  }
-
   public void toSelectedRotation_Color(int nSpin){
-    
-    
+    nSpin=nSpin*2;
+    if (nSpin>1){
+      nSpin=nSpin-1;
+      toSelectedColor(colorSense.getColorString());
+    }
+    else{
+      spinnerMotor.set(ControlMode.PercentOutput,0);
+    }
 
   
   }
