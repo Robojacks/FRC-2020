@@ -20,7 +20,7 @@ import static frc.robot.Constants.*;
 
 
 public class Arm extends SubsystemBase {
-  private TalonSRX arm = new TalonSRX(0);
+  private WPI_TalonSRX arm = new WPI_TalonSRX(0);
 
   public enum armState {
     REACH, PULL ;
