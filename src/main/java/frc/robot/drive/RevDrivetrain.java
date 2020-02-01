@@ -63,10 +63,7 @@ public class RevDrivetrain extends SubsystemBase {
       RRearWheel.setInverted(kRightInverted);
 
       LFrontWheel.getEncoder().setPosition(0);
-      LFrontWheel.getEncoder().setInverted(kLeftEncoderPhase);
-
       RFrontWheel.getEncoder().setPosition(0);
-      RFrontWheel.getEncoder().setInverted(kRightEncoderPhase);
   
       gyro.reset();
   }

@@ -83,7 +83,12 @@ public final class Constants {
   public static final double armPullSpeed = -0.1;
   
   // Field Measurements
-  public static final double cameraToTargetHeight = 0;
+  public static final double cameraHeight = Units.inchesToMeters(30);
+  
+  public static final double ballTargetHeight = Units.inchesToMeters(81.25);
+  public static final double collectorTargetHeight = Units.inchesToMeters(11);
+
+  public static final double cameraToBallTargetHeight = Units.inchesToMeters(51.25);
 
   public static final double shooterDistanceFromTargetMeters = 5;
   

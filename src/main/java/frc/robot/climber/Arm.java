@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase {
   private WPI_TalonSRX arm = new WPI_TalonSRX(0);
 
   public enum armState {
-    REACH, PULL ;
+    REACH, PULL
   }
 
   // Keeps track of how high the shooter is

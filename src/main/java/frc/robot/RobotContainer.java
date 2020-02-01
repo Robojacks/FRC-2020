@@ -101,7 +101,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    manualDrive.schedule();
+    rDrive.setDefaultCommand(manualDrive);
   }
 
   /**
@@ -135,12 +135,6 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kStart.value)
     .whenPressed(new SpinnNTimes());
     
-
-  /*
-  new JoystickButton(xbox, Button.kX.value)
-    .whenPressed(() -> spinner.toSelectedColor("Y"), spinner);
-  
-  */
   }
 
 
