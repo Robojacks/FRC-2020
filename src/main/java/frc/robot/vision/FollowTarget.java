@@ -43,7 +43,7 @@ public class FollowTarget extends CommandBase {
   @Override
   public void execute() {
     rdrive.getDifferentialDrive().arcadeDrive(
-    distanceCorrector.calculate(limelight.getTargetDistanceMeasured(cameraToTargetHeight, cameraAngle)), 
+    distanceCorrector.calculate(limelight.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)), 
     angleCorrector.calculate(limelight.getXError()));
   }
 
