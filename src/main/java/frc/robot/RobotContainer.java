@@ -27,6 +27,7 @@ import frc.robot.wheel.SenseColor;
 import frc.robot.wheel.SpinnNTimes;
 import frc.robot.wheel.Spinner;
 import frc.robot.climber.Arm;
+import frc.robot.drive.Gears;
 import frc.robot.drive.RevDrivetrain;
 import frc.robot.shooter.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,6 +71,8 @@ public class RobotContainer {
   private final Arm arm = new Arm();
 
   private final Shooter shooter = new Shooter();
+
+  private final Gears gears = new Gears();
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
@@ -134,6 +137,9 @@ public class RobotContainer {
 
     new JoystickButton(xbox, Button.kStart.value)
     .whenPressed(new SpinnNTimes());
+    
+    new JoystickButton(xbox, Button.kStickRight.value)
+    .whenPressed( () -> gears.switchGear() );
     
   }
 

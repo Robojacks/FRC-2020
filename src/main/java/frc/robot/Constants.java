@@ -40,6 +40,9 @@ public final class Constants {
   public static final int kRightShooterWheelPort = 6;
 
   public static final int kConveyorBelt = 9;
+  
+  public static final int SolGearLPort = 15;
+  public static final int SolGearRPort = 16;
 
     
   // Motor Phase
