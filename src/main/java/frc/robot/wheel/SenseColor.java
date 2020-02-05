@@ -8,15 +8,19 @@
 package frc.robot.wheel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.wheel.SenseColor.Colour;
 
 import static frc.robot.Constants.*;
 
+import java.text.BreakIterator;
+
+import javax.swing.text.Position;
 
 import edu.wpi.first.wpilibj.I2C;
 import com.revrobotics.ColorSensorV3;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorMatchResult;
@@ -42,10 +46,12 @@ public class SenseColor extends SubsystemBase {
 
   public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-  boolean isBlue = getRawColor() >= blueLowerBound && getRawColor() <= blueUpperBound;
-  boolean isRed = getRawColor() >= redLowerBound && getRawColor() <= redUpperBound;
-  boolean isYellow = getRawColor() >= yellowLowerBound && getRawColor() <= yellowUpperBound;
-  boolean isGreen = getRawColor() >= greenLowerBound && getRawColor() <= greenUpperBound;
+  private boolean isBlue = getRawColor() >= blueLowerBound && getRawColor() <= blueUpperBound;
+  private boolean isRed = getRawColor() >= redLowerBound && getRawColor() <= redUpperBound;
+  private boolean isYellow = getRawColor() >= yellowLowerBound && getRawColor() <= yellowUpperBound;
+  private boolean isGreen = getRawColor() >= greenLowerBound && getRawColor() <= greenUpperBound;
+
+  private static Colour prevColor = Colour.YELLOW;
 
   public enum Colour {
 
@@ -61,15 +67,11 @@ public class SenseColor extends SubsystemBase {
     GREEN(greenLowerBound, greenUpperBound,4,'G') {
       public Colour next() {return YELLOW;}};
 
-    
-    /**
-     *
-     */
     private final double upper;
     private final double lower;
     private final int position;
     private final char capital;
-    
+
     public abstract Colour next();
 
     public char getCapital(){
@@ -121,12 +123,12 @@ public class SenseColor extends SubsystemBase {
         case('R'):
           return Colour.RED;
         default:
-          return null;
+          return Colour.YELLOW;
       }
 
     }
   
-    private Colour(final double upperBound, final double lowerBound, final int position, final char capital) {
+    private Colour(final double lowerBound, final double upperBound, final int position, final char capital) {
       this.upper = upperBound;
       this.lower = lowerBound;
       this.position = position;
@@ -179,21 +181,26 @@ public class SenseColor extends SubsystemBase {
     return proximity;
   }
 
+ 
   public Colour getColour(){
     if (getIsBlue()) {
-      return  Colour.BLUE;
+      prevColor = Colour.BLUE;
+      return Colour.BLUE;
 
     } else if (getIsRed()) {
+      prevColor = Colour.RED;
       return Colour.RED;
 
     } else if (getIsGreen()) {
+      prevColor = Colour.GREEN;
       return Colour.GREEN;
 
     } else if (getIsYellow()) {
+      prevColor = Colour.YELLOW;
       return Colour.YELLOW;
 
     } else {
-      return null;
+      return prevColor;
 
     }
 
@@ -204,41 +211,34 @@ public class SenseColor extends SubsystemBase {
 
   public String getColorString() {
     
-    if (getIsBlue()) {
-      return  "Blue";
-
-    } else if (getIsRed()) {
-      return "Red";
-
-    } else if (getIsGreen()) {
-      return "Green";
-
-    } else if (getIsYellow()) {
-      return "Yellow";
-
-    } else {
-      return null;
-
+    switch(getColour()){
+      case YELLOW:
+        return "Yellow";
+      case RED:
+        return "Red";
+      case BLUE:
+        return "Blue";
+      case GREEN:
+        return "Green";
+      default:
+        return "Yellow";
     }
+
   }
 
   public char getColorChar() {
-    
-    if (getIsBlue()) {
-      return  Colour.BLUE.capital;
 
-    } else if (getIsRed()) {
-      return Colour.RED.capital;
-
-    } else if (getIsGreen()) {
-      return Colour.GREEN.capital;
-
-    } else if (getIsYellow()) {
-      return Colour.YELLOW.capital;
-
-    } else {
-      return (Character) null;
-
+    switch(getColour()){
+      case YELLOW:
+        return 'Y';
+      case RED:
+        return 'R';
+      case BLUE:
+        return 'B';
+      case GREEN:
+        return 'G';
+      default:
+        return 'Y';
     }
   }
   
