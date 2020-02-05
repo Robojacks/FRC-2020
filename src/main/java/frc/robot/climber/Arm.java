@@ -20,7 +20,8 @@ import static frc.robot.Constants.*;
 
 
 public class Arm extends SubsystemBase {
-  private WPI_TalonSRX arm = new WPI_TalonSRX(0);
+  private WPI_TalonSRX leftArm = new WPI_TalonSRX(0);
+  private WPI_TalonSRX rightArm = new WPI_TalonSRX(1);
 
   public enum armState {
     REACH, PULL
@@ -30,12 +31,16 @@ public class Arm extends SubsystemBase {
   private armState state = armState.PULL;
 
   public void reach(){
-    arm.set(ControlMode.PercentOutput,armReachSpeed);
+    leftArm.set(ControlMode.PercentOutput, -armReachSpeed);
+    rightArm.set(ControlMode.PercentOutput, armReachSpeed);
+
     state = armState.REACH;
   }
 
   public void pull(){
-    arm.set(ControlMode.PercentOutput, armPullSpeed);
+    leftArm.set(ControlMode.PercentOutput, -armPullSpeed);
+    rightArm.set(ControlMode.PercentOutput, armPullSpeed);
+
     state = armState.PULL;
   }
 
