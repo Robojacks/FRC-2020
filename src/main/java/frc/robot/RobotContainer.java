@@ -24,7 +24,6 @@ import frc.robot.turret.Turret;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
-import frc.robot.wheel.SpinnNTimes;
 import frc.robot.wheel.Spinner;
 import frc.robot.climber.Arm;
 import frc.robot.drive.Gears;
@@ -37,11 +36,9 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import static frc.robot.Constants.*;
-
 import java.util.Arrays;
 
+import static frc.robot.Constants.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
