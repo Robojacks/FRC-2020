@@ -140,8 +140,6 @@ public class RobotContainer {
     
   }
 
-
-
   public void periodic() {
     update.logContinuous();
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
