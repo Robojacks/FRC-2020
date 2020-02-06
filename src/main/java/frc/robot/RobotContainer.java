@@ -132,8 +132,8 @@ public class RobotContainer {
     .whenPressed(() -> spinner.toSelectedColor
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
-    //new JoystickButton(xbox, Button.kStart.value)
-    //.whenPressed(());
+    new JoystickButton(xbox, Button.kStart.value)
+    .whenPressed(() -> spinner.toSelectedRotation_Color());
     
     new JoystickButton(xbox, Button.kStickRight.value)
     .whenPressed( () -> gears.switchGear() );
