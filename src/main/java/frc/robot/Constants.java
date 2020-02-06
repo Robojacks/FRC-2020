@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*/
+*----------------------------------------------------------------------------*/
 /* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj.util.Units;
 public final class Constants {
 
   // Port Numbers
-	public static final int kLeftFrontPort = 0;
+	public static final int kLeftFrontPort = 8;
 	public static final int kRightFrontPort = 1;
 	public static final int kLeftRearPort = 2;
   public static final int kRightRearPort = 4;
 
-  public static final int kControllerPort = 0;
+  public static final int kXboxPort = 0;
 
-  public static final int kSpinnerPort = 4; 
+  public static final int kSpinnerPort = 8; 
 
   public static final int compressorModule = 20;
 
@@ -40,6 +40,9 @@ public final class Constants {
   public static final int kRightShooterWheelPort = 6;
 
   public static final int kConveyorBelt = 9;
+  
+  public static final int SolGearLPort = 15;
+  public static final int SolGearRPort = 16;
 
     
   // Motor Phase
@@ -61,17 +64,17 @@ public final class Constants {
   public static final double cameraAngle = 0;
   
   // Color Value Bounds
-	public static final double blueLowerBound = 85;
-  public static final double blueUpperBound = 95;
+	public static final double blueLowerBound = 106;
+  public static final double blueUpperBound = 115;
 
-  public static final double redLowerBound = 50;
-  public static final double redUpperBound = 60;
+  public static final double redLowerBound = 65;
+  public static final double redUpperBound = 81;
 
-  public static final double greenLowerBound = 30;
-  public static final double greenUpperBound = 45;
+  public static final double greenLowerBound = 46;
+  public static final double greenUpperBound = 60;
 
-  public static final double yellowLowerBound = 73;
-  public static final double yellowUpperBound = 80;
+  public static final double yellowLowerBound = 91;
+  public static final double yellowUpperBound = 98;
   
   // Constant Speeds
   public static final double armPercentSpeed = 0.4;
@@ -84,14 +87,17 @@ public final class Constants {
 
   public static final double rotationSpeed = 0.2;
   public static final double colorSpeed = 0.1;
-
   
   // Field Measurements
-  public static final double cameraToTargetHeight = 0;
+  public static final double cameraHeight = Units.inchesToMeters(30);
+  
+  public static final double ballTargetHeight = Units.inchesToMeters(81.25);
+  public static final double collectorTargetHeight = Units.inchesToMeters(11);
+
+  public static final double cameraToBallTargetHeight = Units.inchesToMeters(51.25);
 
   public static final double shooterDistanceFromTargetMeters = 5;
   
-
   // PID Constants
   public static class leftDrive {
     public static double Kp = 0.1;
@@ -127,12 +133,12 @@ public final class Constants {
     public static double Kp = 0.1;
     public static double Ki = 0;
     public static double Kd = 0;
-
+  }
+  
   public static class spinnerWheel{
     public static double Kp = 0.1;
     public static double Ki = 0;
     public static double Kd = 0;
-  }
   }
 
   // Ramsete controller constants
