@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -123,7 +122,8 @@ public class RobotContainer {
     .whenReleased(() -> shooter.setVoltage(0));
 
     new JoystickButton(xbox, Button.kY.value)
-    .whenPressed(() -> arm.switchArm(), arm);
+    .whenPressed(() -> arm.switchArm(), arm)
+    .whenReleased(() -> arm.stop());
 
     new JoystickButton(xbox, Button.kB.value)
     .whileHeld(new FollowTarget());
