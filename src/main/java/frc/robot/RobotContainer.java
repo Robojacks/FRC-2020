@@ -78,8 +78,8 @@ public class RobotContainer {
   // Autonomous
   private Command shootThenGo = new FollowTarget() 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVelocity(500, 50))
-    .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0.2, 0.2), rDrive) 
+    .andThen(()-> shooter.setVoltage(5))
+    .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
   
@@ -132,8 +132,8 @@ public class RobotContainer {
     .whenPressed(() -> spinner.toSelectedColor
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
-    new JoystickButton(xbox, Button.kStart.value)
-    .whenPressed(new SpinnNTimes());
+    //new JoystickButton(xbox, Button.kStart.value)
+    //.whenPressed(());
     
     new JoystickButton(xbox, Button.kStickRight.value)
     .whenPressed( () -> gears.switchGear() );
