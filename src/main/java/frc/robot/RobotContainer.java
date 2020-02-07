@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import frc.robot.turret.Turret;
+import frc.robot.shooter.Turret;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
