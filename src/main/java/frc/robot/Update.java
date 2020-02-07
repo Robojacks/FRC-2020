@@ -83,53 +83,53 @@ public class Update {
 
   public void logContinuous() {
     //change PID values for angle
-    if ( aP != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {
+    if (aP != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {
       aP = SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp);
      }
-    if ( aI != SmartDashboard.getNumber("I value(angle)", angleCorrection.Ki))  {
+    if (aI != SmartDashboard.getNumber("I value(angle)", angleCorrection.Ki))  {
       aI = SmartDashboard.getNumber("I value(angle)", angleCorrection.Ki);
      }
-    if ( aD != SmartDashboard.getNumber("D value(angle)", angleCorrection.Kd))  {
+    if (aD != SmartDashboard.getNumber("D value(angle)", angleCorrection.Kd))  {
       aD = SmartDashboard.getNumber("D value(angle)", angleCorrection.Kd);
      } 
 
     //change PID values for distance
-    if ( dP != SmartDashboard.getNumber("P value(distance)", distanceCorrection.Kp))  {
+    if (dP != SmartDashboard.getNumber("P value(distance)", distanceCorrection.Kp))  {
       dP = SmartDashboard.getNumber("P value(distance)", distanceCorrection.Kp);
      }
-    if ( dI != SmartDashboard.getNumber("I value(distance)", distanceCorrection.Ki))  {
+    if (dI != SmartDashboard.getNumber("I value(distance)", distanceCorrection.Ki))  {
       dI = SmartDashboard.getNumber("I value(distance)", distanceCorrection.Ki);
      }
-    if ( dD != SmartDashboard.getNumber("D value(distance)", distanceCorrection.Kd))  {
+    if (dD != SmartDashboard.getNumber("D value(distance)", distanceCorrection.Kd))  {
       dD = SmartDashboard.getNumber("D value(distance)", distanceCorrection.Kd);
      } 
 
      //Change color bounds
-     if ( blueLowerBound != SmartDashboard.getNumber("Blue Lower Bound", Constants.blueLowerBound))  {
+     if (blueLowerBound != SmartDashboard.getNumber("Blue Lower Bound", Constants.blueLowerBound))  {
       blueLowerBound = SmartDashboard.getNumber("Blue Lower Bound", Constants.blueLowerBound);
      }
-     if ( blueUpperBound != SmartDashboard.getNumber("Blue Upper Bound", Constants.blueUpperBound))  {
+     if (blueUpperBound != SmartDashboard.getNumber("Blue Upper Bound", Constants.blueUpperBound))  {
       blueUpperBound = SmartDashboard.getNumber("Blue Upper Bound", Constants.blueUpperBound);
      }
 
-     if ( redLowerBound != SmartDashboard.getNumber("Red Lower Bound", Constants.redLowerBound))  {
+     if (redLowerBound != SmartDashboard.getNumber("Red Lower Bound", Constants.redLowerBound))  {
       redLowerBound = SmartDashboard.getNumber("Red Lower Bound", Constants.redLowerBound);
      }
-     if ( redUpperBound != SmartDashboard.getNumber("Red Upper Bound", Constants.redUpperBound))  {
+     if (redUpperBound != SmartDashboard.getNumber("Red Upper Bound", Constants.redUpperBound))  {
       redUpperBound = SmartDashboard.getNumber("Red Upper Bound", Constants.redUpperBound);
      }
 
-     if ( greenLowerBound != SmartDashboard.getNumber("Green Lower Bound", Constants.greenLowerBound))  {
+     if (greenLowerBound != SmartDashboard.getNumber("Green Lower Bound", Constants.greenLowerBound))  {
       greenLowerBound = SmartDashboard.getNumber("Green Lower Bound", Constants.greenLowerBound);
      }
-     if ( greenUpperBound != SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound))  {
+     if (greenUpperBound != SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound))  {
       greenUpperBound = SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound);
      }
 
-     if ( yellowLowerBound != SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound))  {
+     if (yellowLowerBound != SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound))  {
       yellowLowerBound = SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound);
      }
-     if ( yellowUpperBound != SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound))  {
+     if (yellowUpperBound != SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound))  {
       yellowUpperBound = SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound);
      }
   }
