@@ -19,31 +19,41 @@ import edu.wpi.first.wpilibj.util.Units;
 public final class Constants {
 
   // Port Numbers
+
+  // Drive Ports
 	public static final int kLeftFrontPort = 8;
 	public static final int kRightFrontPort = 1;
 	public static final int kLeftRearPort = 2;
   public static final int kRightRearPort = 4;
 
+  // Xbox controller port
   public static final int kXboxPort = 0;
 
+  // Spinner port
   public static final int kSpinnerPort = 8; 
 
+  // Compressor port
   public static final int compressorModule = 20;
 
+  // Solenoid ports
   public static final int leftPistonPort = 0;
 	public static final int rightPistonPort = 1; 
 
-  public static final int armPort = 7;
+  // Arm motor ports
+  public static final int leftArmPort = 7;
+  public static final int rightArmPort = 8;
 
+  // Shooter motor ports
   public static final int kLeftShooterWheelPort = 5;
   public static final int kRightShooterWheelPort = 6;
 
+  // Conveyor belt motor port
   public static final int kConveyorBelt = 9;
   
+  // Solenoid controlling gear ports 
   public static final int SolGearLPort = 15;
   public static final int SolGearRPort = 16;
 
-    
   // Motor Phase
   public static final boolean kLeftInverted = false;
   public static final boolean kRightInverted = true;
@@ -78,8 +88,8 @@ public final class Constants {
   // Constant Speeds
   public static final double armPercentSpeed = 0.4;
   public static final double shooterVolts = 5; 
-  public static final double shooterRPM = 30;
-  public static final double shooterError = 20;
+
+  public static final double conveyorVolts = 2;
 
   public static final double armReachSpeed = 0.1;
   public static final double armPullSpeed = -0.1;
