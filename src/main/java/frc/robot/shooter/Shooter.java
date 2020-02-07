@@ -9,6 +9,7 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
@@ -17,13 +18,6 @@ public class Shooter extends SubsystemBase {
 
   private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
 
-  /**
-   * Creates a new Shooter.
-   */
-  public Shooter() {
-
-  }
-  
   public void setVoltage(double volts){
     leftLauncher.setVoltage(volts);
     rightLauncher.setVoltage(volts);
