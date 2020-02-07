@@ -35,6 +35,9 @@ public class Update {
 
     private double greenLowerBound = Constants.greenLowerBound;
     private double greenUpperBound = Constants.greenUpperBound;
+    
+    private double yellowLowerBound = Constants.yellowLowerBound;
+    private double yellowUpperBound = Constants.yellowUpperBound;
 
     // Starting positions
     private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
@@ -68,6 +71,9 @@ public class Update {
 
         SmartDashboard.putNumber("Green Lower Bound", Constants.greenLowerBound);
         SmartDashboard.putNumber("Green Upper Bound", Constants.greenUpperBound);
+        
+        SmartDashboard.putNumber("Yellow Lower Bound", Constants.yellowLowerBound);
+        SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
     }
 
     public static Pose2d getStartingPose() {
@@ -118,6 +124,13 @@ public class Update {
      }
      if ( greenUpperBound != SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound))  {
       greenUpperBound = SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound);
+     }
+
+     if ( yellowLowerBound != SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound))  {
+      yellowLowerBound = SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound);
+     }
+     if ( yellowUpperBound != SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound))  {
+      yellowUpperBound = SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound);
      }
   }
 
