@@ -20,29 +20,37 @@ public class Spinner extends SubsystemBase {
   private final SenseColor colorSense = new SenseColor();
   private final CANSparkMax SpinnerMotor = new CANSparkMax(4, MotorType.kBrushless);
   private int rotation = 10 * 8;
- 
-  
- public void move(double speed) {
+
+  public void move(double speed) {
     SpinnerMotor.set(speed);
     System.out.println("move works");
   }
 
   public void toSelectedColor(String c) {
-    
     Colour objective = Colour.fromChar(c.charAt(0)).nextIn(2);
     SpinnerMotor.set(0.1);
-    if ( colorSense.getColorChar() == objective.getCapital() ){
+
+    if (colorSense.getColorChar() == objective.getCapital()){
       SpinnerMotor.set(0);
       System.out.println("Release!");
     }
   }
 
+  public int getCurrentRotations() {
+    return rotation;
+  }
+
+  public void changeMaxRotations(int maxRotations) {
+    rotation = maxRotations;
+  };
 
   public void toSelectedRotation_Color(){
     SpinnerMotor.set(rotationSpeed);
+
     if(colorSense.getColour() != colorSense.getPrevColour()) {
       rotation--;
     }
+
     if (rotation >= 0){
       SpinnerMotor.set(0);
     }
