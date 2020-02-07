@@ -58,9 +58,6 @@ public class RevDrivetrain extends SubsystemBase {
       LRearWheel.follow(LFrontWheel);
       RRearWheel.follow(RFrontWheel);
 
-      LFrontWheel.setInverted(kLeftInverted);
-      RRearWheel.setInverted(kRightInverted);
-
       LFrontWheel.getEncoder().setPosition(0);
       RFrontWheel.getEncoder().setPosition(0);
   
