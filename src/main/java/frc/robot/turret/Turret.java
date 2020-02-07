@@ -42,13 +42,13 @@ public class Turret extends SubsystemBase {
     
   }
 
-  public void collectGoal(){
+  public void collectGoal() {
     state = shooterState.COLLECTING;
 
     piston.set(false);
   }
 
-  public void shootGoal(){
+  public void shootGoal() {
     state = shooterState.SHOOTING;
     
     piston.set(true);
