@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -58,9 +57,6 @@ public class RevDrivetrain extends SubsystemBase {
   public RevDrivetrain() {
       LRearWheel.follow(LFrontWheel);
       RRearWheel.follow(RFrontWheel);
-
-      LFrontWheel.setInverted(kLeftInverted);
-      RRearWheel.setInverted(kRightInverted);
 
       LFrontWheel.getEncoder().setPosition(0);
       RFrontWheel.getEncoder().setPosition(0);

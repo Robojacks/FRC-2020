@@ -9,76 +9,54 @@ package frc.robot.wheel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.wheel.SenseColor.*;
-
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorMatch;
-import edu.wpi.first.wpilibj.util.Color;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ControlType;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.platform.DeviceType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import com.revrobotics.CANEncoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import com.revrobotics.AlternateEncoderType;
-import com.revrobotics.CANPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
 public class Spinner extends SubsystemBase {
 
   private final SenseColor colorSense = new SenseColor();
-  private final Colour colorSensed = colorSense.getColour();
-  private final CANSparkMax SpinnerMotor = new CANSparkMax(kSpinnerPort, MotorType.kBrushless);
-  private final CANPIDController spinController = SpinnerMotor.getPIDController();
-  /*DriverStation.getInstance().getGameSpecificMessage();*/
- 
+  private final CANSparkMax SpinnerMotor = new CANSparkMax(4, MotorType.kBrushless);
+  private int rotation = 10 * 8;
 
-  public Spinner() {
-    spinController.setP(spinnerWheel.Kp);
-    spinController.setI(spinnerWheel.Ki);
-    spinController.setD(spinnerWheel.Kd);
+  public void move(double speed) {
+    SpinnerMotor.set(speed);
+    System.out.println("move works");
   }
 
-  public void toSelectedColor(String message) {
-    Colour objective = Colour.fromChar(message.charAt(0)).nextIn(2);
+  public void toSelectedColor(String c) {
+    Colour objective = Colour.fromChar(c.charAt(0)).nextIn(2);
     SpinnerMotor.set(0.1);
-    if ( colorSense.getColorChar() == objective.getCapital() ){
+
+    if (colorSense.getColorChar() == objective.getCapital()){
+      SpinnerMotor.set(0);
+      System.out.println("Release!");
+    }
+  }
+
+  public int getCurrentRotations() {
+    return rotation;
+  }
+
+  public void changeMaxRotations(int maxRotations) {
+    rotation = maxRotations;
+  };
+
+  public void toSelectedRotation_Color(){
+    SpinnerMotor.set(rotationSpeed);
+
+    if(colorSense.getColour() != colorSense.getPrevColour()) {
+      rotation--;
+    }
+
+    if (rotation >= 0){
       SpinnerMotor.set(0);
     }
   
-
   }
-  public void toSelectedColor2(Colour message) {
-    SpinnerMotor.set(0.1);
-    if ( colorSense.getColour() == message ){
-      SpinnerMotor.set(0);
-    }
-  }
-
-
-  public void nextColor(Colour nowColor){
-    SpinnerMotor.set(0.1);
-    if (nowColor != colorSense.getColour()){
-      SpinnerMotor.set(0);
-    
-    }
-    
-  }
-
-
-  public void measuredSpin(final double rotations) {
-    spinController.setReference(rotations, ControlType.kPosition);  
-
-  }
-
+ 
   @Override
   public void periodic() {
   }

@@ -11,11 +11,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -24,7 +22,6 @@ import frc.robot.turret.Turret;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
-import frc.robot.wheel.SpinnNTimes;
 import frc.robot.wheel.Spinner;
 import frc.robot.climber.Arm;
 import frc.robot.drive.Gears;
@@ -37,11 +34,9 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import static frc.robot.Constants.*;
-
 import java.util.Arrays;
 
+import static frc.robot.Constants.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -81,8 +76,8 @@ public class RobotContainer {
   // Autonomous
   private Command shootThenGo = new FollowTarget() 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVelocity(500, 50))
-    .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0.2, 0.2), rDrive) 
+    .andThen(()-> shooter.setVoltage(5))
+    .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
   
@@ -126,7 +121,8 @@ public class RobotContainer {
     .whenReleased(() -> shooter.setVoltage(0));
 
     new JoystickButton(xbox, Button.kY.value)
-    .whenPressed(() -> arm.switchArm(), arm);
+    .whenPressed(() -> arm.switchArm(), arm)
+    .whenReleased(() -> arm.stop());
 
     new JoystickButton(xbox, Button.kB.value)
     .whileHeld(new FollowTarget());
@@ -136,14 +132,12 @@ public class RobotContainer {
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
     new JoystickButton(xbox, Button.kStart.value)
-    .whenPressed(new SpinnNTimes());
+    .whenPressed(() -> spinner.toSelectedRotation_Color());
     
     new JoystickButton(xbox, Button.kStickRight.value)
-    .whenPressed( () -> gears.switchGear() );
+    .whenPressed(() -> gears.switchGear());
     
   }
-
-
 
   public void periodic() {
     update.logContinuous();

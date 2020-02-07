@@ -8,19 +8,10 @@
 package frc.robot.wheel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.wheel.SenseColor.Colour;
-
 import static frc.robot.Constants.*;
-
-import java.text.BreakIterator;
-
-import javax.swing.text.Position;
 
 import edu.wpi.first.wpilibj.I2C;
 import com.revrobotics.ColorSensorV3;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorMatchResult;
@@ -37,11 +28,6 @@ public class SenseColor extends SubsystemBase {
   private Color detectedColor = m_colorSensor.getColor();
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
-  private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-  private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-  private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-  private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-
    
 
   public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
@@ -51,7 +37,7 @@ public class SenseColor extends SubsystemBase {
   private boolean isYellow = getRawColor() >= yellowLowerBound && getRawColor() <= yellowUpperBound;
   private boolean isGreen = getRawColor() >= greenLowerBound && getRawColor() <= greenUpperBound;
 
-  private static Colour prevColor = Colour.YELLOW;
+  private Colour prevColor = Colour.YELLOW;
 
   public enum Colour {
 
@@ -206,7 +192,9 @@ public class SenseColor extends SubsystemBase {
 
   }
 
-
+  public Colour getPrevColour() {
+    return prevColor;
+  }
 
 
   public String getColorString() {

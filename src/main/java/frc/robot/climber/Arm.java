@@ -7,42 +7,43 @@
 
 package frc.robot.climber;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANDigitalInput.LimitSwitch;
 
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
-
-
 
 public class Arm extends SubsystemBase {
   private WPI_TalonSRX leftArm = new WPI_TalonSRX(0);
   private WPI_TalonSRX rightArm = new WPI_TalonSRX(1);
 
   public enum armState {
-    REACH, PULL
+    REACH, PULL, NEUTRAL
   }
 
-  // Keeps track of how high the shooter is
-  private armState state = armState.PULL;
+  // Keeps track of what mode arm is in
+  private armState state = armState.NEUTRAL;
 
   public void reach(){
-    leftArm.set(ControlMode.PercentOutput, -armReachSpeed);
-    rightArm.set(ControlMode.PercentOutput, armReachSpeed);
+    leftArm.set(-armReachSpeed);
+    rightArm.set(armReachSpeed);
 
     state = armState.REACH;
   }
 
   public void pull(){
-    leftArm.set(ControlMode.PercentOutput, -armPullSpeed);
-    rightArm.set(ControlMode.PercentOutput, armPullSpeed);
+    leftArm.set(-armPullSpeed);
+    rightArm.set(armPullSpeed);
 
     state = armState.PULL;
   }
+
+  public void stop() {
+    leftArm.set(0);
+    rightArm.set(0);
+
+    state = armState.NEUTRAL;
+  }
+
 
   public void switchArm() {
     switch(state) {
@@ -50,8 +51,10 @@ public class Arm extends SubsystemBase {
         reach();
       case REACH:
         pull();
-      default:
+      case NEUTRAL: 
         pull();
+      default:
+        stop();
     }
   }
 

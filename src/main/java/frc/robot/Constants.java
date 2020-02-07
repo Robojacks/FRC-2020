@@ -1,4 +1,3 @@
-/*----------------------------------------------------------------------------*/
 /* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -84,6 +83,9 @@ public final class Constants {
 
   public static final double armReachSpeed = 0.1;
   public static final double armPullSpeed = -0.1;
+
+  public static final double rotationSpeed = 0.2;
+  public static final double colorSpeed = 0.1;
   
   // Field Measurements
   public static final double cameraHeight = Units.inchesToMeters(30);
