@@ -17,9 +17,13 @@ import static frc.robot.Constants.*;
 
 public class Spinner extends SubsystemBase {
 
-  private final SenseColor colorSense = new SenseColor();
+  private SenseColor colorSense;
   private final CANSparkMax SpinnerMotor = new CANSparkMax(4, MotorType.kBrushless);
   private int rotation = 10 * 8;
+
+  public Spinner(SenseColor colorSensor) {
+    colorSense = colorSensor;
+  }
 
   public void move(double speed) {
     SpinnerMotor.set(speed);

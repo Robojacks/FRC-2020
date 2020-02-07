@@ -58,7 +58,7 @@ public class RobotContainer {
 
   private final SenseColor colorSense = new SenseColor();
 
-  private final Spinner spinner = new Spinner();
+  private final Spinner spinner = new Spinner(colorSense);
 
   private final Turret goalMover = new Turret();
 
