@@ -9,19 +9,35 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.turret.Turret;
 
 import static frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
   private WPI_TalonSRX leftLauncher = new WPI_TalonSRX(kLeftShooterWheelPort);
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
-
   private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
+  private Turret goalMover;
 
-  public void setVoltage(double volts){
-    leftLauncher.setVoltage(volts);
-    rightLauncher.setVoltage(volts);
-    conveyor.setVoltage(volts);
+  public Shooter(Turret turret) {
+    goalMover = turret;
+  }
+
+  public void setVoltage(double shooterVolts, double conveyorVolts){
+    switch (goalMover.getState()) {
+      case COLLECTING:
+        leftLauncher.setVoltage(-shooterVolts);
+        rightLauncher.setVoltage(-shooterVolts);
+        conveyor.setVoltage(-conveyorVolts);
+      case SHOOTING:
+        leftLauncher.setVoltage(shooterVolts);
+        rightLauncher.setVoltage(shooterVolts);
+        conveyor.setVoltage(conveyorVolts);
+      default:
+        leftLauncher.setVoltage(shooterVolts);
+        rightLauncher.setVoltage(shooterVolts);
+        conveyor.setVoltage(conveyorVolts);
+    }
   }
 
   @Override

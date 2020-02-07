@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -28,8 +29,6 @@ import frc.robot.drive.Gears;
 import frc.robot.drive.RevDrivetrain;
 import frc.robot.shooter.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProxyScheduleCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -65,7 +64,7 @@ public class RobotContainer {
 
   private final Arm arm = new Arm();
 
-  private final Shooter shooter = new Shooter();
+  private final Shooter shooter = new Shooter(goalMover);
 
   private final Gears gears = new Gears();
 
@@ -73,10 +72,16 @@ public class RobotContainer {
   private Command manualDrive = new RunCommand(
     () -> rDrive.getDifferentialDrive().tankDrive(xbox.getRawAxis(5), xbox.getRawAxis(1)), rDrive);
   
+  private Command moveArm = new RunCommand(
+    () -> arm.move(xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
+  
+  private Command moveSpinner = new RunCommand(() -> 
+    spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
+  
   // Autonomous
   private Command shootThenGo = new FollowTarget() 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVoltage(5))
+    .andThen(()-> shooter.setVoltage(shooterVolts, conveyorVolts))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -99,7 +104,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
     rDrive.setDefaultCommand(manualDrive);
+    arm.setDefaultCommand(moveArm);
+    spinner.setDefaultCommand(moveSpinner);
   }
 
   /**
@@ -109,33 +117,36 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
+    // Switch position between shooting and intake
     new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
+    // Shoot or Intake
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setVoltage(shooterVolts))
-    .whenReleased(() -> shooter.setVoltage(0));
+    .whenPressed(() -> shooter.setVoltage(shooterVolts, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setVoltage(0, 0), shooter);
 
-    new JoystickButton(xbox, Button.kBumperLeft.value)
-    .whenPressed(() -> shooter.setVoltage(-shooterVolts))
-    .whenReleased(() -> shooter.setVoltage(0));
-
+    // Switches arm modes
     new JoystickButton(xbox, Button.kY.value)
-    .whenPressed(() -> arm.switchArm(), arm)
-    .whenReleased(() -> arm.stop());
+    .whenPressed(() -> arm.switchMovement(), arm);
 
+    // Vision correction
     new JoystickButton(xbox, Button.kB.value)
     .whileHeld(new FollowTarget());
   
+    // Spins to selected color
     new JoystickButton(xbox, Button.kX.value)
     .whenPressed(() -> spinner.toSelectedColor
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
+    // Spin number of rotations
     new JoystickButton(xbox, Button.kStart.value)
-    .whenPressed(() -> spinner.toSelectedRotation_Color());
+    .whenPressed(() -> spinner.toSelectedRotation_Color(), spinner);
     
+    // Switch Gears
     new JoystickButton(xbox, Button.kStickRight.value)
-    .whenPressed(() -> gears.switchGear());
+    .whenPressed(() -> gears.switchGear(), gears);
     
   }
 
