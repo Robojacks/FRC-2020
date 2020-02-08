@@ -19,6 +19,11 @@ public class Arm extends SubsystemBase {
   private boolean negation = false;
 
   public void move(double speed) {
+    leftArm.set(speed);
+    rightArm.set(speed);
+  }
+
+  public void moveOneAxis(double speed) {
     if (negation) {
       leftArm.set(-speed);
       rightArm.set(-speed);

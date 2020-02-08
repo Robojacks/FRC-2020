@@ -72,8 +72,11 @@ public class RobotContainer {
   private Command manualDrive = new RunCommand(
     () -> rDrive.getDifferentialDrive().tankDrive(xbox.getRawAxis(5), xbox.getRawAxis(1)), rDrive);
   
+  private Command moveArmOneAxis = new RunCommand(
+    () -> arm.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
+  
   private Command moveArm = new RunCommand(
-    () -> arm.move(xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
+    () -> arm.move(xbox.getRawAxis(Axis.kRightTrigger.value) - xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
   
   private Command moveSpinner = new RunCommand(() -> 
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
@@ -106,7 +109,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     rDrive.setDefaultCommand(manualDrive);
-    arm.setDefaultCommand(moveArm);
+    arm.setDefaultCommand(moveArmOneAxis);
     spinner.setDefaultCommand(moveSpinner);
   }
 
@@ -119,20 +122,22 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     // Switch position between shooting and intake
-    new JoystickButton(xbox, Button.kA.value)
+    new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage
+    /*
     new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
     .whenReleased(() -> shooter.setPoseVolts(0, 0, 0), shooter);
+    */
 
     // Shoot or intake with set velocity
-    new JoystickButton(xbox, Button.kBumperLeft.value)
+    new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> shooter.setPoseRPM(intakeRPM, shooterRPM, conveyorVolts), shooter)
     .whenReleased(() -> shooter.setPoseRPM(0, 0, 0), shooter);
 
-    // Switches arm modes
+    // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> arm.switchMovement(), arm);
 
@@ -141,16 +146,16 @@ public class RobotContainer {
     .whileHeld(new FollowTarget(limelight, rDrive));
   
     // Spins to selected color
-    new JoystickButton(xbox, Button.kX.value)
+    new JoystickButton(xbox, Button.kStart.value)
     .whenPressed(() -> spinner.toSelectedColor
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
     // Spin number of rotations
-    new JoystickButton(xbox, Button.kStart.value)
+    new JoystickButton(xbox, Button.kBack.value)
     .whenPressed(() -> spinner.toSelectedRotation_Color(), spinner);
     
     // Switch Gears
-    new JoystickButton(xbox, Button.kStickRight.value)
+    new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> gears.switchGear(), gears);
     
   }
