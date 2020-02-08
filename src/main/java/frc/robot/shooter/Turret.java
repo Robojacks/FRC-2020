@@ -9,6 +9,7 @@ package frc.robot.shooter;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.*;
 
 public class Turret extends SubsystemBase {
@@ -19,10 +20,16 @@ public class Turret extends SubsystemBase {
   }
 
   // Keeps track of how high the shooter is
-  private shooterState state = shooterState.SHOOTING;
+  private shooterState state = shooterState.COLLECTING;
+
+  private boolean collecting = false;
 
   public shooterState getState() {
     return state;
+  }
+
+  public boolean getCollecting() {
+    return collecting;
   }
 
   /**
@@ -31,27 +38,21 @@ public class Turret extends SubsystemBase {
   public void swapHeight(){
     switch(state){
       case COLLECTING:
-        shootGoal();
-      
+        shootPose();
       case SHOOTING:
-        collectGoal();
-      
-      default:
-        collectGoal();
+        collectPose();
     }
     
   }
 
-  public void collectGoal() {
-    state = shooterState.COLLECTING;
-
+  public void collectPose() {
     piston.set(false);
+    state = shooterState.COLLECTING;
   }
 
-  public void shootGoal() {
-    state = shooterState.SHOOTING;
-    
+  public void shootPose(){
     piston.set(true);
+    state = shooterState.SHOOTING;
   }
 
   @Override
