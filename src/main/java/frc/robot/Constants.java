@@ -125,14 +125,14 @@ public final class Constants {
   public static class shooterLeftPID {
     public static double Kp = 0.25;
     public static double Ki = 0;
-    public static double Kd = 25;
+    public static double Kd = 20;
     public static double Kf = 1023 / 7200;
   }
 
   public static class shooterRightPID {
     public static double Kp = 0.25;
     public static double Ki = 0;
-    public static double Kd = 25;
+    public static double Kd = 20;
     public static double Kf = 1023 / 7200;
   }
 
