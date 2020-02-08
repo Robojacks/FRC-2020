@@ -81,7 +81,7 @@ public class RobotContainer {
   // Autonomous
   private Command shootThenGo = new FollowTarget() 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVoltage(intakeVolts, shooterVolts, conveyorVolts))
+    .andThen(()-> shooter.setVolts(intakeVolts, shooterVolts, conveyorVolts))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);

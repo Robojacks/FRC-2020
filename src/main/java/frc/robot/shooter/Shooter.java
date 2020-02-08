@@ -23,10 +23,10 @@ public class Shooter extends SubsystemBase {
 
   public void setVolts(double inVolts, double outVolts, double beltVolts){
     if (goalMover.getCollecting()) {
-      intake(inVolts, beltVolts);
+      collect(inVolts, beltVolts);
 
     } else {
-      outtake(outVolts, beltVolts);
+      shoot(outVolts, beltVolts);
     }
   }
 
