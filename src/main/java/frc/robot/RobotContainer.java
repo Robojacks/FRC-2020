@@ -79,7 +79,7 @@ public class RobotContainer {
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
   
   // Autonomous
-  private Command shootThenGo = new FollowTarget() 
+  private Command shootThenGo = new FollowTarget(limelight, rDrive) 
     .andThen(new WaitCommand(2)) 
     .andThen(()-> shooter.setVolts(intakeVolts, shooterVolts, conveyorVolts))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
@@ -133,7 +133,7 @@ public class RobotContainer {
 
     // Vision correction
     new JoystickButton(xbox, Button.kB.value)
-    .whileHeld(new FollowTarget());
+    .whileHeld(new FollowTarget(limelight, rDrive));
   
     // Spins to selected color
     new JoystickButton(xbox, Button.kX.value)

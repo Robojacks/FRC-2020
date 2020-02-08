@@ -14,8 +14,8 @@ import frc.robot.drive.RevDrivetrain;
 import static frc.robot.Constants.*;
 
 public class FollowTarget extends CommandBase {
-  private Limelight limelight = new Limelight();
-  private RevDrivetrain rdrive = new RevDrivetrain();
+  private Limelight vision;
+  private RevDrivetrain drive;
 
   private PIDController distanceCorrector 
     = new PIDController(distanceCorrection.Kp, distanceCorrection.Ki, distanceCorrection.Kd);
@@ -26,9 +26,12 @@ public class FollowTarget extends CommandBase {
   /**
    * Creates a new FollowTarget.
    */
-  public FollowTarget() {
+  public FollowTarget(Limelight limelight, RevDrivetrain rDrive) {
+    vision = limelight;
+    drive = rDrive;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(limelight, rdrive);
+    addRequirements(vision, drive);
 
     distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
     angleCorrector.setSetpoint(0);
@@ -42,9 +45,9 @@ public class FollowTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    rdrive.getDifferentialDrive().arcadeDrive(
-    distanceCorrector.calculate(limelight.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)), 
-    angleCorrector.calculate(limelight.getXError()));
+    drive.getDifferentialDrive().arcadeDrive(
+    distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)), 
+    angleCorrector.calculate(vision.getXError()));
   }
 
   // Called once the command ends or is interrupted.
@@ -55,6 +58,6 @@ public class FollowTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return distanceCorrector.atSetpoint() && angleCorrector.atSetpoint();
   }
 }
