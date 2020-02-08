@@ -81,7 +81,7 @@ public class RobotContainer {
   // Autonomous
   private Command shootThenGo = new FollowTarget() 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVoltage(shooterVolts, conveyorVolts))
+    .andThen(()-> shooter.setVoltage(intakeVolts, shooterVolts, conveyorVolts))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -124,8 +124,8 @@ public class RobotContainer {
 
     // Shoot or Intake
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setVoltage(shooterVolts, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setVoltage(0, 0), shooter);
+    .whenPressed(() -> shooter.setVoltage(intakeVolts, shooterVolts, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setVoltage(0, 0, 0), shooter);
 
     // Switches arm modes
     new JoystickButton(xbox, Button.kY.value)

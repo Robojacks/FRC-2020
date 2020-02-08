@@ -22,21 +22,25 @@ public class Shooter extends SubsystemBase {
     goalMover = turret;
   }
 
-  public void setVoltage(double shooterVolts, double conveyorVolts){
+  public void setVoltage(double intakeVolts, double shooterVolts, double conveyorVolts){
     switch (goalMover.getState()) {
       case COLLECTING:
-        leftLauncher.setVoltage(-shooterVolts);
-        rightLauncher.setVoltage(-shooterVolts);
-        conveyor.setVoltage(-conveyorVolts);
+        collect();
       case SHOOTING:
-        leftLauncher.setVoltage(shooterVolts);
-        rightLauncher.setVoltage(shooterVolts);
-        conveyor.setVoltage(conveyorVolts);
-      default:
-        leftLauncher.setVoltage(shooterVolts);
-        rightLauncher.setVoltage(shooterVolts);
-        conveyor.setVoltage(conveyorVolts);
+        shoot();
     }
+  }
+
+  public void collect() {
+    leftLauncher.setVoltage(-intakeVolts);
+    rightLauncher.setVoltage(intakeVolts);
+    conveyor.setVoltage(-conveyorVolts);
+  }
+
+  public void shoot() {
+    leftLauncher.setVoltage(shooterVolts);
+    rightLauncher.setVoltage(-shooterVolts);
+    conveyor.setVoltage(conveyorVolts);
   }
 
   @Override
