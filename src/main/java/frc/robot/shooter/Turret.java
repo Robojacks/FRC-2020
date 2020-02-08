@@ -15,18 +15,7 @@ import static frc.robot.Constants.*;
 public class Turret extends SubsystemBase {
   Solenoid piston = new Solenoid(leftPistonPort);
 
-  public enum shooterState {
-    COLLECTING, SHOOTING;
-  }
-
-  // Keeps track of how high the shooter is
-  private shooterState state = shooterState.COLLECTING;
-
   private boolean collecting = false;
-
-  public shooterState getState() {
-    return state;
-  }
 
   public boolean getCollecting() {
     return collecting;
@@ -36,23 +25,25 @@ public class Turret extends SubsystemBase {
    * Switch from a shooting position to a collecting position and vice versa.
    */ 
   public void swapHeight(){
-    switch(state){
-      case COLLECTING:
-        shootPose();
-      case SHOOTING:
-        collectPose();
-    }
-    
+    if (collecting) {
+      shootPose();
+    } else {
+      collectPose();
+    } 
   }
 
   public void collectPose() {
     piston.set(false);
-    state = shooterState.COLLECTING;
+    
+    collecting = true;
+    System.out.println("Collecting Pose Set");
   }
 
   public void shootPose(){
     piston.set(true);
-    state = shooterState.SHOOTING;
+
+    collecting = false;
+    System.out.println("Shooting Pose Set");
   }
 
   @Override
