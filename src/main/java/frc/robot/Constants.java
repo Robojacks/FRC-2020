@@ -64,7 +64,7 @@ public final class Constants {
 
   // Robot Measurements
   public static final int kTicksPerRev = 4096;
-  public static final double ktrackWidthMeters = Units.inchesToMeters(10);
+  public static final double kTrackWidthMeters = Units.inchesToMeters(10);
   public static final double kGearRatio = 7.29;
   public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
 	public static final double MaxSafeVelocityMeters = Units.feetToMeters(2);
