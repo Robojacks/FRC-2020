@@ -23,7 +23,6 @@ public class Shooter extends SubsystemBase {
   private double minToMS = 600;
 
   public Shooter(Turret turret) {
-
     // Makes turret instance the same as in RobotContainer
     goalMover = turret;
 
@@ -36,12 +35,12 @@ public class Shooter extends SubsystemBase {
     leftLauncher.config_kP(0, shooterLeftPID.Kp);    
     leftLauncher.config_kI(0, shooterLeftPID.Ki);
     leftLauncher.config_kD(0, shooterLeftPID.Kd);
-    leftLauncher.config_kF(0, 1023 * kTicksPerRev / leftLauncher.getSelectedSensorVelocity());
+    leftLauncher.config_kF(0, shooterLeftPID.Kf);
 
     rightLauncher.config_kP(0, shooterRightPID.Kp);
     rightLauncher.config_kI(0, shooterRightPID.Ki);
     rightLauncher.config_kD(0, shooterRightPID.Kd);
-    rightLauncher.config_kF(0, 1023 * kTicksPerRev / rightLauncher.getSelectedSensorVelocity());
+    rightLauncher.config_kF(0, shooterRightPID.Kf);
   }
 
   /**
