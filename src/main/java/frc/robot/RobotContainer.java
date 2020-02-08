@@ -151,7 +151,7 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    update.logContinuous();
+    update.periodic();
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
     SmartDashboard.putNumber("Proximity", colorSense.getProximity());
     SmartDashboard.putString("Detected Color", colorSense.getColorString());
