@@ -18,6 +18,9 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
   private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
   private Turret goalMover;
+  
+  // Conversion factor from minutes to milliseconds
+  private double minToMS = 600;
 
   public Shooter(Turret turret) {
 
@@ -33,11 +36,12 @@ public class Shooter extends SubsystemBase {
     leftLauncher.config_kP(0, shooterLeftPID.Kp);    
     leftLauncher.config_kI(0, shooterLeftPID.Ki);
     leftLauncher.config_kD(0, shooterLeftPID.Kd);
+    leftLauncher.config_kF(0, 1023 * kTicksPerRev / leftLauncher.getSelectedSensorVelocity());
 
     rightLauncher.config_kP(0, shooterRightPID.Kp);
     rightLauncher.config_kI(0, shooterRightPID.Ki);
     rightLauncher.config_kD(0, shooterRightPID.Kd);
-
+    rightLauncher.config_kF(0, 1023 * kTicksPerRev / rightLauncher.getSelectedSensorVelocity());
   }
 
   /**
@@ -98,17 +102,14 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
   private void setRPM(double launchRPM, double beltVolts) {
-    // Conversion factor from minutes to milliseconds
-    double minToMS = 600;
-
     leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
     rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
 
     conveyor.setVoltage(beltVolts);
   }
 
-  public int getLeftVelocity() {
-    return leftLauncher.getSelectedSensorVelocity();
+  public double getLeftVelocity() {
+    return leftLauncher.getSelectedSensorVelocity() / kTicksPerRev * minToMS;
   }
 
   public int getRightVelocity() {

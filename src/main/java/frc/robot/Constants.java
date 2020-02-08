@@ -63,7 +63,7 @@ public final class Constants {
   public static final boolean kRightEncoderPhase = false;
 
   // Robot Measurements
-  public static final int kTicksPerRev = 4096;
+  public static final double kTicksPerRev = 4096;
   public static final double kTrackWidthMeters = Units.inchesToMeters(10);
   public static final double kGearRatio = 7.29;
   public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
