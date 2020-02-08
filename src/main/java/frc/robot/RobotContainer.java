@@ -47,9 +47,6 @@ public class RobotContainer {
   // Drive Controller
   XboxController xbox = new XboxController(Constants.kXboxPort);
 
-    //Update PID values
-    Update update = new Update();
-
   // Drive Subsystem
   private final RevDrivetrain rDrive = new RevDrivetrain();
 
@@ -67,6 +64,9 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter(goalMover);
 
   private final Gears gears = new Gears();
+
+  // Update PID values
+  private final Update update = new Update(shooter);
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(

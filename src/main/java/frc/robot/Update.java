@@ -11,55 +11,68 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.shooter.Shooter;
+
 import static frc.robot.Constants.*;
 /**
  * Mainly for logging values that need adjustment
  */
 public class Update {
+  private Shooter m_shooter;
 
-    // Starting positions
-    private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
-    private final Pose2d center = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    private final Pose2d right = new Pose2d(1, 0, Rotation2d.fromDegrees(0));
+  // Starting positions
+  private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
+  private final Pose2d center = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+  private final Pose2d right = new Pose2d(1, 0, Rotation2d.fromDegrees(0));
 
-    private static final SendableChooser choosePosition = new SendableChooser<>();
+  private static final SendableChooser choosePosition = new SendableChooser<>();
 
-    public Update() {
-        choosePosition.setDefaultOption("Center", center);
-        choosePosition.addOption("Left", left);
-        choosePosition.addOption("Right", right);
-        SmartDashboard.putData("Starting Position", choosePosition);
+  public Update(Shooter shooter) {
+    m_shooter = shooter;
 
-        //display PID values (angle)
-        SmartDashboard.putNumber("P value(angle)", angleCorrection.Kp);
-        SmartDashboard.putNumber("I value(angle)", angleCorrection.Ki);
-        SmartDashboard.putNumber("D value(angle)", angleCorrection.Kd);
+    choosePosition.setDefaultOption("Center", center);
+    choosePosition.addOption("Left", left);
+    choosePosition.addOption("Right", right);
+    SmartDashboard.putData("Starting Position", choosePosition);
 
-        //display PID values (distance)
-        SmartDashboard.putNumber("P value(distance)", distanceCorrection.Kp);
-        SmartDashboard.putNumber("I value(distance)", distanceCorrection.Ki);
-        SmartDashboard.putNumber("D value(distance)", distanceCorrection.Kd);
+    // Display PID values (angle)
+    SmartDashboard.putNumber("P value(angle)", angleCorrection.Kp);
+    SmartDashboard.putNumber("I value(angle)", angleCorrection.Ki);
+    SmartDashboard.putNumber("D value(angle)", angleCorrection.Kd);
 
-        //Display color bounds
-        SmartDashboard.putNumber("Blue Lower Bound", Constants.blueLowerBound);
-        SmartDashboard.putNumber("Blue Upper Bound", Constants.blueUpperBound);
+    // Display PID values (distance)
+    SmartDashboard.putNumber("P value(distance)", distanceCorrection.Kp);
+    SmartDashboard.putNumber("I value(distance)", distanceCorrection.Ki);
+    SmartDashboard.putNumber("D value(distance)", distanceCorrection.Kd);
 
-        SmartDashboard.putNumber("Red Lower Bound", Constants.redLowerBound);
-        SmartDashboard.putNumber("Red Upper Bound", Constants.redUpperBound);
+    // Display color bounds
+    SmartDashboard.putNumber("Blue Lower Bound", Constants.blueLowerBound);
+    SmartDashboard.putNumber("Blue Upper Bound", Constants.blueUpperBound);
 
-        SmartDashboard.putNumber("Green Lower Bound", Constants.greenLowerBound);
-        SmartDashboard.putNumber("Green Upper Bound", Constants.greenUpperBound);
-        
-        SmartDashboard.putNumber("Yellow Lower Bound", Constants.yellowLowerBound);
-        SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
-    }
+    SmartDashboard.putNumber("Red Lower Bound", Constants.redLowerBound);
+    SmartDashboard.putNumber("Red Upper Bound", Constants.redUpperBound);
 
-    public static Pose2d getStartingPose() {
-        final Pose2d position = (Pose2d) choosePosition.getSelected();
-        return position;
-    }
+    SmartDashboard.putNumber("Green Lower Bound", Constants.greenLowerBound);
+    SmartDashboard.putNumber("Green Upper Bound", Constants.greenUpperBound);
+    
+    SmartDashboard.putNumber("Yellow Lower Bound", Constants.yellowLowerBound);
+    SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
+
+    // Display left and right shooter velocities
+    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+  }
+
+  public static Pose2d getStartingPose() {
+    final Pose2d position = (Pose2d) choosePosition.getSelected();
+    return position;
+  }
 
   public void periodic() {
+    // Update left and right shooter velocities
+    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+    
     // Change PID values for angle correction
     if (angleCorrection.Kp != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {
       angleCorrection.Kp = SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp);
