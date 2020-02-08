@@ -7,6 +7,8 @@
 
 package frc.robot.shooter;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
@@ -18,32 +20,99 @@ public class Shooter extends SubsystemBase {
   private Turret goalMover;
 
   public Shooter(Turret turret) {
+
+    // Makes turret instance the same as in RobotContainer
     goalMover = turret;
+
+    leftLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    rightLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+
+    leftLauncher.setSensorPhase(true);
+    rightLauncher.setSensorPhase(false);
+
+    leftLauncher.config_kP(0, shooterLeftPID.Kp);    
+    leftLauncher.config_kI(0, shooterLeftPID.Ki);
+    leftLauncher.config_kD(0, shooterLeftPID.Kd);
+
+    rightLauncher.config_kP(0, shooterRightPID.Kp);
+    rightLauncher.config_kI(0, shooterRightPID.Ki);
+    rightLauncher.config_kD(0, shooterRightPID.Kd);
+
   }
 
-  public void setVolts(double inVolts, double outVolts, double beltVolts){
+  /**
+   * Sets a voltage based on whether the robot is in shooting position or
+   * intake position. 
+   * @param inVolts The voltage sent to the shooter while in the intake position
+   * @param outVolts The voltage sent to the shooter while in the shooting position
+   * @param beltVolts The voltage sent to the conveyor belt, changing direction
+   * depending on whether the shooter is in the intake or shooting position
+   */
+  public void setPoseVolts(double inVolts, double outVolts, double beltVolts){
     if (goalMover.getCollecting()) {
-      collect(inVolts, beltVolts);
+      collectVolts(inVolts, beltVolts);
 
     } else {
-      shoot(outVolts, beltVolts);
+      shootVolts(outVolts, beltVolts);
     }
   }
 
-  
-  public void collect(double launchVolts, double beltVolts){
+  private void collectVolts(double launchVolts, double beltVolts){
     leftLauncher.setVoltage(-launchVolts);
     rightLauncher.setVoltage(launchVolts);
     conveyor.setVoltage(-beltVolts);
 
     System.out.println("Collecting " + launchVolts);
   }
-  public void shoot(double launchVolts, double beltVolts){
+
+  private void shootVolts(double launchVolts, double beltVolts){
     leftLauncher.setVoltage(launchVolts);
     rightLauncher.setVoltage(-launchVolts);
     conveyor.setVoltage(beltVolts);
 
     System.out.println("Shooting " + launchVolts);
+  }
+
+  /**
+   * Sets RPM based on whether the robot is in shooting position or 
+   * intake position. 
+   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
+   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
+   * @param beltVolts The voltage sent to the conveyor belt, changing direction
+   * depending on whether the shooter is in the intake or shooting position
+   */
+  public void setPoseRPM(double inRPM, double outRPM, double beltVolts){
+    if (goalMover.getCollecting()) {
+      setRPM(-inRPM, -beltVolts);
+
+    } else {
+      setRPM(outRPM, beltVolts);
+    }
+  }
+
+  /**
+   * Sets the velocity of the shooter in RPM using two velocity control loops. Also sets a 
+   * voltage for the conveyor belt, given that it does not have to be as accurate. Must be
+   * set negative for intake.
+   * @param launchRPM Velocity of the shooter in rotations per minute
+   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
+  */ 
+  private void setRPM(double launchRPM, double beltVolts) {
+    // Conversion factor from minutes to milliseconds
+    double minToMS = 600;
+
+    leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
+    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
+
+    conveyor.setVoltage(beltVolts);
+  }
+
+  public int getLeftVelocity() {
+    return leftLauncher.getSelectedSensorVelocity();
+  }
+
+  public int getRightVelocity() {
+    return rightLauncher.getSelectedSensorVelocity();
   }
 
   @Override

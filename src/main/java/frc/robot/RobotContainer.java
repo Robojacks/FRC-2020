@@ -81,7 +81,7 @@ public class RobotContainer {
   // Autonomous
   private Command shootThenGo = new FollowTarget(limelight, rDrive) 
     .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setVolts(intakeVolts, shooterVolts, conveyorVolts))
+    .andThen(()-> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -122,10 +122,15 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
-    // Shoot or Intake
+    // Shoot or intake with voltage
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setVolts(0, 0, 0), shooter);
+    .whenPressed(() -> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setPoseVolts(0, 0, 0), shooter);
+
+    // Shoot or intake with set velocity
+    new JoystickButton(xbox, Button.kBumperLeft.value)
+    .whenPressed(() -> shooter.setPoseRPM(intakeRPM, shooterRPM, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setPoseRPM(0, 0, 0), shooter);
 
     // Switches arm modes
     new JoystickButton(xbox, Button.kY.value)
