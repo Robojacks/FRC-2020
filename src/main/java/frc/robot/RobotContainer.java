@@ -124,8 +124,8 @@ public class RobotContainer {
 
     // Shoot or Intake
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setVoltage(intakeVolts, shooterVolts, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setVoltage(0, 0, 0), shooter);
+    .whenPressed(() -> shooter.setVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setVolts(0, 0, 0), shooter);
 
     // Switches arm modes
     new JoystickButton(xbox, Button.kY.value)
