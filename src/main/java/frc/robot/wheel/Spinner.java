@@ -51,7 +51,7 @@ public class Spinner extends SubsystemBase {
   public void toSelectedRotation_Color(){
     SpinnerMotor.set(rotationSpeed);
 
-    if(colorSense.getColour() != colorSense.getPrevColour()) {
+    if(colorSense.getColour() == colorSense.getPrevColour().next()) {
       rotation--;
     }
 
