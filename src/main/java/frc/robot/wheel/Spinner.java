@@ -9,8 +9,9 @@ package frc.robot.wheel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.wheel.SenseColor.*;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 
 
 import static frc.robot.Constants.*;
@@ -18,7 +19,7 @@ import static frc.robot.Constants.*;
 public class Spinner extends SubsystemBase {
 
   private SenseColor colorSense;
-  private final CANSparkMax SpinnerMotor = new CANSparkMax(4, MotorType.kBrushless);
+  private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
   private int rotation = 10 * 8;
 
   public Spinner(SenseColor colorSensor) {
