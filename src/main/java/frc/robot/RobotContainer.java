@@ -29,11 +29,14 @@ import frc.robot.drive.Gears;
 import frc.robot.drive.RevDrivetrain;
 import frc.robot.shooter.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.Arrays;
+import java.util.Set;
 
 import static frc.robot.Constants.*;
 
@@ -82,9 +85,10 @@ public class RobotContainer {
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
   
   // Autonomous
-  private Command shootThenGo = new FollowTarget(limelight, rDrive) 
-    .andThen(new WaitCommand(2)) 
-    .andThen(()-> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts))
+  private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
+    .andThen(new WaitCommand(.5)) 
+    .andThen(() -> goalMover.shootPose(), goalMover)
+    .andThen(()-> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
