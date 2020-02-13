@@ -12,8 +12,6 @@ import frc.robot.wheel.SenseColor.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-
-
 import static frc.robot.Constants.*;
 
 public class Spinner extends SubsystemBase {
@@ -28,15 +26,14 @@ public class Spinner extends SubsystemBase {
 
   public void move(double speed) {
     SpinnerMotor.set(speed);
-    System.out.println("move works");
   }
 
   public void toSelectedColor(String c) {
     Colour objective = Colour.fromString(c).nextIn(2);
-    SpinnerMotor.set(0.1);
+    move(colorSpeed);
 
     if (colorSense.getColour() == objective){
-      SpinnerMotor.set(0);
+      move(0);
       System.out.println("Release!");
     }
   }
@@ -49,15 +46,15 @@ public class Spinner extends SubsystemBase {
     rotation = maxRotations;
   };
 
-  public void toSelectedRotation_Color(){
-    SpinnerMotor.set(rotationSpeed);
+  public void toSelectedColorSwitches(){
+    move(rotationSpeed);
 
     if(colorSense.getColour() == colorSense.getPrevColour().next()) {
       rotation--;
     }
 
     if (rotation >= 0){
-      SpinnerMotor.set(0);
+      move(0);
     }
   
   }

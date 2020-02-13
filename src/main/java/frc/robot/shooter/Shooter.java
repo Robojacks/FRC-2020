@@ -134,7 +134,7 @@ public class Shooter extends SubsystemBase {
   private void setRPMTalon(double launchRPM, double beltVolts) {
     leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
     rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
-
+    
     conveyor.setVoltage(beltVolts);
   }
 

@@ -150,12 +150,12 @@ public class RobotContainer {
   
     // Spins to selected color
     new JoystickButton(xbox, Button.kStart.value)
-    .whenPressed(() -> spinner.toSelectedColor
+    .whileHeld(() -> spinner.toSelectedColor
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
     // Spin number of rotations
     new JoystickButton(xbox, Button.kBack.value)
-    .whenPressed(() -> spinner.toSelectedRotation_Color(), spinner);
+    .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner);
     
     // Switch Gears
     new JoystickButton(xbox, Button.kA.value)
