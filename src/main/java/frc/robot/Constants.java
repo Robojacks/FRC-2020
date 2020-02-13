@@ -127,6 +127,8 @@ public final class Constants {
     public static double Ki = 0;
     public static double Kd = 20;
     public static double Kf = 1023 / 7200;
+    
+    public static double tolerance = 0.5;
   }
 
   public static class shooterRightPID {
@@ -134,6 +136,8 @@ public final class Constants {
     public static double Ki = 0;
     public static double Kd = 20;
     public static double Kf = 1023 / 7200;
+
+    public static double tolerance = 0.5;
   }
 
   public static class distanceCorrection {

@@ -41,8 +41,8 @@ public class Shooter extends SubsystemBase {
     rightLauncher.setSensorPhase(false);
 
     // WPILib PID Stuff
-    leftControl.setTolerance(0.5);
-    rightControl.setTolerance(0.5);
+    leftControl.setTolerance(shooterLeftPID.tolerance);
+    rightControl.setTolerance(shooterRightPID.tolerance);
 
     // Talon PID Stuff
 
@@ -173,8 +173,8 @@ public class Shooter extends SubsystemBase {
     return leftLauncher.getSelectedSensorVelocity() / kTicksPerRev * minToMS;
   }
 
-  public int getRightVelocity() {
-    return rightLauncher.getSelectedSensorVelocity();
+  public double getRightVelocity() {
+    return rightLauncher.getSelectedSensorVelocity() / kTicksPerRev * minToMS;
   }
 
   @Override
