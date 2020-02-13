@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class Turret extends SubsystemBase {
-  Solenoid piston = new Solenoid(leftPistonPort);
-
+  Solenoid leftPiston = new Solenoid(leftPistonPort);
+  Solenoid rightPiston = new Solenoid(rightPistonPort);
   private boolean collecting = false;
 
   public boolean getCollecting() {
@@ -33,14 +33,16 @@ public class Turret extends SubsystemBase {
   }
 
   public void collectPose() {
-    piston.set(true);
-    
+    leftPiston.set(true);
+    rightPiston.set(true);
+
     collecting = true;
     System.out.println("Collecting Pose Set");
   }
 
   public void shootPose(){
-    piston.set(false);
+    leftPiston.set(false);
+    rightPiston.set(false);
 
     collecting = false;
     System.out.println("Shooting Pose Set");
