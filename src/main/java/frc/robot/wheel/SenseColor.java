@@ -41,26 +41,26 @@ public class SenseColor extends SubsystemBase {
 
   public enum Colour {
 
-    RED(redLowerBound, redUpperBound ,1,'R') {
+    RED(redLowerBound, redUpperBound ,1,"R") {
       public Colour next() {return YELLOW;}},
 
-    YELLOW(yellowLowerBound, yellowUpperBound,2,'Y') {
+    YELLOW(yellowLowerBound, yellowUpperBound,2,"Y") {
       public Colour next() {return BLUE;}},
 
-    BLUE(blueLowerBound, blueUpperBound,3,'B') {
+    BLUE(blueLowerBound, blueUpperBound,3,"B") {
       public Colour next() {return GREEN;}},
 
-    GREEN(greenLowerBound, greenUpperBound,4,'G') {
-      public Colour next() {return YELLOW;}};
+    GREEN(greenLowerBound, greenUpperBound,4,"G") {
+      public Colour next() {return RED;}};
 
     private final double upper;
     private final double lower;
     private final int position;
-    private final char capital;
+    private final String capital;
 
     public abstract Colour next();
 
-    public char getCapital(){
+    public String getCapital() {
       return capital;
     }
 
@@ -98,15 +98,15 @@ public class SenseColor extends SubsystemBase {
     
 	  
 
-	public static Colour fromChar (final char Ch){
+	public static Colour fromString (final String Ch){
       switch(Ch){
-        case('B'):
+        case("B"):
           return Colour.BLUE;
-        case('Y'):
+        case("Y"):
           return Colour.YELLOW;
-        case('G'):
+        case("G"):
           return Colour.GREEN;
-        case('R'):
+        case("R"):
           return Colour.RED;
         default:
           return Colour.YELLOW;
@@ -114,7 +114,7 @@ public class SenseColor extends SubsystemBase {
 
     }
   
-    private Colour(final double lowerBound, final double upperBound, final int position, final char capital) {
+    private Colour(final double lowerBound, final double upperBound, final int position, final String capital) {
       this.upper = upperBound;
       this.lower = lowerBound;
       this.position = position;
@@ -213,22 +213,7 @@ public class SenseColor extends SubsystemBase {
     }
 
   }
-
-  public char getColorChar() {
-
-    switch(getColour()){
-      case YELLOW:
-        return 'Y';
-      case RED:
-        return 'R';
-      case BLUE:
-        return 'B';
-      case GREEN:
-        return 'G';
-      default:
-        return 'Y';
-    }
-  }
+  
   
 
   @Override

@@ -32,10 +32,10 @@ public class Spinner extends SubsystemBase {
   }
 
   public void toSelectedColor(String c) {
-    Colour objective = Colour.fromChar(c.charAt(0)).nextIn(2);
+    Colour objective = Colour.fromString(c).nextIn(2);
     SpinnerMotor.set(0.1);
 
-    if (colorSense.getColorChar() == objective.getCapital()){
+    if (colorSense.getColour() == objective){
       SpinnerMotor.set(0);
       System.out.println("Release!");
     }
