@@ -49,7 +49,7 @@ public class Spinner extends SubsystemBase {
     rotation = maxRotations;
   };
 
-  public void toSelectedRotation_Color(){
+  public void toSelectedColorSwitches(){
     SpinnerMotor.set(rotationSpeed);
 
     if(colorSense.getColour() == colorSense.getPrevColour().next()) {
