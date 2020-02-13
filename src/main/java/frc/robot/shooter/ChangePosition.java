@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
 
-public class Turret extends SubsystemBase {
+public class ChangePosition extends SubsystemBase {
   Solenoid leftPiston = new Solenoid(leftPistonPort);
   Solenoid rightPiston = new Solenoid(rightPistonPort);
   private boolean collecting = false;

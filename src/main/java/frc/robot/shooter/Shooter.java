@@ -18,7 +18,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
-  private Turret goalMover;
+  private ChangePosition goalMover;
 
   private WPI_TalonSRX leftLauncher = new WPI_TalonSRX(kLeftShooterWheelPort);
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
@@ -30,9 +30,9 @@ public class Shooter extends SubsystemBase {
   // Conversion factor from minutes to milliseconds
   private double minToMS = 600;
 
-  public Shooter(Turret turret) {
-    // Makes turret instance the same as in RobotContainer
-    goalMover = turret;
+  public Shooter(ChangePosition changePosition) {
+    // Makes changePosition instance the same as in RobotContainer
+    goalMover = changePosition;
 
     leftLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     rightLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);

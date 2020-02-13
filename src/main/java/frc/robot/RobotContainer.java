@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import frc.robot.shooter.Turret;
+import frc.robot.shooter.ChangePosition;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
@@ -60,7 +60,7 @@ public class RobotContainer {
 
   private final Spinner spinner = new Spinner(colorSense);
 
-  private final Turret goalMover = new Turret();
+  private final ChangePosition goalMover = new ChangePosition();
 
   private final Arm arm = new Arm();
 
