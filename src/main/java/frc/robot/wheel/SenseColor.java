@@ -25,12 +25,12 @@ public class SenseColor extends SubsystemBase {
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
   private int proximity = m_colorSensor.getProximity();
   private double IR = m_colorSensor.getIR();
-  private Color detectedColor = m_colorSensor.getColor();
+  //private Color detectedColor = m_colorSensor.getColor();
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
    
 
-  public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+  //public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
   private boolean isBlue = getRawColor() >= blueLowerBound && getRawColor() <= blueUpperBound;
   private boolean isRed = getRawColor() >= redLowerBound && getRawColor() <= redUpperBound;
@@ -154,11 +154,11 @@ public class SenseColor extends SubsystemBase {
 
  }
 
-
+/*
   public Color getColor() {
     return detectedColor;
   }
-
+*/
   public double getRawColor() {
     return IR;
   }
@@ -234,9 +234,10 @@ public class SenseColor extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    detectedColor = m_colorSensor.getColor();
+   // detectedColor = m_colorSensor.getColor();
     IR = m_colorSensor.getIR();
     proximity = m_colorSensor.getProximity();
-    match = m_colorMatcher.matchClosestColor(detectedColor);
+    //match = m_colorMatcher.matchClosestColor(detectedColor);
   }
+
 }
