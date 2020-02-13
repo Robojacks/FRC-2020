@@ -96,7 +96,7 @@ public final class Constants {
 
   public static final double conveyorVolts = 2;
 
-  public static final double rotationSpeed = 0.2;
+  public static final double colorSwitchSpeed = 0.2;
   public static final double colorSpeed = 0.1;
   
   // Field Measurements

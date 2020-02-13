@@ -18,7 +18,7 @@ public class Spinner extends SubsystemBase {
 
   private SenseColor colorSense;
   private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
-  private int rotation = 10 * 8;
+  private int colorSwitches = 10 * 8;
 
   public Spinner(SenseColor colorSensor) {
     colorSense = colorSensor;
@@ -39,21 +39,21 @@ public class Spinner extends SubsystemBase {
   }
 
   public int getCurrentRotations() {
-    return rotation;
+    return colorSwitches;
   }
 
-  public void changeMaxRotations(int maxRotations) {
-    rotation = maxRotations;
+  public void changeMaxRotations(int maxColorSwitches) {
+    colorSwitches = maxColorSwitches;
   };
 
   public void toSelectedColorSwitches(){
-    move(rotationSpeed);
+    move(colorSwitchSpeed);
 
     if(colorSense.getColour() == colorSense.getPrevColour().next()) {
-      rotation--;
+      colorSwitches--;
     }
 
-    if (rotation >= 0){
+    if (colorSwitches >= 0){
       move(0);
     }
   
