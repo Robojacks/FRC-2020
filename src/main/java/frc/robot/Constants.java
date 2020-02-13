@@ -21,8 +21,8 @@ public final class Constants {
   // Port Numbers
 
   // Drive Ports
-	public static final int kLeftFrontPort = 8;
-	public static final int kRightFrontPort = 1;
+	public static final int kLeftFrontPort = 1;
+	public static final int kRightFrontPort = 3;
 	public static final int kLeftRearPort = 2;
   public static final int kRightRearPort = 4;
 
@@ -30,7 +30,7 @@ public final class Constants {
   public static final int kXboxPort = 0;
 
   // Spinner port
-  public static final int kSpinnerPort = 8; 
+  public static final int kSpinnerPort = 10; 
 
   // Compressor port
   public static final int compressorModule = 20;
