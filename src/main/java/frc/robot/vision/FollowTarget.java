@@ -9,6 +9,7 @@ package frc.robot.vision;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.drive.RevDrivetrain;
 
 import static frc.robot.Constants.*;
@@ -33,26 +34,41 @@ public class FollowTarget extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(vision, drive);
 
-    distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
-    angleCorrector.setSetpoint(0);
+    distanceCorrector.setTolerance(0.5);
+    angleCorrector.setTolerance(1);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
+    angleCorrector.setSetpoint(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Passing PID outputs to the drive
     drive.getDifferentialDrive().arcadeDrive(
-    distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)), 
-    angleCorrector.calculate(vision.getXError()));
+      // Distance Correction
+      MathUtil.clamp(
+        // Calculate what to do based off measurement
+        distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)),
+        // Min, Max output
+        -0.5, 0.5), 
+      // Angle Correction
+      MathUtil.clamp(
+        // Calculate what to do based off measurement
+        angleCorrector.calculate(vision.getXError()),
+        // Min, Max output
+        -0.5, 0.5));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    distanceCorrector.reset();
+    angleCorrector.reset();
   }
 
   // Returns true when the command should end.

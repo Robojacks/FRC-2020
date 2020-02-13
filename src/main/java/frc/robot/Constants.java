@@ -51,8 +51,8 @@ public final class Constants {
   public static final int kConveyorBelt = 9;
   
   // Solenoid controlling gear ports 
-  public static final int SolGearLPort = 15;
-  public static final int SolGearRPort = 16;
+  public static final int SolGearLPort = 2;
+  public static final int SolGearRPort = 3;
 
   // Motor Phase
   public static final boolean kLeftInverted = false;
@@ -73,17 +73,17 @@ public final class Constants {
   public static final double cameraAngle = 0;
   
   // Color Value Bounds
-	public static  double blueLowerBound = 106;
-  public static  double blueUpperBound = 115;
+	public static double blueLowerBound = 106;
+  public static double blueUpperBound = 115;
 
-  public static  double redLowerBound = 65;
-  public static  double redUpperBound = 81;
+  public static double redLowerBound = 65;
+  public static double redUpperBound = 81;
 
-  public static  double greenLowerBound = 46;
-  public static  double greenUpperBound = 60;
+  public static double greenLowerBound = 46;
+  public static double greenUpperBound = 60;
 
-  public static  double yellowLowerBound = 91;
-  public static  double yellowUpperBound = 98;
+  public static double yellowLowerBound = 91;
+  public static double yellowUpperBound = 98;
   
   // Constant Speeds
   public static final double armPercentSpeed = 0.4;
