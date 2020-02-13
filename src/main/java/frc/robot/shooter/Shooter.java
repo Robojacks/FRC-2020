@@ -10,15 +10,23 @@ package frc.robot.shooter;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+
 import static frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
+  private Turret goalMover;
+
   private WPI_TalonSRX leftLauncher = new WPI_TalonSRX(kLeftShooterWheelPort);
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
   private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
-  private Turret goalMover;
   
+  private PIDController leftControl = new PIDController(0, 0, 0);
+  private PIDController rightControl = new PIDController(0, 0, 0);
+
   // Conversion factor from minutes to milliseconds
   private double minToMS = 600;
 
@@ -31,6 +39,12 @@ public class Shooter extends SubsystemBase {
 
     leftLauncher.setSensorPhase(true);
     rightLauncher.setSensorPhase(false);
+
+    // WPILib PID Stuff
+    leftControl.setTolerance(0.5);
+    rightControl.setTolerance(0.5);
+
+    // Talon PID Stuff
 
     leftLauncher.config_kP(0, shooterLeftPID.Kp);    
     leftLauncher.config_kI(0, shooterLeftPID.Ki);
@@ -84,24 +98,72 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The voltage sent to the conveyor belt, changing direction
    * depending on whether the shooter is in the intake or shooting position
    */
-  public void setPoseRPM(double inRPM, double outRPM, double beltVolts){
+  public void setPoseRPMTalon(double inRPM, double outRPM, double beltVolts){
     if (goalMover.getCollecting()) {
-      setRPM(-inRPM, -beltVolts);
+      setRPMTalon(-inRPM, -beltVolts);
 
     } else {
-      setRPM(outRPM, beltVolts);
+      setRPMTalon(outRPM, beltVolts);
     }
   }
 
   /**
-   * Sets the velocity of the shooter in RPM using two velocity control loops. Also sets a 
-   * voltage for the conveyor belt, given that it does not have to be as accurate. Must be
-   * set negative for intake.
+   * Sets RPM based on whether the robot is in shooting position or 
+   * intake position. 
+   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
+   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
+   * @param beltVolts The voltage sent to the conveyor belt, changing direction
+   * depending on whether the shooter is in the intake or shooting position
+   */
+  public void setPoseRPMWPI(double inRPM, double outRPM, double beltVolts){
+    if (goalMover.getCollecting()) {
+      setRPMWPI(-inRPM, -beltVolts);
+
+    } else {
+      setRPMWPI(outRPM, beltVolts);
+    }
+  }
+
+  /**
+   * Sets the velocity of the shooter in RPM using two velocity control loops directly on the 
+   * talon. Also sets a voltage for the conveyor belt, given that it does not have to be 
+   * as accurate. Must be set negative for intake.
    * @param launchRPM Velocity of the shooter in rotations per minute
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
-  private void setRPM(double launchRPM, double beltVolts) {
+  private void setRPMTalon(double launchRPM, double beltVolts) {
     leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
+    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
+
+    conveyor.setVoltage(beltVolts);
+  }
+
+  /**
+   * Sets the velocity of the shooter in RPM using two velocity control loops through the roborio.
+   * Also sets a voltage for the conveyor belt, given that it does not have to be as accurate. Must 
+   * be set negative for intake.
+   * @param launchRPM Velocity of the shooter in rotations per minute
+   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
+  */ 
+  private void setRPMWPI(double launchRPM, double beltVolts) {
+    leftLauncher.set(
+      MathUtil.clamp(leftControl.calculate(getLeftVelocity(), launchRPM), -.5, .5));
+
+    rightLauncher.set(
+      MathUtil.clamp(rightControl.calculate(getRightVelocity(), launchRPM), -.5, .5));
+
+    conveyor.setVoltage(beltVolts);
+  }
+
+  /**
+   * Sets the velocity of the shooter in RPM using two velocity control loops directly on the 
+   * talon. Also sets a voltage for the conveyor belt, given that it does not have to be 
+   * as accurate. Must be set negative for intake.
+   * @param launchRPM Velocity of the shooter in rotations per minute
+   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
+  */ 
+  private void setRPM(double launchRPM, double beltVolts, double error) {
+    leftLauncher.setVoltage(launchRPM * kTicksPerRev / minToMS);
     rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
 
     conveyor.setVoltage(beltVolts);

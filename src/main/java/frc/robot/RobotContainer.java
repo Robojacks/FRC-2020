@@ -138,8 +138,8 @@ public class RobotContainer {
 
     // Shoot or intake with set velocity
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setPoseRPM(intakeRPM, shooterRPM, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setPoseRPM(0, 0, 0), shooter);
+    .whenPressed(() -> shooter.setPoseRPMTalon(intakeRPM, shooterRPM, conveyorVolts), shooter)
+    .whenReleased(() -> shooter.setPoseRPMTalon(0, 0, 0), shooter);
 
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
