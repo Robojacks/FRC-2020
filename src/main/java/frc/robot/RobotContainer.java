@@ -130,17 +130,16 @@ public class RobotContainer {
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage
-    /*
     new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
     .whenReleased(() -> shooter.setPoseVolts(0, 0, 0), shooter);
-    */
-
+    
     // Shoot or intake with set velocity
+    /*
     new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> shooter.setPoseRPMTalon(intakeRPM, shooterRPM, conveyorVolts), shooter)
     .whenReleased(() -> shooter.setPoseRPMTalon(0, 0, 0), shooter);
-
+    */
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> arm.switchMovement(), arm);
