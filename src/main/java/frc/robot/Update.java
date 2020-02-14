@@ -59,8 +59,8 @@ public class Update {
     SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
 
     // Display left and right shooter velocities
-    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
-    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+    SmartDashboard.putNumber("Left Shooter Velocity (Raw)", m_shooter.getRawLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter Velocity (Raw)", m_shooter.getRawRightVelocity());
   }
 
   public static Pose2d getStartingPose() {
@@ -70,8 +70,8 @@ public class Update {
 
   public void periodic() {
     // Update left and right shooter velocities
-    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
-    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+    SmartDashboard.putNumber("Left Shooter Velocity (Raw)", m_shooter.getRawLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter Velocity (Raw)", m_shooter.getRawRightVelocity());
     
     // Change PID values for angle correction
     if (angleCorrection.Kp != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {

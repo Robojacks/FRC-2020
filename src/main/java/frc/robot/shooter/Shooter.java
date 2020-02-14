@@ -32,8 +32,8 @@ public class Shooter extends SubsystemBase {
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
 
-  // Conversion factor from minutes to milliseconds
-  private double minToMS = 600;
+  // Conversion factor from milliseconds to minutes
+  private double msToMin = 600;
 
   public Shooter(ChangePosition changePosition) {
     // Makes changePosition instance the same as in RobotContainer
@@ -136,8 +136,8 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
   private void setRPMTalon(double launchRPM, double beltVolts) {
-    leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
-    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
+    leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / msToMin);
+    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / msToMin);
     
     conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
   }
@@ -152,23 +152,23 @@ public class Shooter extends SubsystemBase {
   private void setRPMWPI(double launchRPM, double beltVolts) {
     leftLauncher.setVoltage(
       MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
-      + leftControl.calculate(getLeftVelocity(), launchRPM), // PID correction
+      + leftControl.calculate(getRawLeftVelocity(), launchRPM), // PID correction
       -12, 12)); // min volts, max volts
 
     rightLauncher.setVoltage(
       MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
-      + rightControl.calculate(getRightVelocity(), -launchRPM), // PID correction
+      + rightControl.calculate(getRawRightVelocity(), -launchRPM), // PID correction
       -12, 12)); // min volts, max volts
 
     conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
   }
 
-  public double getLeftVelocity() {
-    return leftLauncher.getSelectedSensorVelocity() / kTicksPerRev * minToMS;
+  public double getRawLeftVelocity() {
+    return leftLauncher.getSelectedSensorVelocity();
   }
 
-  public double getRightVelocity() {
-    return rightLauncher.getSelectedSensorVelocity() / kTicksPerRev * minToMS;
+  public double getRawRightVelocity() {
+    return rightLauncher.getSelectedSensorVelocity();
   }
 
   @Override
