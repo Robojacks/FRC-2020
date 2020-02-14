@@ -12,6 +12,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
@@ -26,6 +28,9 @@ public class Shooter extends SubsystemBase {
   
   private PIDController leftControl = new PIDController(0, 0, 0);
   private PIDController rightControl = new PIDController(0, 0, 0);
+
+  private SimpleMotorFeedforward feedforward 
+    = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
 
   // Conversion factor from minutes to milliseconds
   private double minToMS = 600;
@@ -45,7 +50,6 @@ public class Shooter extends SubsystemBase {
     rightControl.setTolerance(shooterRightPID.tolerance);
 
     // Talon PID Stuff
-
     leftLauncher.config_kP(0, shooterLeftPID.Kp);    
     leftLauncher.config_kI(0, shooterLeftPID.Ki);
     leftLauncher.config_kD(0, shooterLeftPID.Kd);
@@ -135,7 +139,7 @@ public class Shooter extends SubsystemBase {
     leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / minToMS);
     rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
     
-    conveyor.setVoltage(beltVolts);
+    conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
   }
 
   /**
@@ -146,27 +150,17 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
   private void setRPMWPI(double launchRPM, double beltVolts) {
-    leftLauncher.set(
-      MathUtil.clamp(leftControl.calculate(getLeftVelocity(), launchRPM), -.5, .5));
+    leftLauncher.setVoltage(
+      MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
+      + leftControl.calculate(getLeftVelocity(), launchRPM), // PID correction
+      -12, 12)); // min volts, max volts
 
-    rightLauncher.set(
-      MathUtil.clamp(rightControl.calculate(getRightVelocity(), launchRPM), -.5, .5));
+    rightLauncher.setVoltage(
+      MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
+      + rightControl.calculate(getRightVelocity(), -launchRPM), // PID correction
+      -12, 12)); // min volts, max volts
 
-    conveyor.setVoltage(beltVolts);
-  }
-
-  /**
-   * Sets the velocity of the shooter in RPM using two velocity control loops directly on the 
-   * talon. Also sets a voltage for the conveyor belt, given that it does not have to be 
-   * as accurate. Must be set negative for intake.
-   * @param launchRPM Velocity of the shooter in rotations per minute
-   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
-  */ 
-  private void setRPM(double launchRPM, double beltVolts, double error) {
-    leftLauncher.setVoltage(launchRPM * kTicksPerRev / minToMS);
-    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / minToMS);
-
-    conveyor.setVoltage(beltVolts);
+    conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
   }
 
   public double getLeftVelocity() {

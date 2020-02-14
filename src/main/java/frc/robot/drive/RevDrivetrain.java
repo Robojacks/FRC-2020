@@ -43,7 +43,7 @@ public class RevDrivetrain extends SubsystemBase {
   DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
   DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
 
-  SimpleMotorFeedforward feedForward 
+  SimpleMotorFeedforward feedforward 
   = new SimpleMotorFeedforward(driveFeedforward.ks, driveFeedforward.kv, driveFeedforward.ka);
 
   PIDController leftDrivePID 
@@ -65,8 +65,13 @@ public class RevDrivetrain extends SubsystemBase {
   }
 
   public void setOutputVolts(double leftVolts, double rightVolts) {
-      LFrontWheel.setVoltage(feedForward.calculate(leftVolts));
-      RFrontWheel.setVoltage(feedForward.calculate(rightVolts));
+    LFrontWheel.setVoltage(leftVolts);
+    RFrontWheel.setVoltage(rightVolts);
+  }
+
+  public void setOutputFeedforward(double leftVolts, double rightVolts) {
+    LFrontWheel.setVoltage(feedforward.calculate(leftVolts));
+    RFrontWheel.setVoltage(feedforward.calculate(rightVolts));
   }
 
   public DifferentialDrive getDifferentialDrive() {
@@ -86,7 +91,7 @@ public class RevDrivetrain extends SubsystemBase {
     }
   
     public SimpleMotorFeedforward getFeedforward() {
-      return feedForward;
+      return feedforward;
     }
   
     public PIDController getLeftDrivePID() {

@@ -122,11 +122,16 @@ public final class Constants {
     public static double Kd = 0;
   }
 
+  public static class shooterFeedforward {
+    public static double ks = 0;
+    public static double kv = 0;
+  }
+
   public static class shooterLeftPID {
     public static double Kp = 0.25;
     public static double Ki = 0;
     public static double Kd = 20;
-    public static double Kf = 1023 / 7200;
+    public static double Kf = 0; // 1023 / 7200
     
     public static double tolerance = 0.5;
   }
@@ -135,7 +140,7 @@ public final class Constants {
     public static double Kp = 0.25;
     public static double Ki = 0;
     public static double Kd = 20;
-    public static double Kf = 1023 / 7200;
+    public static double Kf = 0; // 1023 / 7200
 
     public static double tolerance = 0.5;
   }
