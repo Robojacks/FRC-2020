@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.shooter.Shooter;
+import frc.robot.wheel.SenseColor;
 
 import static frc.robot.Constants.*;
 /**
@@ -19,6 +20,7 @@ import static frc.robot.Constants.*;
  */
 public class Update {
   private Shooter m_shooter;
+  private SenseColor colorSense;
 
   // Starting positions
   private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
@@ -27,8 +29,9 @@ public class Update {
 
   private static final SendableChooser choosePosition = new SendableChooser<>();
 
-  public Update(Shooter shooter) {
+  public Update(SenseColor colorSensing, Shooter shooter) {
     m_shooter = shooter;
+    colorSense = colorSensing;
 
     choosePosition.setDefaultOption("Center", center);
     choosePosition.addOption("Left", left);
@@ -58,6 +61,11 @@ public class Update {
     SmartDashboard.putNumber("Yellow Lower Bound", Constants.yellowLowerBound);
     SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
 
+    // Put up color sense data
+    SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
+    SmartDashboard.putNumber("Proximity", colorSense.getProximity());
+    SmartDashboard.putString("Detected Color", colorSense.getColorString());
+
     // Display left and right shooter velocities
     SmartDashboard.putNumber("Left Shooter Velocity (Raw)", m_shooter.getRawLeftVelocity());
     SmartDashboard.putNumber("Right Shooter Velocity (Raw)", m_shooter.getRawRightVelocity());
@@ -72,6 +80,11 @@ public class Update {
     // Update left and right shooter velocities
     SmartDashboard.putNumber("Left Shooter Velocity (Raw)", m_shooter.getRawLeftVelocity());
     SmartDashboard.putNumber("Right Shooter Velocity (Raw)", m_shooter.getRawRightVelocity());
+
+    // Update color sense data
+    SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
+    SmartDashboard.putNumber("Proximity", colorSense.getProximity());
+    SmartDashboard.putString("Detected Color", colorSense.getColorString());
     
     // Change PID values for angle correction
     if (angleCorrection.Kp != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {

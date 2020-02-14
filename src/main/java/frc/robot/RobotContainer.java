@@ -69,7 +69,7 @@ public class RobotContainer {
   private final Gears gears = new Gears();
 
   // Update PID values
-  private final Update update = new Update(shooter);
+  private final Update update = new Update(colorSense, shooter);
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
@@ -165,9 +165,6 @@ public class RobotContainer {
 
   public void periodic() {
     update.periodic();
-    SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
-    SmartDashboard.putNumber("Proximity", colorSense.getProximity());
-    SmartDashboard.putString("Detected Color", colorSense.getColorString());
   }
 
   private Trajectory getMovingTrajectory() {
