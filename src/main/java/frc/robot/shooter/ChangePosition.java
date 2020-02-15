@@ -7,15 +7,22 @@
 
 package frc.robot.shooter;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
 
 public class ChangePosition extends SubsystemBase {
+  Compressor airow = new Compressor(20);
+
   Solenoid leftPiston = new Solenoid(leftPistonPort);
   Solenoid rightPiston = new Solenoid(rightPistonPort);
   private boolean collecting = false;
+
+  public ChangePosition() {
+    airow.start();
+  }
 
   public boolean getCollecting() {
     return collecting;

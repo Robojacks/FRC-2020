@@ -130,9 +130,8 @@ public class RobotContainer {
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage
-    new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setPoseVolts(0, 0, 0), shooter);
+    new JoystickButton(xbox, Button.kA.value)
+    .whenPressed(() -> shooter.switchVoltsPose(intakeVolts, shooterVolts, conveyorVolts), shooter);
     
     // Shoot or intake with set velocity
     /*
@@ -158,7 +157,7 @@ public class RobotContainer {
     .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner);
     
     // Switch Gears
-    new JoystickButton(xbox, Button.kA.value)
+    new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> gears.switchGear(), gears);
     
   }

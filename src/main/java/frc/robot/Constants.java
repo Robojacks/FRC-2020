@@ -44,8 +44,8 @@ public final class Constants {
   public static final int rightArmPort = 8;
 
   // Shooter motor ports
-  public static final int kLeftShooterWheelPort = 5;
-  public static final int kRightShooterWheelPort = 6;
+  public static final int kLeftShooterWheelPort = 6;
+  public static final int kRightShooterWheelPort = 5;
 
   // Conveyor belt motor port
   public static final int kConveyorBelt = 9;
@@ -94,7 +94,7 @@ public final class Constants {
   public static final double intakeRPM = 50;
   public static final double shooterRPM = 100;
 
-  public static final double conveyorVolts = 2;
+  public static final double conveyorVolts = 6;
 
   public static final double colorSwitchSpeed = 0.2;
   public static final double colorSpeed = 0.1;

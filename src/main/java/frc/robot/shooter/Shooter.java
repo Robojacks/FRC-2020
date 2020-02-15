@@ -32,6 +32,9 @@ public class Shooter extends SubsystemBase {
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
 
+  // Switch
+  private boolean engaged = false;
+
   // Conversion factor from milliseconds to minutes
   private double msToMin = 600;
 
@@ -78,18 +81,28 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  public void switchVoltsPose(double inVolts, double outVolts, double beltVolts) {
+    if (engaged) {
+      setPoseVolts(0, 0, 0);
+      engaged = false;
+    } else {
+      setPoseVolts(inVolts, outVolts, beltVolts);
+      engaged = true;
+    }
+  }
+
   private void collectVolts(double launchVolts, double beltVolts){
     leftLauncher.setVoltage(-launchVolts);
-    rightLauncher.setVoltage(launchVolts);
-    conveyor.setVoltage(-beltVolts);
+    rightLauncher.setVoltage(-launchVolts);
+    conveyor.setVoltage(beltVolts);
 
     System.out.println("Collecting " + launchVolts);
   }
 
   private void shootVolts(double launchVolts, double beltVolts){
     leftLauncher.setVoltage(launchVolts);
-    rightLauncher.setVoltage(-launchVolts);
-    conveyor.setVoltage(beltVolts);
+    rightLauncher.setVoltage(launchVolts);
+    conveyor.setVoltage(-beltVolts);
 
     System.out.println("Shooting " + launchVolts);
   }

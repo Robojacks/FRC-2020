@@ -53,7 +53,7 @@ public class FollowTarget extends CommandBase {
       // Distance Correction
       MathUtil.clamp(
         // Calculate what to do based off measurement
-        distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)),
+        0, //distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)),
         // Min, Max output
         -0.5, 0.5), 
       // Angle Correction

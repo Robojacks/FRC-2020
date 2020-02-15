@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase {
   private WPI_TalonSRX leftArm = new WPI_TalonSRX(leftArmPort);
   private WPI_TalonSRX rightArm = new WPI_TalonSRX(rightArmPort);
 
-  private boolean negation = false;
+  private boolean negation = true; // on true for safety, in case arm is accidentally activated
 
   public void move(double speed) {
     leftArm.set(speed);
