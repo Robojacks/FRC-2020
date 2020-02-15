@@ -123,11 +123,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     // Switch position between shooting and intake
-    new JoystickButton(xbox, Button.kBumperLeft.value)
+    new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage
-    new JoystickButton(xbox, Button.kA.value)
+    new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.switchVoltsPose(intakeVolts, shooterVolts, conveyorVolts), shooter);
     
     // Shoot or intake with set velocity
@@ -141,7 +141,7 @@ public class RobotContainer {
     .whenPressed(() -> arm.switchMovement(), arm);
 
     // Vision correction
-    new JoystickButton(xbox, Button.kB.value)
+    new JoystickButton(xbox, Button.kX.value)
     .whileHeld(new FollowTarget(limelight, rDrive));
   
     // Spins to selected color

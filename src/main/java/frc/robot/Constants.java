@@ -89,7 +89,7 @@ public final class Constants {
   public static final double armPercentSpeed = 0.4;
   
   public static final double intakeVolts = 4;
-  public static final double shooterVolts = 9.25; 
+  public static final double shooterVolts = 12; // 9.25
 
   public static final double intakeRPM = 50;
   public static final double shooterRPM = 100;

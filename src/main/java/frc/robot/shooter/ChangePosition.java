@@ -16,8 +16,9 @@ import static frc.robot.Constants.*;
 public class ChangePosition extends SubsystemBase {
   Compressor airow = new Compressor(20);
 
-  Solenoid leftPiston = new Solenoid(leftPistonPort);
-  Solenoid rightPiston = new Solenoid(rightPistonPort);
+  Solenoid leftPiston = new Solenoid(compressorModule, leftPistonPort);
+  Solenoid rightPiston = new Solenoid(compressorModule, rightPistonPort);
+
   private boolean collecting = false;
 
   public ChangePosition() {

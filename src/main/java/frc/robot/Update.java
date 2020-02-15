@@ -27,7 +27,7 @@ public class Update {
   private final Pose2d center = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
   private final Pose2d right = new Pose2d(1, 0, Rotation2d.fromDegrees(0));
 
-  private static final SendableChooser choosePosition = new SendableChooser<>();
+  private static final SendableChooser choosePosition = new SendableChooser<Pose2d>();
 
   public Update(SenseColor colorSensing, Shooter shooter) {
     m_shooter = shooter;

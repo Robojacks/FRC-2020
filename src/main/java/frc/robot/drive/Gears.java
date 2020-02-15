@@ -8,13 +8,13 @@
 package frc.robot.drive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase; 
-import frc.robot.Constants;
+import static frc.robot.Constants.*;
 /**
  * Add your docs here.
  */
 public class Gears extends SubsystemBase {
-  Solenoid left = new Solenoid(Constants.SolGearLPort);
-  Solenoid right = new Solenoid(Constants.SolGearRPort);
+  Solenoid left = new Solenoid(compressorModule, SolGearLPort);
+  Solenoid right = new Solenoid(compressorModule, SolGearRPort);
 
   public enum gearState {
     FAST, SLOW;
