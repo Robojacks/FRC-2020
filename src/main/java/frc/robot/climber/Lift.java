@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
 
-public class Arm extends SubsystemBase {
+public class Lift extends SubsystemBase {
   private WPI_TalonSRX leftArm = new WPI_TalonSRX(leftArmPort);
   private WPI_TalonSRX rightArm = new WPI_TalonSRX(rightArmPort);
 

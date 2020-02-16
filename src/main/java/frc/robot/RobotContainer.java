@@ -24,7 +24,7 @@ import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
 import frc.robot.wheel.Spinner;
-import frc.robot.climber.Arm;
+import frc.robot.climber.Lift;
 import frc.robot.drive.Gears;
 import frc.robot.drive.RevDrivetrain;
 import frc.robot.shooter.Shooter;
@@ -60,7 +60,7 @@ public class RobotContainer {
 
   private final ChangePosition goalMover = new ChangePosition();
 
-  private final Arm arm = new Arm();
+  private final Lift lift = new Lift();
 
   private final Shooter shooter = new Shooter(goalMover);
 
@@ -77,10 +77,10 @@ public class RobotContainer {
       drivePercentLimit * xbox.getRawAxis(1), drivePercentLimit * xbox.getRawAxis(5), false), rDrive);
   
   private Command moveArmOneAxis = new RunCommand(
-    () -> arm.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
+    () -> lift.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), lift);
   
   private Command moveArm = new RunCommand(
-    () -> arm.move(xbox.getRawAxis(Axis.kRightTrigger.value) - xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
+    () -> lift.move(xbox.getRawAxis(Axis.kRightTrigger.value) - xbox.getRawAxis(Axis.kLeftTrigger.value)), lift);
   
   private Command moveSpinner = new RunCommand(() -> 
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
@@ -117,7 +117,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     rDrive.setDefaultCommand(manualDrive);
-    arm.setDefaultCommand(moveArmOneAxis);
+    lift.setDefaultCommand(moveArmOneAxis);
     spinner.setDefaultCommand(moveSpinner);
   }
 
@@ -146,7 +146,7 @@ public class RobotContainer {
 
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
-    .whenPressed(() -> arm.switchMovement(), arm);
+    .whenPressed(() -> lift.switchMovement(), lift);
 
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
