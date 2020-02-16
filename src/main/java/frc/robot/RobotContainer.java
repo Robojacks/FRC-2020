@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import frc.robot.shooter.ChangePosition;
+import frc.robot.shooter.Conveyor;
 import frc.robot.vision.FollowTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
@@ -62,6 +63,8 @@ public class RobotContainer {
   private final Arm arm = new Arm();
 
   private final Shooter shooter = new Shooter(goalMover);
+
+  private final Conveyor conveyor = new Conveyor(goalMover, shooter);
 
   private final Gears gears = new Gears();
 
@@ -130,14 +133,15 @@ public class RobotContainer {
 
     // Shoot or intake with voltage
     new JoystickButton(xbox, Button.kBumperLeft.value)
-    .whenPressed(() -> shooter.switchVoltsPose(intakeVolts, shooterVolts, conveyorVolts), shooter);
+    .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
+    .whenPressed(new WaitCommand(1).andThen(() -> conveyor.toggleSpeed(conveyorVolts)));
     
     // Shoot or intake with set velocity
-    /*
-    new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> shooter.setPoseRPMTalon(intakeRPM, shooterRPM, conveyorVolts), shooter)
-    .whenReleased(() -> shooter.setPoseRPMTalon(0, 0, 0), shooter);
-    */
+    
+    new JoystickButton(xbox, Button.kB.value)
+    .whenPressed(() -> shooter.setSpeedTalon(intakeRPM, shooterRPM), shooter)
+    .whenReleased(() -> shooter.setSpeedTalon(0, 0), shooter);
+
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> arm.switchMovement(), arm);

@@ -23,19 +23,21 @@ public class Shooter extends SubsystemBase {
 
   private WPI_TalonSRX leftLauncher = new WPI_TalonSRX(kLeftShooterWheelPort);
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
-  private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
   
-  private PIDController leftControl = new PIDController(0, 0, 0);
-  private PIDController rightControl = new PIDController(0, 0, 0);
+  private PIDController leftControl 
+    = new PIDController(shooterLeftPID.Kp, shooterLeftPID.Ki, shooterLeftPID.Kd);
+
+  private PIDController rightControl 
+    = new PIDController(shooterRightPID.Kp, shooterRightPID.Ki, shooterRightPID.Kd);
 
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
 
-  // Switch
+  // Create toggle for shooting
   private boolean engaged = false;
 
-  // Conversion factor from milliseconds to minutes
-  private double msToMin = 600;
+  // Conversion factor from minutes to milliseconds
+  private double minToMS = 600;
 
   public Shooter(ChangePosition changePosition) {
     // Makes changePosition instance the same as in RobotContainer
@@ -68,44 +70,35 @@ public class Shooter extends SubsystemBase {
    * intake position. 
    * @param inVolts The voltage sent to the shooter while in the intake position
    * @param outVolts The voltage sent to the shooter while in the shooting position
-   * @param beltVolts The voltage sent to the conveyor belt, changing direction
-   * depending on whether the shooter is in the intake or shooting position
    */
-  public void setPoseVolts(double inVolts, double outVolts, double beltVolts){
+  public void setSpeedVolts(double inVolts, double outVolts){
     if (goalMover.getCollecting()) {
-      collectVolts(inVolts, beltVolts);
+      // if in intake position, intake
+      leftLauncher.setVoltage(-inVolts);
+      rightLauncher.setVoltage(-inVolts);
 
     } else {
-      shootVolts(outVolts, beltVolts);
+      leftLauncher.setVoltage(outVolts);
+      rightLauncher.setVoltage(outVolts);
     }
   }
 
-  public void switchVoltsPose(double inVolts, double outVolts, double beltVolts) {
+  /**
+   * Toggles shooter on and off with the specified voltage
+   * @param inVolts voltage applied with intake
+   * @param outVolts voltage applied with shooting
+   */
+  public void toggleSpeedVolts(double inVolts, double outVolts) {
     if (engaged) {
-      setPoseVolts(0, 0, 0);
+      setSpeedVolts(0, 0);
       engaged = false;
+
     } else {
-      setPoseVolts(inVolts, outVolts, beltVolts);
+      setSpeedVolts(inVolts, outVolts);
       engaged = true;
     }
   }
 
-  private void collectVolts(double launchVolts, double beltVolts){
-    leftLauncher.setVoltage(-launchVolts);
-    rightLauncher.setVoltage(-launchVolts);
-    conveyor.setVoltage(beltVolts);
-
-    System.out.println("Collecting " + launchVolts);
-  }
-
-  private void shootVolts(double launchVolts, double beltVolts){
-    leftLauncher.setVoltage(launchVolts);
-    rightLauncher.setVoltage(launchVolts);
-    conveyor.setVoltage(-beltVolts);
-
-    System.out.println("Shooting " + launchVolts);
-  }
-
   /**
    * Sets RPM based on whether the robot is in shooting position or 
    * intake position. 
@@ -114,44 +107,15 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The voltage sent to the conveyor belt, changing direction
    * depending on whether the shooter is in the intake or shooting position
    */
-  public void setPoseRPMTalon(double inRPM, double outRPM, double beltVolts){
+  public void setSpeedTalon(double inRPM, double outRPM){
     if (goalMover.getCollecting()) {
-      setRPMTalon(-inRPM, -beltVolts);
+      leftLauncher.set(ControlMode.Velocity, -inRPM * kTicksPerRev / minToMS);
+      rightLauncher.set(ControlMode.Velocity, -inRPM * kTicksPerRev / minToMS);
 
     } else {
-      setRPMTalon(outRPM, beltVolts);
+      leftLauncher.set(ControlMode.Velocity, outRPM * kTicksPerRev / minToMS);
+      rightLauncher.set(ControlMode.Velocity, outRPM * kTicksPerRev / minToMS);
     }
-  }
-
-  /**
-   * Sets RPM based on whether the robot is in shooting position or 
-   * intake position. 
-   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
-   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
-   * @param beltVolts The voltage sent to the conveyor belt, changing direction
-   * depending on whether the shooter is in the intake or shooting position
-   */
-  public void setPoseRPMWPI(double inRPM, double outRPM, double beltVolts){
-    if (goalMover.getCollecting()) {
-      setRPMWPI(-inRPM, -beltVolts);
-
-    } else {
-      setRPMWPI(outRPM, beltVolts);
-    }
-  }
-
-  /**
-   * Sets the velocity of the shooter in RPM using two velocity control loops directly on the 
-   * talon. Also sets a voltage for the conveyor belt, given that it does not have to be 
-   * as accurate. Must be set negative for intake.
-   * @param launchRPM Velocity of the shooter in rotations per minute
-   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
-  */ 
-  private void setRPMTalon(double launchRPM, double beltVolts) {
-    leftLauncher.set(ControlMode.Velocity, launchRPM * kTicksPerRev / msToMin);
-    rightLauncher.set(ControlMode.Velocity, -launchRPM * kTicksPerRev / msToMin);
-    
-    conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
   }
 
   /**
@@ -161,7 +125,7 @@ public class Shooter extends SubsystemBase {
    * @param launchRPM Velocity of the shooter in rotations per minute
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
-  private void setRPMWPI(double launchRPM, double beltVolts) {
+  private void setRPMWPI(double launchRPM) {
     leftLauncher.setVoltage(
       MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
       + leftControl.calculate(getRawLeftVelocity(), launchRPM), // PID correction
@@ -171,8 +135,25 @@ public class Shooter extends SubsystemBase {
       MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
       + rightControl.calculate(getRawRightVelocity(), -launchRPM), // PID correction
       -12, 12)); // min volts, max volts
+  }
 
-    conveyor.setVoltage(MathUtil.clamp(beltVolts, -12, 12));
+  /**
+   * Sets RPM based on whether the robot is in shooting position or 
+   * intake position. 
+   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
+   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
+   */
+  public void setSpeedWPI(double inRPM, double outRPM){
+    if (goalMover.getCollecting()) {
+      setRPMWPI(-inRPM);
+
+    } else {
+      setRPMWPI(outRPM);
+    }
+  }
+
+  public boolean isEngaged() {
+    return engaged;
   }
 
   public double getRawLeftVelocity() {
