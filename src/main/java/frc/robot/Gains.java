@@ -14,63 +14,63 @@ public class Gains {
 
 	// PID Constants
 	public static class leftDrive {
-        public static double Kp = 0.1;
-        public static double Ki = 0;
-        public static double Kd = 0;
+		public static double Kp = 0.1;
+		public static double Ki = 0;
+		public static double Kd = 0;
 	}
 
 	public static class rightDrive {
-	    public static double Kp = 0.1;
-	    public static double Ki = 0;
-	    public static double Kd = 0;
+		public static double Kp = 0.1;
+		public static double Ki = 0;
+		public static double Kd = 0;
 	}
 
 	public static class shooterFeedforward {
-	    public static double ks = 0;
-	    public static double kv = 0;
+		public static double ks = 0;
+		public static double kv = 0;
 	}
 
 	public static class shooterLeftPID {
-	    public static double Kp = 0.25;
-	    public static double Ki = 0;
-	    public static double Kd = 20;
-	    public static double Kf = 0; // 1023 / 7200
-	    
-	    public static double tolerance = 0.5;
+		public static double Kp = 0.25;
+		public static double Ki = 0;
+		public static double Kd = 20;
+		public static double Kf = 0; // 1023 / 7200
+
+		public static double tolerance = 0.5;
 	}
 
 	public static class shooterRightPID {
-	    public static double Kp = 0.25;
-	    public static double Ki = 0;
-	    public static double Kd = 20;
-	    public static double Kf = 0; // 1023 / 7200
-	
-	    public static double tolerance = 0.5;
+		public static double Kp = 0.25;
+		public static double Ki = 0;
+		public static double Kd = 20;
+		public static double Kf = 0; // 1023 / 7200
+
+		public static double tolerance = 0.5;
 	}
 
 	public static class distanceCorrection {
-	    public static double Kp = 0.1;
-	    public static double Ki = 0;
-	    public static double Kd = 0;
+		public static double Kp = 0.1;
+		public static double Ki = 0;
+		public static double Kd = 0;
 	}
 
 	public static class angleCorrection {
-	    public static double Kp = 0.1;
-	    public static double Ki = 0;
-	    public static double Kd = 0;
+		public static double Kp = 0.1;
+		public static double Ki = 0;
+		public static double Kd = 0;
 	}
 
 	// Ramsete controller constants
-    public static class Ramsete {
-        public static final double kb = 2;
-        public static final double kzeta = 0.7;
-    }
+	public static class Ramsete {
+		public static final double kb = 2;
+		public static final double kzeta = 0.7;
+	}
 
 	// Feed Forward Constants
-    public static class driveFeedforward {
-        public static final double ks = 0;
-        public static final double kv = 0;
-        public static final double ka = 0;
-    }
+	public static class driveFeedforward {
+		public static final double ks = 0;
+		public static final double kv = 0;
+		public static final double ka = 0;
+	}
 
 }
