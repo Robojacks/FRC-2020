@@ -88,14 +88,18 @@ public class RobotContainer {
   
   // Autonomous 
   
-  private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
+  private Command shootThenGo = new InstantCommand(
+    () -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
+    .andThen(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
-    .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
     .andThen(new WaitCommand(shooterRampUpTime))
     .andThen(() -> conveyor.setSpeed(conveyorVolts))
+    .andThen(new WaitCommand(4))
+    .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
+    .andThen(() -> conveyor.setSpeed(0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
-    .andThen(new WaitCommand(2))
+    .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
   
   private RamseteCommand rbase = new RamseteCommand(
