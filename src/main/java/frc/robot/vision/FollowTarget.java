@@ -13,6 +13,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.drive.RevDrivetrain;
 
 import static frc.robot.Constants.*;
+import static frc.robot.Gains.*;
 
 public class FollowTarget extends CommandBase {
   private Limelight vision;

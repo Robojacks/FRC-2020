@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Gains.*;
 
 import static frc.robot.Constants.*;
 
@@ -55,13 +56,13 @@ public class RevDrivetrain extends SubsystemBase {
   Pose2d pose = new Pose2d();
 
   public RevDrivetrain() {
-      LRearWheel.follow(LFrontWheel);
-      RRearWheel.follow(RFrontWheel);
+    LRearWheel.follow(LFrontWheel);
+    RRearWheel.follow(RFrontWheel);
 
-      LFrontWheel.getEncoder().setPosition(0);
-      RFrontWheel.getEncoder().setPosition(0);
-  
-      gyro.reset();
+    LFrontWheel.getEncoder().setPosition(0);
+    RFrontWheel.getEncoder().setPosition(0);
+
+    gyro.reset();
   }
 
   public void setOutputVolts(double leftVolts, double rightVolts) {
@@ -79,46 +80,46 @@ public class RevDrivetrain extends SubsystemBase {
   }
 
   public Rotation2d getHeading() {
-      return Rotation2d.fromDegrees(-gyro.getAngle());
+    return Rotation2d.fromDegrees(-gyro.getAngle());
   }
 
   public DifferentialDriveKinematics getKinematics() {
-      return kinematics;
-    }
+    return kinematics;
+  }
   
-    public Pose2d getPose() {
-      return pose;
-    }
-  
-    public SimpleMotorFeedforward getFeedforward() {
-      return feedforward;
-    }
-  
-    public PIDController getLeftDrivePID() {
-      return leftDrivePID;
-    }
-  
-    public PIDController getRightDrivePID() {
-      return rightDrivePID;
-    }
+  public Pose2d getPose() {
+    return pose;
+  }
+
+  public SimpleMotorFeedforward getFeedforward() {
+    return feedforward;
+  }
+
+  public PIDController getLeftDrivePID() {
+    return leftDrivePID;
+  }
+
+  public PIDController getRightDrivePID() {
+    return rightDrivePID;
+  }
   
   public double getLeftDistanceMeters() {
-      return LFrontWheel.getEncoder().getPosition() / 
-      RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
+    return LFrontWheel.getEncoder().getPosition() / 
+    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
   }
 
   public double getRightDistanceMeters() {
-      return RFrontWheel.getEncoder().getPosition() / 
-      RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
+    return RFrontWheel.getEncoder().getPosition() / 
+    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
       
   }
 
   public DifferentialDriveWheelSpeeds getSpeeds() {
-      return new DifferentialDriveWheelSpeeds(
-          LFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60,
-          RFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60
-      );
-    }
+    return new DifferentialDriveWheelSpeeds(
+      LFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60,
+      RFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60
+    );
+  }
   
   /**
   * Will be called periodically whenever the CommandScheduler runs.

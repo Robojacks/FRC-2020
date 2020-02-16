@@ -15,6 +15,7 @@ import frc.robot.shooter.Shooter;
 import frc.robot.wheel.SenseColor;
 
 import static frc.robot.Constants.*;
+import static frc.robot.Gains.*;
 
 /**
  * Mainly for logging values that need adjustment

@@ -17,7 +17,7 @@ import static frc.robot.Constants.*;
 public class Spinner extends SubsystemBase {
 
   private SenseColor colorSense;
-  private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
+  private WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
   private int colorSwitches = 10 * 8;
 
   public Spinner(SenseColor colorSensor) {

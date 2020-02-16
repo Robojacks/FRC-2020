@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.Arrays;
 
 import static frc.robot.Constants.*;
+import static frc.robot.Gains.Ramsete;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
