@@ -51,8 +51,8 @@ public final class Constants {
   public static final int kConveyorBelt = 9;
   
   // Solenoid controlling gear ports 
-  public static final int SolGearLPort = 2;
-  public static final int SolGearRPort = 3;
+  public static final int leftGearPort = 2;
+  public static final int rightGearPort = 3;
 
   // Motor Phase
   public static final boolean kLeftInverted = false;
@@ -110,6 +110,8 @@ public final class Constants {
   public static final double cameraToBallTargetHeight = Units.inchesToMeters(51.25);
 
   public static final double shooterDistanceFromTargetMeters = 5;
+
+  public static final double shooterRampUpTime = 1.0;
   
   // PID Constants
   public static class leftDrive {

@@ -86,15 +86,17 @@ public class RobotContainer {
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
   
   // Autonomous 
-  /*
+  
   private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
-    .andThen(new WaitCommand(.5)) 
+    .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
-    .andThen(()-> shooter.switchShootingVoltsPose(intakeVolts, shooterVolts), shooter)
-    .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
+    .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
+    .andThen(new WaitCommand(shooterRampUpTime))
+    .andThen(() -> conveyor.setSpeed(conveyorVolts))
+    .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
-  */
+  
   private RamseteCommand rbase = new RamseteCommand(
     getMovingTrajectory(), 
     rDrive::getPose, 
@@ -134,7 +136,7 @@ public class RobotContainer {
     // Shoot or intake with voltage
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(new WaitCommand(1).andThen(() -> conveyor.toggleSpeed(conveyorVolts)));
+    .whenPressed(new WaitCommand(shooterRampUpTime).andThen(() -> conveyor.toggleSpeed(conveyorVolts)));
     
     // Shoot or intake with set velocity
     
@@ -161,7 +163,7 @@ public class RobotContainer {
     
     // Switch Gears
     new JoystickButton(xbox, Button.kBumperRight.value)
-    .whenPressed(() -> gears.switchGear(), gears);
+    .whenPressed(() -> gears.switchGears(), gears);
     
   }
 
@@ -184,6 +186,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return shootThenGo;
   }
 }

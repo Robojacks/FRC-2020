@@ -13,36 +13,31 @@ import static frc.robot.Constants.*;
  * Add your docs here.
  */
 public class Gears extends SubsystemBase {
-  Solenoid left = new Solenoid(compressorModule, SolGearLPort);
-  Solenoid right = new Solenoid(compressorModule, SolGearRPort);
+  private Solenoid leftGear = new Solenoid(compressorModule, leftGearPort);
+  private Solenoid rightGear = new Solenoid(compressorModule, rightGearPort);
 
-  public enum gearState {
-    FAST, SLOW;
+  private boolean isFast = false;
+
+  private void fast(){
+    leftGear.set(true);
+    rightGear.set(true);
+
+    isFast = true;
   }
 
-  // Keeps track of how high the shooter is
-  private gearState state = gearState.SLOW;
+  private void slow(){
+    leftGear.set(false);
+    rightGear.set(false);
 
-  public void FAST(){
-    left.set(true);
-    right.set(true);
-    state = gearState.FAST;
+    isFast = false;
   }
 
-  public void SLOW(){
-    left.set(false);
-    right.set(false);
-    state = gearState.SLOW;
-  }
+  public void switchGears() {
+    if (isFast) {
+      slow();
 
-  public void switchGear() {
-    switch(state) {
-      case FAST:
-        FAST();
-      case SLOW:
-        SLOW();
-      default:
-        SLOW();
+    } else {
+      fast();
     }
   }
 }
