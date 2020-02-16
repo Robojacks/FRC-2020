@@ -175,7 +175,8 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       Arrays.asList(Update.getStartingPose(), new Pose2d(1.0, 0, new Rotation2d()),
         new Pose2d(2.3, 1.2, Rotation2d.fromDegrees(90.0))), 
-        new TrajectoryConfig(MaxSafeVelocityMeters, MaxSafeAccelerationMeters));
+      new TrajectoryConfig(MaxSafeVelocityMeters, MaxSafeAccelerationMeters)
+    );
     
     return trajectory;
   }
