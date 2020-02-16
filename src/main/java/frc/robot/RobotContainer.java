@@ -70,7 +70,8 @@ public class RobotContainer {
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
-    () -> rDrive.getDifferentialDrive().tankDrive(xbox.getRawAxis(1), xbox.getRawAxis(5)), rDrive);
+    () -> rDrive.getDifferentialDrive().tankDrive(
+      drivePercentLimit * xbox.getRawAxis(1), drivePercentLimit * xbox.getRawAxis(5), false), rDrive);
   
   private Command moveArmOneAxis = new RunCommand(
     () -> arm.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), arm);
@@ -81,15 +82,16 @@ public class RobotContainer {
   private Command moveSpinner = new RunCommand(() -> 
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
   
-  // Autonomous
+  // Autonomous 
+  /*
   private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.5)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
-    .andThen(()-> shooter.setPoseVolts(intakeVolts, shooterVolts, conveyorVolts), shooter)
+    .andThen(()-> shooter.switchShootingVoltsPose(intakeVolts, shooterVolts), shooter)
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(2))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
-  
+  */
   private RamseteCommand rbase = new RamseteCommand(
     getMovingTrajectory(), 
     rDrive::getPose, 
@@ -178,6 +180,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return shootThenGo.andThen(() -> rDrive.setOutputVolts(0, 0));
+    return null;
   }
 }
