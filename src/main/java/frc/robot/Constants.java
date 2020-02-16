@@ -86,6 +86,8 @@ public final class Constants {
   public static double yellowUpperBound = 98;
   
   // Constant Speeds
+  public static final double drivePercentLimit = .75;
+ 
   public static final double armPercentSpeed = 0.4;
   
   public static final double intakeVolts = 4;
@@ -94,7 +96,7 @@ public final class Constants {
   public static final double intakeRPM = 50;
   public static final double shooterRPM = 100;
 
-  public static final double conveyorVolts = 6;
+  public static final double conveyorVolts = 12;
 
   public static final double colorSwitchSpeed = 0.2;
   public static final double colorSpeed = 0.1;
