@@ -9,6 +9,7 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
@@ -37,6 +38,8 @@ public class Conveyor extends SubsystemBase {
       conveyor.setVoltage(beltVolts);
 
     } else {
+      Timer.delay(shooterRampUpTime);
+      
       conveyor.setVoltage(-beltVolts);
     }
   }
