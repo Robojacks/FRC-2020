@@ -15,7 +15,10 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Gains;
+
+import static frc.robot.Gains.shooterLeftPID;
+import static frc.robot.Gains.shooterRightPID;
+import static frc.robot.Gains.shooterFeedforward;
 
 import static frc.robot.Constants.*;
 
@@ -26,13 +29,13 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
   
   private PIDController leftControl 
-    = new PIDController(Gains.shooterLeftPID.Kp, Gains.shooterLeftPID.Ki, Gains.shooterLeftPID.Kd);
+    = new PIDController(shooterLeftPID.Kp, shooterLeftPID.Ki, shooterLeftPID.Kd);
 
   private PIDController rightControl 
-    = new PIDController(Gains.shooterRightPID.Kp, Gains.shooterRightPID.Ki, Gains.shooterRightPID.Kd);
+    = new PIDController(shooterRightPID.Kp, shooterRightPID.Ki, shooterRightPID.Kd);
 
   private SimpleMotorFeedforward feedforward 
-    = new SimpleMotorFeedforward(Gains.shooterFeedforward.ks, Gains.shooterFeedforward.kv);
+    = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
 
   // Create toggle for shooting
   private boolean engaged = false;
@@ -51,19 +54,19 @@ public class Shooter extends SubsystemBase {
     rightLauncher.setSensorPhase(false);
 
     // WPILib PID Stuff
-    leftControl.setTolerance(Gains.shooterLeftPID.tolerance);
-    rightControl.setTolerance(Gains.shooterRightPID.tolerance);
+    leftControl.setTolerance(shooterLeftPID.tolerance);
+    rightControl.setTolerance(shooterRightPID.tolerance);
 
     // Talon PID Stuff
-    leftLauncher.config_kP(0, Gains.shooterLeftPID.Kp);    
-    leftLauncher.config_kI(0, Gains.shooterLeftPID.Ki);
-    leftLauncher.config_kD(0, Gains.shooterLeftPID.Kd);
-    leftLauncher.config_kF(0, Gains.shooterLeftPID.Kf);
+    leftLauncher.config_kP(0, shooterLeftPID.Kp);    
+    leftLauncher.config_kI(0, shooterLeftPID.Ki);
+    leftLauncher.config_kD(0, shooterLeftPID.Kd);
+    leftLauncher.config_kF(0, shooterLeftPID.Kf);
 
-    rightLauncher.config_kP(0, Gains.shooterRightPID.Kp);
-    rightLauncher.config_kI(0, Gains.shooterRightPID.Ki);
-    rightLauncher.config_kD(0, Gains.shooterRightPID.Kd);
-    rightLauncher.config_kF(0, Gains.shooterRightPID.Kf);
+    rightLauncher.config_kP(0, shooterRightPID.Kp);
+    rightLauncher.config_kI(0, shooterRightPID.Ki);
+    rightLauncher.config_kD(0, shooterRightPID.Kd);
+    rightLauncher.config_kF(0, shooterRightPID.Kf);
   }
 
   /**
