@@ -20,10 +20,10 @@ public class FollowTarget extends CommandBase {
   private RevDrivetrain drive;
 
   private PIDController distanceCorrector 
-    = new PIDController(distanceCorrection.Kp, distanceCorrection.Ki, distanceCorrection.Kd);
+    = new PIDController(distanceCorrection.kP, distanceCorrection.kI, distanceCorrection.kD);
 
   private PIDController angleCorrector 
-    = new PIDController(angleCorrection.Kp, angleCorrection.Ki, angleCorrection.Kd);
+    = new PIDController(angleCorrection.kP, angleCorrection.kI, angleCorrection.kD);
   
   /**
    * Creates a new FollowTarget.

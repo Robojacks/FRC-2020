@@ -41,14 +41,14 @@ public class Update {
     SmartDashboard.putData("Starting Position", choosePosition);
 
     // Display PID values (angle)
-    SmartDashboard.putNumber("P value(angle)", angleCorrection.Kp);
-    SmartDashboard.putNumber("I value(angle)", angleCorrection.Ki);
-    SmartDashboard.putNumber("D value(angle)", angleCorrection.Kd);
+    SmartDashboard.putNumber("P value(angle)", angleCorrection.kP);
+    SmartDashboard.putNumber("I value(angle)", angleCorrection.kI);
+    SmartDashboard.putNumber("D value(angle)", angleCorrection.kD);
 
     // Display PID values (distance)
-    SmartDashboard.putNumber("P value(distance)", distanceCorrection.Kp);
-    SmartDashboard.putNumber("I value(distance)", distanceCorrection.Ki);
-    SmartDashboard.putNumber("D value(distance)", distanceCorrection.Kd);
+    SmartDashboard.putNumber("P value(distance)", distanceCorrection.kP);
+    SmartDashboard.putNumber("I value(distance)", distanceCorrection.kI);
+    SmartDashboard.putNumber("D value(distance)", distanceCorrection.kD);
 
     // Display color bounds
     SmartDashboard.putNumber("Blue Lower Bound", Constants.blueLowerBound);
@@ -89,29 +89,29 @@ public class Update {
     SmartDashboard.putString("Detected Color", colorSense.getColorString());
     
     // Change PID values for angle correction
-    if (angleCorrection.Kp != SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp))  {
-      angleCorrection.Kp = SmartDashboard.getNumber("P value(angle)", angleCorrection.Kp);
+    if (angleCorrection.kP != SmartDashboard.getNumber("P value(angle)", angleCorrection.kP))  {
+      angleCorrection.kP = SmartDashboard.getNumber("P value(angle)", angleCorrection.kP);
     }
 
-    if (angleCorrection.Ki != SmartDashboard.getNumber("I value(angle)", angleCorrection.Ki))  {
-      angleCorrection.Ki = SmartDashboard.getNumber("I value(angle)", angleCorrection.Ki);
+    if (angleCorrection.kI != SmartDashboard.getNumber("I value(angle)", angleCorrection.kI))  {
+      angleCorrection.kI = SmartDashboard.getNumber("I value(angle)", angleCorrection.kI);
     }
 
-    if (angleCorrection.Kd != SmartDashboard.getNumber("D value(angle)", angleCorrection.Kd))  {
-      angleCorrection.Kd = SmartDashboard.getNumber("D value(angle)", angleCorrection.Kd);
+    if (angleCorrection.kD != SmartDashboard.getNumber("D value(angle)", angleCorrection.kD))  {
+      angleCorrection.kD = SmartDashboard.getNumber("D value(angle)", angleCorrection.kD);
     } 
 
     // Change PID values for distance correction
-    if (distanceCorrection.Kp != SmartDashboard.getNumber("P value(distance)", distanceCorrection.Kp))  {
-      distanceCorrection.Kp = SmartDashboard.getNumber("P value(distance)", distanceCorrection.Kp);
+    if (distanceCorrection.kP != SmartDashboard.getNumber("P value(distance)", distanceCorrection.kP))  {
+      distanceCorrection.kP = SmartDashboard.getNumber("P value(distance)", distanceCorrection.kP);
     }
 
-    if (distanceCorrection.Ki != SmartDashboard.getNumber("I value(distance)", distanceCorrection.Ki))  {
-      distanceCorrection.Ki = SmartDashboard.getNumber("I value(distance)", distanceCorrection.Ki);
+    if (distanceCorrection.kI != SmartDashboard.getNumber("I value(distance)", distanceCorrection.kI))  {
+      distanceCorrection.kI = SmartDashboard.getNumber("I value(distance)", distanceCorrection.kI);
     }
 
-    if (distanceCorrection.Kd != SmartDashboard.getNumber("D value(distance)", distanceCorrection.Kd))  {
-      distanceCorrection.Kd = SmartDashboard.getNumber("D value(distance)", distanceCorrection.Kd);
+    if (distanceCorrection.kD != SmartDashboard.getNumber("D value(distance)", distanceCorrection.kD))  {
+      distanceCorrection.kD = SmartDashboard.getNumber("D value(distance)", distanceCorrection.kD);
     } 
 
      // Change color bounds

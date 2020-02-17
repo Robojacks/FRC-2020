@@ -48,10 +48,10 @@ public class RevDrivetrain extends SubsystemBase {
   = new SimpleMotorFeedforward(driveFeedforward.ks, driveFeedforward.kv, driveFeedforward.ka);
 
   PIDController leftDrivePID 
-  = new PIDController(leftDrive.Kp, leftDrive.Ki, leftDrive.Kd);
+  = new PIDController(leftDrive.kP, leftDrive.kI, leftDrive.kD);
 
   PIDController rightDrivePID
-  = new PIDController(rightDrive.Kp, rightDrive.Ki, rightDrive.Kd);
+  = new PIDController(rightDrive.kP, rightDrive.kI, rightDrive.kD);
 
   Pose2d pose = new Pose2d();
 

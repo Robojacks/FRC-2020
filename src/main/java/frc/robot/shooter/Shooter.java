@@ -29,10 +29,10 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
   
   private PIDController leftControl 
-    = new PIDController(shooterLeftPID.Kp, shooterLeftPID.Ki, shooterLeftPID.Kd);
+    = new PIDController(shooterLeftPID.kP, shooterLeftPID.kI, shooterLeftPID.kD);
 
   private PIDController rightControl 
-    = new PIDController(shooterRightPID.Kp, shooterRightPID.Ki, shooterRightPID.Kd);
+    = new PIDController(shooterRightPID.kP, shooterRightPID.kI, shooterRightPID.kD);
 
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
@@ -58,15 +58,15 @@ public class Shooter extends SubsystemBase {
     rightControl.setTolerance(shooterRightPID.tolerance);
 
     // Talon PID Stuff
-    leftLauncher.config_kP(0, shooterLeftPID.Kp);    
-    leftLauncher.config_kI(0, shooterLeftPID.Ki);
-    leftLauncher.config_kD(0, shooterLeftPID.Kd);
-    leftLauncher.config_kF(0, shooterLeftPID.Kf);
+    leftLauncher.config_kP(0, shooterLeftPID.kP);    
+    leftLauncher.config_kI(0, shooterLeftPID.kI);
+    leftLauncher.config_kD(0, shooterLeftPID.kD);
+    leftLauncher.config_kF(0, shooterLeftPID.kF);
 
-    rightLauncher.config_kP(0, shooterRightPID.Kp);
-    rightLauncher.config_kI(0, shooterRightPID.Ki);
-    rightLauncher.config_kD(0, shooterRightPID.Kd);
-    rightLauncher.config_kF(0, shooterRightPID.Kf);
+    rightLauncher.config_kP(0, shooterRightPID.kP);
+    rightLauncher.config_kI(0, shooterRightPID.kI);
+    rightLauncher.config_kD(0, shooterRightPID.kD);
+    rightLauncher.config_kF(0, shooterRightPID.kF);
   }
 
   /**
