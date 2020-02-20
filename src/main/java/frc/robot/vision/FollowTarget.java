@@ -35,6 +35,7 @@ public class FollowTarget extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(vision, drive);
 
+
     distanceCorrector.setTolerance(0.5);
     angleCorrector.setTolerance(1);
   }
@@ -44,6 +45,7 @@ public class FollowTarget extends CommandBase {
   public void initialize() {
     distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
     angleCorrector.setSetpoint(0);
+    vision.lightOn();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -70,6 +72,7 @@ public class FollowTarget extends CommandBase {
   public void end(boolean interrupted) {
     distanceCorrector.reset();
     angleCorrector.reset();
+    vision.lightOff();
   }
 
   // Returns true when the command should end.
