@@ -132,12 +132,12 @@ public class Shooter extends SubsystemBase {
   private void setRPMWPI(double launchRPM) {
     leftLauncher.setVoltage(
       MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
-      + leftControl.calculate(getRawLeftVelocity(), launchRPM), // PID correction
+      + leftControl.calculate(getLeftVelocity(), launchRPM), // PID correction
       -12, 12)); // min volts, max volts
 
     rightLauncher.setVoltage(
       MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
-      + rightControl.calculate(getRawRightVelocity(), -launchRPM), // PID correction
+      + rightControl.calculate(getRightVelocity(), -launchRPM), // PID correction
       -12, 12)); // min volts, max volts
   }
 
@@ -156,16 +156,33 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  /**
+   * Toggles shooter on and off with the specified RPM
+   * @param inVolts voltage applied with intake
+   * @param outVolts voltage applied with shooting
+   */
+  public void toggleSpeedWPI(double inRPM, double outRPM) {
+    if (engaged) {
+      setSpeedWPI(0, 0);
+      engaged = false;
+
+    } else {
+      setSpeedWPI(inRPM, outRPM);
+      engaged = true;
+
+    }
+  }
+
   public boolean isEngaged() {
     return engaged;
   }
 
-  public double getRawLeftVelocity() {
-    return leftLauncher.getSelectedSensorVelocity();
+  public double getLeftVelocity() {
+    return leftLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
   }
 
-  public double getRawRightVelocity() {
-    return rightLauncher.getSelectedSensorVelocity();
+  public double getRightVelocity() {
+    return rightLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
   }
 
   @Override
