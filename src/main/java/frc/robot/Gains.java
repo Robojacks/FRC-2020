@@ -36,7 +36,7 @@ public class Gains {
 		public static double kD = 20;
 		public static double kF = 0; // 1023 / 7200
 
-		public static double tolerance = 0.5;
+		public static double tolerance = 20;
 	}
 
 	public static class shooterRightPID {
@@ -45,7 +45,7 @@ public class Gains {
 		public static double kD = 20;
 		public static double kF = 0; // 1023 / 7200
 
-		public static double tolerance = 0.5;
+		public static double tolerance = 20;
 	}
 
 	public static class distanceCorrection {

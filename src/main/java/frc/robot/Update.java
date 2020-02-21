@@ -69,8 +69,8 @@ public class Update {
     SmartDashboard.putString("Detected Color", colorSense.getColorString());
 
     // Display left and right shooter velocities
-    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
-    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+    SmartDashboard.putNumber("Left Shooter RPM", m_shooter.getLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter RPM", m_shooter.getRightVelocity());
   }
 
   public static Pose2d getStartingPose() {
@@ -80,8 +80,8 @@ public class Update {
 
   public void periodic() {
     // Update left and right shooter velocities
-    SmartDashboard.putNumber("Left Shooter Velocity (RPM)", m_shooter.getLeftVelocity());
-    SmartDashboard.putNumber("Right Shooter Velocity (RPM)", m_shooter.getRightVelocity());
+    SmartDashboard.putNumber("Left Shooter RPM", m_shooter.getLeftVelocity());
+    SmartDashboard.putNumber("Right Shooter RPM", m_shooter.getRightVelocity());
 
     // Update color sense data
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());

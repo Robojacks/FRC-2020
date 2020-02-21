@@ -54,14 +54,6 @@ public final class Constants {
 	public static final int leftGearPort = 2;
 	public static final int rightGearPort = 3;
 
-	// Motor Phase
-	public static final boolean kLeftInverted = false;
-	public static final boolean kRightInverted = true;
-
-	// Encoder Sensor Phase
-	public static final boolean kLeftEncoderPhase = false;
-	public static final boolean kRightEncoderPhase = false;
-
 	// Robot Measurements
 	public static final double kTicksPerRev = 4096;
 	public static final double kTrackWidthMeters = Units.inchesToMeters(10);
@@ -86,7 +78,7 @@ public final class Constants {
 	public static double yellowUpperBound = 98;
 
 	// Constant Speeds
-	public static final double drivePercentLimit = .75;
+	public static final double drivePercentLimit = 1;
 
 	public static final double armPercentSpeed = 0.4;
 
@@ -111,6 +103,6 @@ public final class Constants {
 
 	public static final double shooterDistanceFromTargetMeters = 5;
 
-	public static final double shooterRampUpTime = 1.0;
+	public static final double shooterRampUpTime = 2;
 
 }

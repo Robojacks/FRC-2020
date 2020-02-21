@@ -38,6 +38,7 @@ public class Conveyor extends SubsystemBase {
       conveyor.setVoltage(beltVolts);
 
     } else {
+      // Delays start up time when in shooting position
       Timer.delay(shooterRampUpTime);
       conveyor.setVoltage(-beltVolts);
     }
