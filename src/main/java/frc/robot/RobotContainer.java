@@ -74,8 +74,8 @@ public class RobotContainer {
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
-    () -> rDrive.getDifferentialDrive().tankDrive(
-      drivePercentLimit * xbox.getRawAxis(1), drivePercentLimit * xbox.getRawAxis(5), false), rDrive);
+    () -> rDrive.driveStraight(
+      drivePercentLimit * xbox.getRawAxis(1), drivePercentLimit * xbox.getRawAxis(5)), rDrive);
   
   private Command moveArmOneAxis = new RunCommand(
     () -> lift.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), lift);

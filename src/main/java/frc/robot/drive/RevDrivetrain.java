@@ -120,7 +120,21 @@ public class RevDrivetrain extends SubsystemBase {
       RFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60
     );
   }
-  
+
+  public void driveStraight(double leftSpeed, double rightSpeed) {
+    double leftVelocity = LFrontWheel.getEncoder().getVelocity();
+    double rightVelocity = RFrontWheel.getEncoder().getVelocity();
+    double avgVelocity = (leftVelocity + rightVelocity)/2;
+    
+    if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
+      roboDrive.tankDrive(
+        leftDrivePID.calculate(leftVelocity, avgVelocity),
+        rightDrivePID.calculate(rightVelocity, avgVelocity));
+    }
+    else {
+      roboDrive.tankDrive(leftSpeed, rightSpeed);
+    }
+  }
   /**
   * Will be called periodically whenever the CommandScheduler runs.
   */

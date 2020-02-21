@@ -26,6 +26,8 @@ public final class Constants {
 	public static final int kLeftRearPort = 2;
 	public static final int kRightRearPort = 4;
 
+	//Straight drive deadband 
+	public static final double straightDriveDeadband = 0.05;
 	// Xbox controller port
 	public static final int kXboxPort = 0;
 
