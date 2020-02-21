@@ -142,11 +142,13 @@ public class RobotContainer {
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
     .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts));
     
-    
     // Shoot or intake with set velocity
+    /*
     new JoystickButton(xbox, Button.kB.value)
-    .whenPressed(() -> shooter.toggleSpeedWPI(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts));
+    .whileHeld(() -> shooter.setSpeedWPI(intakeRPM, shooterRPM), shooter)
+    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts))
+    .whenReleased(() -> conveyor.toggleSpeed(conveyorVolts));
+    */
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)

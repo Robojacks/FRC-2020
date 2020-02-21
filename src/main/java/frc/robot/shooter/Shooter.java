@@ -31,8 +31,8 @@ public class Shooter extends SubsystemBase {
   private PIDController leftControl 
     = new PIDController(shooterLeftPID.kP, shooterLeftPID.kI, shooterLeftPID.kD);
 
-  private PIDController rightControl 
-    = new PIDController(shooterRightPID.kP, shooterRightPID.kI, shooterRightPID.kD);
+  //private PIDController rightControl 
+   // = new PIDController(shooterRightPID.kP, shooterRightPID.kI, shooterRightPID.kD);
 
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
     // WPILib PID Stuff
     leftControl.setTolerance(shooterLeftPID.tolerance);
-    rightControl.setTolerance(shooterRightPID.tolerance);
+    //rightControl.setTolerance(shooterRightPID.tolerance);
 
     // Talon PID Stuff
     leftLauncher.config_kP(0, shooterLeftPID.kP);    
@@ -67,6 +67,14 @@ public class Shooter extends SubsystemBase {
     rightLauncher.config_kI(0, shooterRightPID.kI);
     rightLauncher.config_kD(0, shooterRightPID.kD);
     rightLauncher.config_kF(0, shooterRightPID.kF);
+  }
+
+  public void stop() {
+    leftLauncher.setVoltage(0);
+    rightLauncher.setVoltage(0);
+
+    leftControl.reset();
+    //rightControl.reset();
   }
 
   /**
@@ -94,7 +102,7 @@ public class Shooter extends SubsystemBase {
    */
   public void toggleSpeedVolts(double inVolts, double outVolts) {
     if (engaged) {
-      setSpeedVolts(0, 0);
+      stop();
       engaged = false;
 
     } else {
@@ -131,13 +139,13 @@ public class Shooter extends SubsystemBase {
   */ 
   private void setRPMWPI(double launchRPM) {
     leftLauncher.setVoltage(
-      MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
+      MathUtil.clamp(/*feedforward.calculate(launchRPM)*/ // feedforward
       + leftControl.calculate(getLeftVelocity(), launchRPM), // PID correction
       -12, 12)); // min volts, max volts
 
     rightLauncher.setVoltage(
-      MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
-      + rightControl.calculate(getRightVelocity(), -launchRPM), // PID correction
+      MathUtil.clamp(/*feedforward.calculate(-launchRPM)*/ // feedforward
+      + leftControl.calculate(getRightVelocity(), launchRPM), // PID correction
       -12, 12)); // min volts, max volts
   }
 
@@ -163,7 +171,7 @@ public class Shooter extends SubsystemBase {
    */
   public void toggleSpeedWPI(double inRPM, double outRPM) {
     if (engaged) {
-      setSpeedWPI(0, 0);
+      stop();
       engaged = false;
 
     } else {
@@ -177,10 +185,16 @@ public class Shooter extends SubsystemBase {
     return engaged;
   }
 
+  /**
+   * Gets the left velocity in RPM
+   */
   public double getLeftVelocity() {
     return leftLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
   }
 
+  /**
+   * Gets the right velocity in RPM
+   */
   public double getRightVelocity() {
     return rightLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
   }
