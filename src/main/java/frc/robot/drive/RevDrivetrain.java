@@ -126,7 +126,7 @@ public class RevDrivetrain extends SubsystemBase {
     double rightVelocity = RFrontWheel.getEncoder().getVelocity();
     double avgVelocity = (leftVelocity + rightVelocity)/2;
     
-    if(Math.abs(leftSpeed - rightSpeed) < 0.05) {
+    if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
       roboDrive.tankDrive(
         leftDrivePID.calculate(leftVelocity, avgVelocity),
         rightDrivePID.calculate(rightVelocity, avgVelocity));
