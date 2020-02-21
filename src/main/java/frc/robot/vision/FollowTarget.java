@@ -46,6 +46,7 @@ public class FollowTarget extends CommandBase {
     distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
     angleCorrector.setSetpoint(0);
     vision.lightOn();
+    vision.visionMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +63,7 @@ public class FollowTarget extends CommandBase {
       // Angle Correction
       MathUtil.clamp(
         // Calculate what to do based off measurement
-        angleCorrector.calculate(vision.getXError()),
+        angleCorrector.calculate(-vision.getXError()),
         // Min, Max output
         -0.5, 0.5));
   }
@@ -72,12 +73,6 @@ public class FollowTarget extends CommandBase {
   public void end(boolean interrupted) {
     distanceCorrector.reset();
     angleCorrector.reset();
-    vision.lightOff();
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return distanceCorrector.atSetpoint() && angleCorrector.atSetpoint();
-  }
 }

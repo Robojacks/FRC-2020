@@ -144,18 +144,19 @@ public class RobotContainer {
     
     
     // Shoot or intake with set velocity
-    //new JoystickButton(xbox, Button.kB.value)
-    //.whenPressed(() -> shooter.setSpeedTalon(intakeRPM, shooterRPM), shooter)
-    //.whenReleased(() -> shooter.setSpeedTalon(0, 0), shooter);
+    new JoystickButton(xbox, Button.kB.value)
+    .whenPressed(() -> shooter.toggleSpeedWPI(intakeRPM, shooterRPM), shooter)
+    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts));
     
-
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> lift.switchMovement(), lift);
 
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
-    .whileHeld(new FollowTarget(limelight, rDrive));
+    .whileHeld(new FollowTarget(limelight, rDrive))
+    .whenReleased(() -> limelight.driverMode())
+    .whenReleased(() -> limelight.lightOff());
   
     // Spins to selected color
     new JoystickButton(xbox, Button.kStart.value)

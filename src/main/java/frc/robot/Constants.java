@@ -85,8 +85,8 @@ public final class Constants {
 	public static final double intakeVolts = 4;
 	public static final double shooterVolts = 12; // 9.25
 
-	public static final double intakeRPM = 50;
-	public static final double shooterRPM = 100;
+	public static final double intakeRPM = 1000;
+	public static final double shooterRPM = 3000;
 
 	public static final double conveyorVolts = 12;
 
