@@ -38,7 +38,7 @@ public class SenseColor extends SubsystemBase {
   private boolean isGreen = getRawColor() >= greenLowerBound && getRawColor() <= greenUpperBound;
 
   private Colour prevColor = Colour.YELLOW;
-
+                               
   public enum Colour {
 
     RED(redLowerBound, redUpperBound ,1,"R") {

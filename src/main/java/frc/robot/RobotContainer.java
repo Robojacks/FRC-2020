@@ -186,6 +186,12 @@ public class RobotContainer {
     return trajectory;
   }
 
+  public void init(){
+    limelight.driverMode();
+    limelight.lightOff();
+    limelight.PiPMainStream();
+
+  } 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
