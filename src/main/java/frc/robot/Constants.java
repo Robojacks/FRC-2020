@@ -26,8 +26,6 @@ public final class Constants {
 	public static final int kLeftRearPort = 2;
 	public static final int kRightRearPort = 4;
 
-	//Straight drive deadband 
-	public static final double straightDriveDeadband = 0.05;
 	// Xbox controller port
 	public static final int kXboxPort = 0;
 
@@ -45,12 +43,17 @@ public final class Constants {
 	public static final int leftArmPort = 7;
 	public static final int rightArmPort = 8;
 
-	// Shooter motor ports
-	public static final int kLeftShooterWheelPort = 6;
-	public static final int kRightShooterWheelPort = 5;
+	// Shooter motor port
+	public static final int kShooterPort = 5;
+
+	//public static final int kLeftShooterWheelPort = 6;
+	//public static final int kRightShooterWheelPort = 5;
 
 	// Conveyor belt motor port
-	public static final int kConveyorBelt = 9;
+	public static final int kConveyorPort = 9;
+
+	// Feeder wheel motor port
+	public static final int kFeederPort = 6;
 
 	// Solenoid controlling gear ports 
 	public static final int leftGearPort = 2;
@@ -65,6 +68,8 @@ public final class Constants {
 	public static final double MaxSafeAccelerationMeters = Units.feetToMeters(2);
 	public static final double targetToCameraHeight = 5;
 	public static final double cameraAngle = 0;
+	 
+	public static final double straightDriveDeadband = 0.05;
 
 	// Color Value Bounds
 	public static double blueLowerBound = 106;
@@ -92,6 +97,7 @@ public final class Constants {
 	public static final double shooterRPM = 3000;
 
 	public static final double conveyorVolts = 12;
+	public static final double feedingVolts = 12;
 
 	public static final double colorSwitchSpeed = 0.2;
 	public static final double colorSpeed = 0.1;
