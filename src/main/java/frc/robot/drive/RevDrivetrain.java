@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -21,6 +22,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+
 import static frc.robot.Gains.*;
 
 import static frc.robot.Constants.*;
@@ -30,30 +33,37 @@ import static frc.robot.Constants.*;
  */
 public class RevDrivetrain extends SubsystemBase {
 
-  CANSparkMax LFrontWheel = new CANSparkMax(kLeftFrontPort, MotorType.kBrushless);
-  CANSparkMax RFrontWheel = new CANSparkMax(kRightFrontPort, MotorType.kBrushless);
+  private CANSparkMax LFrontWheel = new CANSparkMax(kLeftFrontPort, MotorType.kBrushless);
+  private CANSparkMax RFrontWheel = new CANSparkMax(kRightFrontPort, MotorType.kBrushless);
 
-  CANSparkMax LRearWheel = new CANSparkMax(kLeftRearPort, MotorType.kBrushless);
-  CANSparkMax RRearWheel = new CANSparkMax(kRightRearPort, MotorType.kBrushless);
+  private CANSparkMax LRearWheel = new CANSparkMax(kLeftRearPort, MotorType.kBrushless);
+  private CANSparkMax RRearWheel = new CANSparkMax(kRightRearPort, MotorType.kBrushless);
 
-  DifferentialDrive roboDrive = new DifferentialDrive(LFrontWheel, RFrontWheel);
+  private DifferentialDrive roboDrive = new DifferentialDrive(LFrontWheel, RFrontWheel);
 
-  AHRS gyro = new AHRS(SPI.Port.kMXP);
+  private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+  private double gyroPosition = -gyro.getAngle();
+
+  private PIDController gyroController 
+    = new PIDController(0.1, 0, 0);
 
   // Autonomous Tracking
-  DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
-  DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
+  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
+  private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
 
-  SimpleMotorFeedforward feedforward 
-  = new SimpleMotorFeedforward(driveFeedforward.ks, driveFeedforward.kv, driveFeedforward.ka);
+  private SimpleMotorFeedforward feedforward 
+    = new SimpleMotorFeedforward(driveFeedforward.ks, driveFeedforward.kv, driveFeedforward.ka);
 
-  PIDController leftDrivePID 
-  = new PIDController(leftDrive.kP, leftDrive.kI, leftDrive.kD);
+  private PIDController leftDrivePID 
+    = new PIDController(leftDrive.kP, leftDrive.kI, leftDrive.kD);
 
-  PIDController rightDrivePID
-  = new PIDController(rightDrive.kP, rightDrive.kI, rightDrive.kD);
+  private PIDController rightDrivePID
+    = new PIDController(rightDrive.kP, rightDrive.kI, rightDrive.kD);
 
-  Pose2d pose = new Pose2d();
+  private Pose2d pose = new Pose2d();
+
+  private SlewRateLimiter speedLimiter = new SlewRateLimiter(3);
 
   public RevDrivetrain() {
     LRearWheel.follow(LFrontWheel);
@@ -63,6 +73,42 @@ public class RevDrivetrain extends SubsystemBase {
     RFrontWheel.getEncoder().setPosition(0);
 
     gyro.reset();
+  }
+
+  
+  public void tankDriveWithGyro(double leftSpeed, double rightSpeed) {
+
+    if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
+      double speedAverage = (leftSpeed + rightSpeed) / 2;
+      roboDrive.arcadeDrive(speedAverage, gyroController.calculate(getAngle(), gyroPosition));
+
+    } else {
+      roboDrive.tankDrive(leftSpeed, rightSpeed, false);
+      gyroPosition = getAngle();
+    }
+
+  }
+  
+
+  public void arcadeDriveWithGyro(double speed, double rotation) {
+    // Drive in arcade mode (one axis for linear speed, one for rotation)
+    roboDrive.arcadeDrive(
+      // Limits rate of change of percent speed
+      /*speedLimiter.calculate(speed),*/
+      speed, 
+
+      // Constrains PID output
+      MathUtil.clamp(
+        // Using the fused heading as a measure, adds rotation percent times magnitude
+        gyroController.calculate(getAngle(), getAngle() + rotationMagnitude * rotation),
+        
+        // Low output, high output
+        -1, 1
+      ),
+
+      // Squared inputs, false for linearity
+      false
+    );
   }
 
   public void setOutputVolts(double leftVolts, double rightVolts) {
@@ -79,8 +125,12 @@ public class RevDrivetrain extends SubsystemBase {
     return roboDrive;
   }
 
+  public double getAngle() {
+    return -gyro.getAngle();
+  }
+
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(-gyro.getAngle());
+    return Rotation2d.fromDegrees(getAngle());
   }
 
   public DifferentialDriveKinematics getKinematics() {
@@ -121,20 +171,6 @@ public class RevDrivetrain extends SubsystemBase {
     );
   }
 
-  public void driveStraight(double leftSpeed, double rightSpeed) {
-    double leftVelocity = LFrontWheel.getEncoder().getVelocity();
-    double rightVelocity = RFrontWheel.getEncoder().getVelocity();
-    double avgVelocity = (leftVelocity + rightVelocity)/2;
-    
-    if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
-      roboDrive.tankDrive(
-        leftDrivePID.calculate(leftVelocity, avgVelocity),
-        rightDrivePID.calculate(rightVelocity, avgVelocity));
-    }
-    else {
-      roboDrive.tankDrive(leftSpeed, rightSpeed);
-    }
-  }
   /**
   * Will be called periodically whenever the CommandScheduler runs.
   */

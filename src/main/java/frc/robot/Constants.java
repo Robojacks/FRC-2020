@@ -81,6 +81,7 @@ public final class Constants {
 
 	// Constant Speeds
 	public static final double drivePercentLimit = 1;
+	public static final double rotationMagnitude = 360;
 
 	public static final double armPercentSpeed = 0.4;
 
