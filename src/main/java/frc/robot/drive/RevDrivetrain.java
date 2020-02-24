@@ -65,6 +65,9 @@ public class RevDrivetrain extends SubsystemBase {
 
   private SlewRateLimiter speedLimiter = new SlewRateLimiter(3);
 
+  private SlewRateLimiter leftLimiter = new SlewRateLimiter(3);
+  private SlewRateLimiter rightLimiter = new SlewRateLimiter(3);
+
   public RevDrivetrain() {
     LRearWheel.follow(LFrontWheel);
     RRearWheel.follow(RFrontWheel);
@@ -75,7 +78,30 @@ public class RevDrivetrain extends SubsystemBase {
     gyro.reset();
   }
 
-  
+  /**
+   * Limits the rate of change of percent outputs
+   * @param leftSpeed percent speed -1 to 1 of the left side
+   * @param rightSpeed percent speed -1 to 1 of the right side
+   */
+  public void limitedTankDrive(double leftSpeed, double rightSpeed) {
+    roboDrive.tankDrive(leftLimiter.calculate(leftSpeed), rightLimiter.calculate(rightSpeed), false);
+  }
+
+  /**
+   * Limits the rate of change of percent outputs with added PID straightening
+   * with the gyro when two joystick inputs are close enough
+   * @param leftSpeed percent speed -1 to 1 of the left side
+   * @param rightSpeed percent speed -1 to 1 of the right side
+   */
+  public void limitedTankDriveWithGyro(double leftSpeed, double rightSpeed) {
+    tankDriveWithGyro(leftLimiter.calculate(leftSpeed), rightLimiter.calculate(rightSpeed));
+  }
+
+  /**
+   * Makes robot drive straight when two joystick inputs are close enough
+   * @param leftSpeed percent speed -1 to 1 of the left side
+   * @param rightSpeed percent speed -1 to 1 of the right side
+   */
   public void tankDriveWithGyro(double leftSpeed, double rightSpeed) {
 
     if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
