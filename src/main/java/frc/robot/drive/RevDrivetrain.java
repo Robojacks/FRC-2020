@@ -80,7 +80,21 @@ public class RevDrivetrain extends SubsystemBase {
 
     if(Math.abs(leftSpeed - rightSpeed) < straightDriveDeadband) {
       double speedAverage = (leftSpeed + rightSpeed) / 2;
-      roboDrive.arcadeDrive(speedAverage, gyroController.calculate(getAngle(), gyroPosition));
+
+      roboDrive.arcadeDrive(
+        speedAverage, 
+
+        // Keeps PID output within joystick range
+        MathUtil.clamp(
+          // calculates how far to adjust based off of the previously recorded angle
+          gyroController.calculate(getAngle(), gyroPosition), 
+        
+          // low output, high output 
+          -1, 1
+        ),
+        // Squared inputs
+        false
+      );
 
     } else {
       roboDrive.tankDrive(leftSpeed, rightSpeed, false);
