@@ -47,7 +47,7 @@ import static frc.robot.Gains.Ramsete;
  */
 public class RobotContainer {
   // Drive Controller
-  XboxController xbox = new XboxController(Constants.kXboxPort);
+  private XboxController xbox = new XboxController(Constants.kXboxPort);
 
   // Drive Subsystem
   private final RevDrivetrain rDrive = new RevDrivetrain();
@@ -59,7 +59,7 @@ public class RobotContainer {
 
   private final Spinner spinner = new Spinner(colorSense);
 
-  private final ChangePosition goalMover = new ChangePosition();
+  private ChangePosition goalMover;
 
   private final Lift lift = new Lift();
 
@@ -74,6 +74,14 @@ public class RobotContainer {
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
+    () -> rDrive.getDifferentialDrive().tankDrive(
+      drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
+      drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
+      ), 
+    rDrive
+  );
+
+  private Command assistedDrive = new RunCommand(
     () -> rDrive.arcadeDriveWithGyro(
       drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
       drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
@@ -121,6 +129,9 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Instantiate the mover afterwards 
+    goalMover = new ChangePosition(shooter);
+
     // Configure the button bindings
     configureButtonBindings();
 

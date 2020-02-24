@@ -14,14 +14,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class ChangePosition extends SubsystemBase {
-  Compressor airow = new Compressor(20);
+  private Shooter m_shooter;
 
-  Solenoid leftPiston = new Solenoid(compressorModule, leftPistonPort);
-  Solenoid rightPiston = new Solenoid(compressorModule, rightPistonPort);
+  private Compressor airow = new Compressor(20);
+
+  private Solenoid leftPiston = new Solenoid(compressorModule, leftPistonPort);
+  private Solenoid rightPiston = new Solenoid(compressorModule, rightPistonPort);
 
   private boolean collecting = false;
 
-  public ChangePosition() {
+  public ChangePosition(Shooter shooter) {
+    m_shooter = shooter;
+
     airow.start();
   }
 
@@ -44,6 +48,8 @@ public class ChangePosition extends SubsystemBase {
     leftPiston.set(true);
     rightPiston.set(true);
 
+    m_shooter.stop(); // For safety, stops shooter when changing position
+
     collecting = true;
     System.out.println("Collecting Pose Set");
   }
@@ -51,6 +57,8 @@ public class ChangePosition extends SubsystemBase {
   public void shootPose(){
     leftPiston.set(false);
     rightPiston.set(false);
+
+    m_shooter.stop(); // For safety, stops shooter when changing position
 
     collecting = false;
     System.out.println("Shooting Pose Set");

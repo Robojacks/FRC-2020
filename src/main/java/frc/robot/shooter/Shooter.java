@@ -68,6 +68,8 @@ public class Shooter extends SubsystemBase {
 
     shootControl.reset();
     launcherController.setReference(0, ControlType.kVoltage);
+
+    engaged = false;
   }
 
   /**
@@ -80,9 +82,11 @@ public class Shooter extends SubsystemBase {
     if (goalMover.getCollecting()) {
       // if in intake position, intake
       launcher.setVoltage(-inVolts);
+      engaged = true;
 
     } else {
       launcher.setVoltage(outVolts);
+      engaged = true;
 
     }
   }
@@ -95,11 +99,9 @@ public class Shooter extends SubsystemBase {
   public void toggleSpeedVolts(double inVolts, double outVolts) {
     if (engaged) {
       stop();
-      engaged = false;
 
     } else {
       setSpeedVolts(inVolts, outVolts);
-      engaged = true;
     }
   }
 
