@@ -17,7 +17,8 @@ public class Conveyor extends SubsystemBase {
   private ChangePosition goalMover;
   private Shooter m_shooter;
 
-  private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorBelt);
+  private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorPort);
+  private WPI_TalonSRX feeder = new WPI_TalonSRX(kFeederPort);
 
   /**
    * Creates a new Conveyor.
@@ -33,14 +34,16 @@ public class Conveyor extends SubsystemBase {
    * @param beltVolts The voltage sent to the conveyor belt, changing direction
    * depending on whether the shooter is in the intake or shooting position
    */
-  public void setSpeed(double beltVolts){
+  public void setSpeed(double beltVolts, double feederVolts){
     if (goalMover.getCollecting()) {
       conveyor.setVoltage(beltVolts);
+      feeder.setVoltage(feederVolts);
 
     } else {
       // Delays start up time when in shooting position
       Timer.delay(shooterRampUpTime);
       conveyor.setVoltage(-beltVolts);
+      feeder.setVoltage(-feederVolts);
     }
   }
 
@@ -49,11 +52,11 @@ public class Conveyor extends SubsystemBase {
    * with the specified voltage
    * @param beltVolts voltage applied to the conveyor when it is on
    */
-  public void toggleSpeed(double beltVolts) {
+  public void toggleSpeed(double beltVolts, double feederVolts) {
     if (m_shooter.isEngaged()) {
-      setSpeed(beltVolts);
+      setSpeed(beltVolts, feederVolts);
     } else {
-      setSpeed(0);
+      setSpeed(0, 0);
     }
   }
 

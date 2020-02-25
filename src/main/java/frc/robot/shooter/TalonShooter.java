@@ -4,36 +4,35 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
+/*
 package frc.robot.shooter;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
-import static frc.robot.Gains.shooterPID;
+import static frc.robot.Gains.shooterLeftPID;
+import static frc.robot.Gains.shooterRightPID;
 import static frc.robot.Gains.shooterFeedforward;
 
 import static frc.robot.Constants.*;
 
-public class Shooter extends SubsystemBase {
+public class TalonShooter extends SubsystemBase {
   private ChangePosition goalMover;
 
-  private CANSparkMax launcher = new CANSparkMax(kShooterPort, MotorType.kBrushless);
-
-  private CANEncoder launcherEncoder = launcher.getEncoder();
+  private WPI_TalonSRX leftLauncher = new WPI_TalonSRX(kLeftShooterWheelPort);
+  private WPI_TalonSRX rightLauncher = new WPI_TalonSRX(kRightShooterWheelPort);
   
-  private CANPIDController launcherController = new CANPIDController(launcher);
+  private PIDController leftControl 
+    = new PIDController(shooterLeftPID.kP, shooterLeftPID.kI, shooterLeftPID.kD);
 
-  private PIDController shootControl 
-    = new PIDController(shooterPID.kP, shooterPID.kI, shooterPID.kD);
+  //private PIDController rightControl 
+   // = new PIDController(shooterRightPID.kP, shooterRightPID.kI, shooterRightPID.kD);
 
   private SimpleMotorFeedforward feedforward 
     = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
@@ -44,32 +43,38 @@ public class Shooter extends SubsystemBase {
   // Conversion factor from minutes to milliseconds
   private double minToMS = 600;
 
-  public Shooter(ChangePosition changePosition) {
+  public TalonShooter(ChangePosition changePosition) {
     // Makes changePosition instance the same as in RobotContainer
     goalMover = changePosition;
 
-    launcherEncoder.setInverted(false);
+    leftLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    rightLauncher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+
+    leftLauncher.setSensorPhase(true);
+    rightLauncher.setSensorPhase(false);
 
     // WPILib PID Stuff
-    shootControl.setTolerance(shooterPID.tolerance);
+    leftControl.setTolerance(shooterLeftPID.tolerance);
+    //rightControl.setTolerance(shooterRightPID.tolerance);
 
-    // Spark PID Stuff
-    launcherController.setP(shooterPID.kP);
-    launcherController.setI(shooterPID.kI);
-    launcherController.setD(shooterPID.kD); 
-    launcherController.setFF(shooterPID.kF);
+    // Talon PID Stuff
+    leftLauncher.config_kP(0, shooterLeftPID.kP);    
+    leftLauncher.config_kI(0, shooterLeftPID.kI);
+    leftLauncher.config_kD(0, shooterLeftPID.kD);
+    leftLauncher.config_kF(0, shooterLeftPID.kF);
 
-    launcherController.setOutputRange(-3000, 3000);
-    //launcherEncoder.setVelocityConversionFactor(factor)
+    rightLauncher.config_kP(0, shooterRightPID.kP);
+    rightLauncher.config_kI(0, shooterRightPID.kI);
+    rightLauncher.config_kD(0, shooterRightPID.kD);
+    rightLauncher.config_kF(0, shooterRightPID.kF);
   }
 
   public void stop() {
-    launcher.setVoltage(0);
+    leftLauncher.setVoltage(0);
+    rightLauncher.setVoltage(0);
 
-    shootControl.reset();
-    launcherController.setReference(0, ControlType.kVoltage);
-
-    engaged = false;
+    leftControl.reset();
+    //rightControl.reset();
   }
 
   /**
@@ -78,16 +83,16 @@ public class Shooter extends SubsystemBase {
    * @param inVolts The voltage sent to the shooter while in the intake position
    * @param outVolts The voltage sent to the shooter while in the shooting position
    */
+  /*
   public void setSpeedVolts(double inVolts, double outVolts){
     if (goalMover.getCollecting()) {
       // if in intake position, intake
-      launcher.setVoltage(-inVolts);
-      engaged = true;
+      leftLauncher.setVoltage(-inVolts);
+      rightLauncher.setVoltage(-inVolts);
 
     } else {
-      launcher.setVoltage(outVolts);
-      engaged = true;
-
+      leftLauncher.setVoltage(outVolts);
+      rightLauncher.setVoltage(outVolts);
     }
   }
 
@@ -96,12 +101,15 @@ public class Shooter extends SubsystemBase {
    * @param inVolts voltage applied with intake
    * @param outVolts voltage applied with shooting
    */
+  /*
   public void toggleSpeedVolts(double inVolts, double outVolts) {
     if (engaged) {
       stop();
+      engaged = false;
 
     } else {
       setSpeedVolts(inVolts, outVolts);
+      engaged = true;
     }
   }
 
@@ -113,25 +121,15 @@ public class Shooter extends SubsystemBase {
    * @param beltVolts The voltage sent to the conveyor belt, changing direction
    * depending on whether the shooter is in the intake or shooting position
    */
-  public void setSpeedSpark(double inRPM, double outRPM){
+  /*
+  public void setSpeedTalon(double inRPM, double outRPM){
     if (goalMover.getCollecting()) {
-      launcherController.setReference(-inRPM, ControlType.kVelocity);
+      leftLauncher.set(ControlMode.Velocity, -inRPM * kTicksPerRev / minToMS);
+      rightLauncher.set(ControlMode.Velocity, -inRPM * kTicksPerRev / minToMS);
 
     } else {
-      launcherController.setReference(outRPM, ControlType.kVelocity);
-
-    }
-  }
-
-  public void toggleSpeedSpark(double inRPM, double outRPM) {
-    if (engaged) {
-      stop();
-      engaged = false;
-
-    } else {
-      setSpeedSpark(inRPM, outRPM);
-      engaged = true;
-
+      leftLauncher.set(ControlMode.Velocity, outRPM * kTicksPerRev / minToMS);
+      rightLauncher.set(ControlMode.Velocity, outRPM * kTicksPerRev / minToMS);
     }
   }
 
@@ -142,17 +140,17 @@ public class Shooter extends SubsystemBase {
    * @param launchRPM Velocity of the shooter in rotations per minute
    * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
+  /*
   private void setRPMWPI(double launchRPM) {
-    launcher.setVoltage(
-      MathUtil.clamp(
-        // feedforward
-        feedforward.calculate(launchRPM) +
-        // PID correction
-        shootControl.calculate(getVelocity(), launchRPM), 
-        // min volts, max volts
-        -12, 12
-      )
-    ); 
+    leftLauncher.setVoltage(
+      MathUtil.clamp(feedforward.calculate(launchRPM) // feedforward
+      + leftControl.calculate(getLeftVelocity(), launchRPM), // PID correction
+      -12, 12)); // min volts, max volts
+
+    rightLauncher.setVoltage(
+      MathUtil.clamp(feedforward.calculate(-launchRPM) // feedforward
+      + leftControl.calculate(getRightVelocity(), launchRPM), // PID correction
+      -12, 12)); // min volts, max volts
   }
 
   /**
@@ -161,6 +159,7 @@ public class Shooter extends SubsystemBase {
    * @param inRPM The velocity in RPM the shooter goes to while in the intake position
    * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
    */
+  /*
   public void setSpeedWPI(double inRPM, double outRPM){
     if (goalMover.getCollecting()) {
       setRPMWPI(-inRPM);
@@ -175,6 +174,7 @@ public class Shooter extends SubsystemBase {
    * @param inVolts voltage applied with intake
    * @param outVolts voltage applied with shooting
    */
+  /*
   public void toggleSpeedWPI(double inRPM, double outRPM) {
     if (engaged) {
       stop();
@@ -192,13 +192,23 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * Gets the shooter velocity in RPM
+   * Gets the left velocity in RPM
    */
-  public double getVelocity() {
-    return launcherEncoder.getVelocity() * minToMS / kTicksPerRev;
+  /*
+  public double getLeftVelocity() {
+    return leftLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
+  }
+
+  /**
+   * Gets the right velocity in RPM
+   */
+  /*
+  public double getRightVelocity() {
+    return rightLauncher.getSelectedSensorVelocity() * minToMS / kTicksPerRev;
   }
 
   @Override
   public void periodic() {
   }
 }
+*/

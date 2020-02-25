@@ -47,7 +47,7 @@ import static frc.robot.Gains.Ramsete;
  */
 public class RobotContainer {
   // Drive Controller
-  XboxController xbox = new XboxController(Constants.kXboxPort);
+  private XboxController xbox = new XboxController(Constants.kXboxPort);
 
   // Drive Subsystem
   private final RevDrivetrain rDrive = new RevDrivetrain();
@@ -59,7 +59,7 @@ public class RobotContainer {
 
   private final Spinner spinner = new Spinner(colorSense);
 
-  private final ChangePosition goalMover = new ChangePosition();
+  private ChangePosition goalMover;
 
   private final Lift lift = new Lift();
 
@@ -74,8 +74,20 @@ public class RobotContainer {
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
-    () -> rDrive.driveStraight(
-      drivePercentLimit * xbox.getRawAxis(1), drivePercentLimit * xbox.getRawAxis(5)), rDrive);
+    () -> rDrive.getDifferentialDrive().tankDrive(
+      drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
+      drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
+      ), 
+    rDrive
+  );
+
+  private Command assistedDrive = new RunCommand(
+    () -> rDrive.arcadeDriveWithGyro(
+      drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
+      drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
+      ), 
+    rDrive
+  );
   
   private Command moveArmOneAxis = new RunCommand(
     () -> lift.moveOneAxis(xbox.getRawAxis(Axis.kLeftTrigger.value)), lift);
@@ -90,13 +102,13 @@ public class RobotContainer {
   
   private Command shootThenGo = new InstantCommand(
     () -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .andThen(() -> conveyor.setSpeed(conveyorVolts))
+    .andThen(() -> conveyor.setSpeed(conveyorVolts, feedingVolts))
     .andThen(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
     .andThen(new WaitCommand(4))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
-    .andThen(() -> conveyor.setSpeed(0))
+    .andThen(() -> conveyor.setSpeed(0, 0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -117,6 +129,9 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Instantiate the mover afterwards 
+    goalMover = new ChangePosition(shooter);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -140,13 +155,14 @@ public class RobotContainer {
     // Shoot or intake with voltage
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts));
-    
+    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts, feedingVolts));
     
     // Shoot or intake with set velocity
+    
     new JoystickButton(xbox, Button.kB.value)
-    .whenPressed(() -> shooter.toggleSpeedWPI(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts));
+    .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
+    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts, feedingVolts));
+    
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
