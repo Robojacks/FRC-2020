@@ -140,7 +140,6 @@ public class Shooter extends SubsystemBase {
    * Also sets a voltage for the conveyor belt, given that it does not have to be as accurate. Must 
    * be set negative for intake.
    * @param launchRPM Velocity of the shooter in rotations per minute
-   * @param beltVolts The applied voltage to the conveyor belt, subject to minor fluctuations
   */ 
   private void setRPMWPI(double launchRPM) {
     launcher.setVoltage(
@@ -195,7 +194,7 @@ public class Shooter extends SubsystemBase {
    * Gets the shooter velocity in RPM
    */
   public double getVelocity() {
-    return launcherEncoder.getVelocity() * minToMS / kTicksPerRev;
+    return launcherEncoder.getVelocity();
   }
 
   @Override
