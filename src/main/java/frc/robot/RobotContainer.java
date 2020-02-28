@@ -102,13 +102,13 @@ public class RobotContainer {
   
   private Command shootThenGo = new InstantCommand(
     () -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .andThen(() -> conveyor.setSpeed(conveyorVolts, feedingVolts))
+    .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts, feedingVolts))
     .andThen(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
     .andThen(new WaitCommand(4))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
-    .andThen(() -> conveyor.setSpeed(0, 0))
+    .andThen(() -> conveyor.setSpeedHighGoal(0, 0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -152,16 +152,15 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
-    // Shoot or intake with voltage
+    // Shoot or intake with voltage, aiming for low goal
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts, feedingVolts));
+    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts, feedingVolts));
     
-    // Shoot or intake with set velocity
-    
+    // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
     .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(conveyorVolts, feedingVolts));
+    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts, feedingVolts));
     
     
     // Switches arm modes from up to down
