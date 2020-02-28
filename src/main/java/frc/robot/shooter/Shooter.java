@@ -185,6 +185,15 @@ public class Shooter extends SubsystemBase {
 
     }
   }
+  
+  public double calcMetricTgSpeed(double distance){
+    double top = Math.sqrt(-4.9* Math.pow(distance,2)); 
+    double bottom = Math.sqrt(Math.pow(Math.cos(Math.toRadians(shooterAngle)), 2) *
+     (highGoalHeight-shooterHeight-Math.tan(shooterAngle)*distance));
+
+    double v = top/bottom;
+    return v;
+  }
 
   public boolean isEngaged() {
     return engaged;
