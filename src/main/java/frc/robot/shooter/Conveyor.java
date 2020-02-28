@@ -28,13 +28,30 @@ public class Conveyor extends SubsystemBase {
     m_shooter = shooter;
   }
 
-  /**
-   * Sets a voltage based on whether the robot is in shooting position or
+/**
+   * Sets a voltage based on whether the robot is in low goal shooting position or
    * intake position. 
    * @param beltVolts The voltage sent to the conveyor belt, changing direction
    * depending on whether the shooter is in the intake or shooting position
    */
-  public void setSpeed(double beltVolts, double feederVolts){
+  public void setSpeedLowGoal(double beltVolts, double feederVolts){
+    if (goalMover.getCollecting()) {
+      conveyor.setVoltage(beltVolts);
+      feeder.setVoltage(feederVolts);
+
+    } else {
+      conveyor.setVoltage(-beltVolts);
+      feeder.setVoltage(-feederVolts);
+    }
+  }
+
+  /**
+   * Sets a voltage based on whether the robot is in high goal shooting position or
+   * intake position. 
+   * @param beltVolts The voltage sent to the conveyor belt, changing direction
+   * depending on whether the shooter is in the intake or shooting position
+   */
+  public void setSpeedHighGoal(double beltVolts, double feederVolts){
     if (goalMover.getCollecting()) {
       conveyor.setVoltage(beltVolts);
       feeder.setVoltage(feederVolts);
@@ -52,11 +69,24 @@ public class Conveyor extends SubsystemBase {
    * with the specified voltage
    * @param beltVolts voltage applied to the conveyor when it is on
    */
-  public void toggleSpeed(double beltVolts, double feederVolts) {
+  public void toggleSpeedLowGoal(double beltVolts, double feederVolts) {
     if (m_shooter.isEngaged()) {
-      setSpeed(beltVolts, feederVolts);
+      setSpeedLowGoal(beltVolts, feederVolts);
     } else {
-      setSpeed(0, 0);
+      setSpeedLowGoal(0, 0);
+    }
+  }
+
+  /**
+   * Relying on the the shooter state, toggles conveyor on and off 
+   * with the specified voltage
+   * @param beltVolts voltage applied to the conveyor when it is on
+   */
+  public void toggleSpeedHighGoal(double beltVolts, double feederVolts) {
+    if (m_shooter.isEngaged()) {
+      setSpeedHighGoal(beltVolts, feederVolts);
+    } else {
+      setSpeedHighGoal(0, 0);
     }
   }
 
