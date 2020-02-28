@@ -18,8 +18,8 @@ public class ChangePosition extends SubsystemBase {
 
   private Compressor airow = new Compressor(20);
 
-  private Solenoid leftPiston = new Solenoid(compressorModule, leftPistonPort);
-  private Solenoid rightPiston = new Solenoid(compressorModule, rightPistonPort);
+  private Solenoid leftPiston = new Solenoid(compressorModule, leftPoseMoverPort);
+  private Solenoid rightPiston = new Solenoid(compressorModule, rightPoseMoverPort);
 
   private boolean collecting = false;
 
