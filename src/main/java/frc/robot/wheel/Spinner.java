@@ -20,7 +20,7 @@ public class Spinner extends SubsystemBase {
   private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
   private int colorSwitches = 9;
   private Colour pastColor = Colour.YELLOW;
-  private Colour countCol= Colour.GREEN;
+  private Colour countCol= Colour.GREEN; 
 
   public Spinner(SenseColor colorSensor) {
     colorSense = colorSensor;
@@ -46,34 +46,34 @@ public class Spinner extends SubsystemBase {
   }
 
   public void changeMaxSwitches(int maxColorSwitches) {
-    colorSwitches = maxColorSwitches* 2 +1;
+    colorSwitches = maxColorSwitches* 2 ;
   };
 
 
   public void setCountColor() {
-	  countCol=colorSense.getColour();
+	  countCol = colorSense.getColour();
   }
 
 
 public Colour getCountColor(){
-  return countCol;}
+  return countCol;
+}
 
   public void toSelectedColorSwitches(){
     
     move(-colorSwitchSpeed);
+    pastColor = colorSense.getColour();
     
-     if(colorSense.getColour() == Colour.RED && pastColor != colorSense.getColour())  {
+    if(colorSense.getColour() == Colour.BLUE && pastColor != colorSense.getColour())  {
       colorSwitches--;
       System.out.println("color passed");
-    
      
     }
-   pastColor = colorSense.getColour();
-     
-   if (colorSwitches <= 0){
-      toSelectedColor(countCol.toString());
+
+    if (colorSwitches <= 0){
+      toSelectedColor(countCol.getCapital());
     }
-    
+
   }
 
 
