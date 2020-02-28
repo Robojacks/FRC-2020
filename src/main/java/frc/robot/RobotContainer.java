@@ -180,11 +180,12 @@ public class RobotContainer {
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
     // Spin number of rotations
-    new JoystickButton(xbox, Button.kBack.value)u
-    .whenPressed(()->spinner.setCountColor(), spinner)
+    new JoystickButton(xbox, Button.kBack.value)
+    .whenPressed(() -> spinner.setCountColor(), spinner)
     .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner)
-    .whenReleased(()-> spinner.changeMaxSwitches(4), spinner)
-    .whenReleased(()-> spinner.move(0), spinner);
+    .whenReleased(() -> spinner.changeMaxSwitches(4), spinner)
+    .whenReleased(() -> spinner.move(0), spinner);
+
     // Switch Gears
     new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> gears.switchGears(), gears);
