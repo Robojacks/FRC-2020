@@ -39,8 +39,8 @@ public final class Constants {
 	public static final int compressorModule = 20;
 
 	// Solenoid ports
-	public static final int leftPistonPort = 0;
-	public static final int rightPistonPort = 1; 
+	public static final int leftPoseMoverPort = 0;
+	public static final int rightPoseMoverPort = 1; 
 
 	// Arm motor ports
 	public static final int leftArmPort = 7;
