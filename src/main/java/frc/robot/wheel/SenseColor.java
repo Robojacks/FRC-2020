@@ -9,6 +9,9 @@ package frc.robot.wheel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
+import frc.robot.Constants;
+
+import java.lang.annotation.Target;
 
 import edu.wpi.first.wpilibj.I2C;
 import com.revrobotics.ColorSensorV3;
@@ -25,57 +28,50 @@ public class SenseColor extends SubsystemBase {
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
   private int proximity = m_colorSensor.getProximity();
   private double IR = m_colorSensor.getIR();
-  //private Color detectedColor = m_colorSensor.getColor();
+  public Color detectedColor = m_colorSensor.getColor();
   private final ColorMatch m_colorMatcher = new ColorMatch();
-
-   
-
-  //public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-
-  private boolean isBlue = getRawColor() >= blueLowerBound && getRawColor() <= blueUpperBound;
-  private boolean isRed = getRawColor() >= redLowerBound && getRawColor() <= redUpperBound;
-  private boolean isYellow = getRawColor() >= yellowLowerBound && getRawColor() <= yellowUpperBound;
-  private boolean isGreen = getRawColor() >= greenLowerBound && getRawColor() <= greenUpperBound;
-
+  public ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+  
+  public SenseColor(){
+    m_colorMatcher.addColorMatch(Colour.BLUE.target);
+    m_colorMatcher.addColorMatch(Colour.YELLOW.target);
+    m_colorMatcher.addColorMatch(Colour.RED.target);
+    m_colorMatcher.addColorMatch(Colour.GREEN.target);
+  }
+  
   private Colour prevColor = Colour.YELLOW;
-                               
+
   public enum Colour {
 
-    RED(redLowerBound, redUpperBound ,1,"R") {
-      public Colour next() {return YELLOW;}},
+    RED( Constants.kRedTarget ,0,"R"), 
+      
+    YELLOW(Constants.kYellowTarget,1,"Y"),
 
-    YELLOW(yellowLowerBound, yellowUpperBound,2,"Y") {
-      public Colour next() {return BLUE;}},
+    BLUE(Constants.kBlueTarget,2,"B"),
 
-    BLUE(blueLowerBound, blueUpperBound,3,"B") {
-      public Colour next() {return GREEN;}},
+    GREEN(Constants.kGreenTarget,3,"G");
 
-    GREEN(greenLowerBound, greenUpperBound,4,"G") {
-      public Colour next() {return RED;}};
-
-    private final double upper;
-    private final double lower;
+    
     private final int position;
     private final String capital;
+    private final Color target; 
+   
 
-    public abstract Colour next();
-
-    public String getCapital() {
-      return capital;
+    Colour (final Color Target, final int position, final String capital) {
+      this.target= Target;
+      this.position = position;
+      this.capital = capital;
     }
-
-    public double getLower() {
-      return lower;
-    }
-
-    public double getUpper() {
-      return upper;
-    }
-
+    /**
+     * 
+     * @param n = number of ofset color counterclockwise
+     * @return 
+     */
     public Colour nextIn(int n) {
       n = this.position + n % 4;
 
       if (n == YELLOW.position) {
+    
         return YELLOW;
       }
 
@@ -94,72 +90,46 @@ public class SenseColor extends SubsystemBase {
       else {
         return null;
       }
-    }
     
-	  
-
-	public static Colour fromString (final String Ch){
-      switch(Ch){
-        case("B"):
-          return Colour.BLUE;
-        case("Y"):
-          return Colour.YELLOW;
-        case("G"):
-          return Colour.GREEN;
-        case("R"):
-          return Colour.RED;
-        default:
-          return Colour.YELLOW;
-      }
-
     }
+   
+     
+
+    public String getCapital() {
+      return capital;
+    }
+
+    
+    
+	public static Colour fromString (final String Ch){
+    switch(Ch){
+    case("B"):
+      return Colour.BLUE;
+    case("Y"):
+      return Colour.YELLOW;
+    case("G"):
+      return Colour.GREEN;
+    case("R"):
+      return Colour.RED;
+    default:
+      return Colour.YELLOW;
+    }
+
+  }
+
+}
   
-    private Colour(final double lowerBound, final double upperBound, final int position, final String capital) {
-      this.upper = upperBound;
-      this.lower = lowerBound;
-      this.position = position;
-      this.capital = capital;
-
-    } 
-  }   
+      
 
 
-  public boolean getIsBlue(){
-    isBlue = getRawColor() >= Colour.BLUE.lower && getRawColor() <= Colour.BLUE.upper;
 
-    return isBlue; 
-  }
 
- public boolean getIsRed(){
+ 
 
-  isRed = getRawColor() >= Colour.RED.lower && getRawColor() <= Colour.RED.upper; 
 
-  return isRed; 
 
- }
-
- public boolean getIsYellow(){
-
-  isYellow = getRawColor() >= Colour.YELLOW.lower && getRawColor() <= Colour.YELLOW.upper; 
-
-  return isYellow; 
-
- }
-
- public boolean getIsGreen(){
-
-  isGreen = getRawColor() >= Colour.GREEN.lower && getRawColor() <= Colour.GREEN.upper; 
-
-  return isGreen; 
-
- }
-
-/*
-  public Color getColor() {
-    return detectedColor;
-  }
-*/
   public double getRawColor() {
+    IR = m_colorSensor.getIR();
     return IR;
   }
 
@@ -169,25 +139,27 @@ public class SenseColor extends SubsystemBase {
 
  
   public Colour getColour(){
-    if (getIsBlue()) {
+    
+    ColorMatchResult matching = m_colorMatcher.matchClosestColor(detectedColor);
+
+    if (matching.color == Colour.BLUE.target) {
       prevColor = Colour.BLUE;
       return Colour.BLUE;
 
-    } else if (getIsRed()) {
+    } else if (matching.color ==  Colour.RED.target) {
       prevColor = Colour.RED;
       return Colour.RED;
 
-    } else if (getIsGreen()) {
+    } else if (matching.color ==  Colour.GREEN.target) {
       prevColor = Colour.GREEN;
       return Colour.GREEN;
 
-    } else if (getIsYellow()) {
+    } else if (matching.color ==  Colour.YELLOW.target) {
       prevColor = Colour.YELLOW;
       return Colour.YELLOW;
 
     } else {
-      return prevColor;
-
+      return Colour.BLUE;
     }
 
   }
@@ -213,16 +185,17 @@ public class SenseColor extends SubsystemBase {
     }
 
   }
-  
+   public double getConfidence(){
+     return m_colorMatcher.matchClosestColor(detectedColor).confidence;
+   }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   // detectedColor = m_colorSensor.getColor();
+    detectedColor = m_colorSensor.getColor();
     IR = m_colorSensor.getIR();
     proximity = m_colorSensor.getProximity();
-    //match = m_colorMatcher.matchClosestColor(detectedColor);
   }
 
 }

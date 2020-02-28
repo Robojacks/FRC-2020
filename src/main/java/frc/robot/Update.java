@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.shooter.Shooter;
 import frc.robot.wheel.SenseColor;
+import frc.robot.wheel.Spinner;
 
 import static frc.robot.Constants.*;
 import static frc.robot.Gains.*;
@@ -23,7 +24,7 @@ import static frc.robot.Gains.*;
 public class Update {
   private Shooter m_shooter;
   private SenseColor colorSense;
-
+  private Spinner m_spinner;
   // Starting positions
   private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
   private final Pose2d center = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
@@ -31,9 +32,12 @@ public class Update {
 
   private static final SendableChooser choosePosition = new SendableChooser<Pose2d>();
 
-  public Update(SenseColor colorSensing, Shooter shooter) {
+
+
+  public Update(SenseColor colorSensing, Shooter shooter, Spinner spinner) {
     m_shooter = shooter;
     colorSense = colorSensing;
+    m_spinner = spinner;
 
     choosePosition.setDefaultOption("Center", center);
     choosePosition.addOption("Left", left);
@@ -50,19 +54,7 @@ public class Update {
     SmartDashboard.putNumber("I value(distance)", distanceCorrection.kI);
     SmartDashboard.putNumber("D value(distance)", distanceCorrection.kD);
 
-    // Display color bounds
-    SmartDashboard.putNumber("Blue Lower Bound", Constants.blueLowerBound);
-    SmartDashboard.putNumber("Blue Upper Bound", Constants.blueUpperBound);
-
-    SmartDashboard.putNumber("Red Lower Bound", Constants.redLowerBound);
-    SmartDashboard.putNumber("Red Upper Bound", Constants.redUpperBound);
-
-    SmartDashboard.putNumber("Green Lower Bound", Constants.greenLowerBound);
-    SmartDashboard.putNumber("Green Upper Bound", Constants.greenUpperBound);
-    
-    SmartDashboard.putNumber("Yellow Lower Bound", Constants.yellowLowerBound);
-    SmartDashboard.putNumber("Yellow Upper Bound", Constants.yellowUpperBound);
-
+   
     // Put up color sense data
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
     SmartDashboard.putNumber("Proximity", colorSense.getProximity());
@@ -70,12 +62,27 @@ public class Update {
 
     // Display left and right shooter velocities
     SmartDashboard.putNumber("Shooter RPM", m_shooter.getVelocity());
+    // Display color related value
+    SmartDashboard.putString("colorFRC", colorSense.getColorString());
+    SmartDashboard.putNumber("confidence", colorSense.getConfidence());
+    SmartDashboard.putNumber("Red", colorSense.detectedColor.red);
+    SmartDashboard.putNumber("green", colorSense.detectedColor.green);
+    SmartDashboard.putNumber("blue", colorSense.detectedColor.blue);
+    SmartDashboard.putNumber("Rotatinos",m_spinner.getColorSwitches());
+    SmartDashboard.putString("colorkey", m_spinner.getCountColor().toString());
   }
+  
 
   public static Pose2d getStartingPose() {
     final Pose2d position = (Pose2d) choosePosition.getSelected();
     return position;
   }
+
+
+
+
+
+
 
   public void periodic() {
     // Update left and right shooter velocities
@@ -85,6 +92,16 @@ public class Update {
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
     SmartDashboard.putNumber("Proximity", colorSense.getProximity());
     SmartDashboard.putString("Detected Color", colorSense.getColorString());
+
+    // Updat color related value
+
+    SmartDashboard.putString("colorFRC", colorSense.getColorString());
+    SmartDashboard.putNumber("confidence", colorSense.getConfidence());
+    SmartDashboard.putNumber("Red", colorSense.detectedColor.red);
+    SmartDashboard.putNumber("green", colorSense.detectedColor.green);
+    SmartDashboard.putNumber("blue", colorSense.detectedColor.blue);
+    SmartDashboard.putNumber("Rotatinos",m_spinner.getColorSwitches());
+    SmartDashboard.putString("colorkey", m_spinner.getCountColor().toString());
     
     // Change PID values for angle correction
     if (angleCorrection.kP != SmartDashboard.getNumber("P value(angle)", angleCorrection.kP))  {
@@ -112,37 +129,6 @@ public class Update {
       distanceCorrection.kD = SmartDashboard.getNumber("D value(distance)", distanceCorrection.kD);
     } 
 
-     // Change color bounds
-    if (blueLowerBound != SmartDashboard.getNumber("Blue Lower Bound", Constants.blueLowerBound))  {
-      blueLowerBound = SmartDashboard.getNumber("Blue Lower Bound", Constants.blueLowerBound);
-    }
-
-    if (blueUpperBound != SmartDashboard.getNumber("Blue Upper Bound", Constants.blueUpperBound))  {
-      blueUpperBound = SmartDashboard.getNumber("Blue Upper Bound", Constants.blueUpperBound);
-    }
-
-    if (redLowerBound != SmartDashboard.getNumber("Red Lower Bound", Constants.redLowerBound))  {
-      redLowerBound = SmartDashboard.getNumber("Red Lower Bound", Constants.redLowerBound);
-    }
-
-    if (redUpperBound != SmartDashboard.getNumber("Red Upper Bound", Constants.redUpperBound))  {
-      redUpperBound = SmartDashboard.getNumber("Red Upper Bound", Constants.redUpperBound);
-    }
-
-    if (greenLowerBound != SmartDashboard.getNumber("Green Lower Bound", Constants.greenLowerBound))  {
-      greenLowerBound = SmartDashboard.getNumber("Green Lower Bound", Constants.greenLowerBound);
-    }
-
-    if (greenUpperBound != SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound))  {
-      greenUpperBound = SmartDashboard.getNumber("Green Upper Bound", Constants.greenUpperBound);
-    }
-
-    if (yellowLowerBound != SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound))  {
-      yellowLowerBound = SmartDashboard.getNumber("Yellow Lower Bound", Constants.greenLowerBound);
-    }
-
-    if (yellowUpperBound != SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound))  {
-      yellowUpperBound = SmartDashboard.getNumber("Yellow Upper Bound", Constants.yellowUpperBound);
-    }
+    
   }
 }

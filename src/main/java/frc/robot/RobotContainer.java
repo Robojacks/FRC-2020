@@ -70,7 +70,7 @@ public class RobotContainer {
   private final Gears gears = new Gears();
 
   // Update PID values
-  private final Update update = new Update(colorSense, shooter);
+  private final Update update = new Update(colorSense, shooter,spinner);
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
@@ -180,9 +180,11 @@ public class RobotContainer {
     (DriverStation.getInstance().getGameSpecificMessage()), spinner);
 
     // Spin number of rotations
-    new JoystickButton(xbox, Button.kBack.value)
-    .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner);
-    
+    new JoystickButton(xbox, Button.kBack.value)u
+    .whenPressed(()->spinner.setCountColor(), spinner)
+    .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner)
+    .whenReleased(()-> spinner.changeMaxSwitches(4), spinner)
+    .whenReleased(()-> spinner.move(0), spinner);
     // Switch Gears
     new JoystickButton(xbox, Button.kBumperRight.value)
     .whenPressed(() -> gears.switchGears(), gears);

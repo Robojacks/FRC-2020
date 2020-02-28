@@ -17,12 +17,15 @@ import static frc.robot.Constants.*;
 public class Spinner extends SubsystemBase {
 
   private SenseColor colorSense;
-  private WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
-  private int colorSwitches = 10 * 8;
+  private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
+  private int colorSwitches = 9;
+  private Colour pastColor = Colour.YELLOW;
+  private Colour countCol= Colour.GREEN;
 
   public Spinner(SenseColor colorSensor) {
     colorSense = colorSensor;
   }
+
 
   public void move(double speed) {
     SpinnerMotor.set(speed);
@@ -38,30 +41,46 @@ public class Spinner extends SubsystemBase {
     }
   }
 
-  public int getCurrentRotations() {
+  public int getColorSwitches() {
     return colorSwitches;
   }
 
-  public void changeMaxRotations(int maxColorSwitches) {
-    colorSwitches = maxColorSwitches;
+  public void changeMaxSwitches(int maxColorSwitches) {
+    colorSwitches = maxColorSwitches* 2 +1;
   };
 
-  public void toSelectedColorSwitches(){
-    move(colorSwitchSpeed);
 
-    if(colorSense.getColour() == colorSense.getPrevColour().next()) {
-      colorSwitches--;
-    }
-
-    if (colorSwitches >= 0){
-      move(0);
-    }
-  
+  public void setCountColor() {
+	  countCol=colorSense.getColour();
   }
- 
+
+
+public Colour getCountColor(){
+  return countCol;}
+
+  public void toSelectedColorSwitches(){
+    
+    move(-colorSwitchSpeed);
+    
+     if(colorSense.getColour() == Colour.RED && pastColor != colorSense.getColour())  {
+      colorSwitches--;
+      System.out.println("color passed");
+    
+     
+    }
+   pastColor = colorSense.getColour();
+     
+   if (colorSwitches <= 0){
+      toSelectedColor(countCol.toString());
+    }
+    
+  }
+
+
+
   @Override
   public void periodic() {
   }
 
-}
 
+}

@@ -6,6 +6,9 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
@@ -72,18 +75,13 @@ public final class Constants {
 	public static final double straightDriveDeadband = 0.05;
 
 	// Color Value Bounds
-	public static double blueLowerBound = 106;
-	public static double blueUpperBound = 115;
+  public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
 
-	public static double redLowerBound = 65;
-	public static double redUpperBound = 81;
+  public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
 
-	public static double greenLowerBound = 46;
-	public static double greenUpperBound = 60;
-
-	public static double yellowLowerBound = 91;
-	public static double yellowUpperBound = 98;
-
+  public final static Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
+  
+  public final static Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 	// Constant Speeds
 	public static final double drivePercentLimit = 1;
 	public static final double rotationMagnitude = 360;
