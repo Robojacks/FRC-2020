@@ -100,12 +100,11 @@ public class RobotContainer {
   
   // Autonomous 
   
-  private Command shootThenGo = new InstantCommand(
-    () -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts, feedingVolts))
-    .andThen(() -> goalMover.collectPose(), goalMover)
+  private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
+    .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
+    .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts, feedingVolts))
     .andThen(new WaitCommand(4))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(0, 0))

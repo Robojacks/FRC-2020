@@ -19,9 +19,6 @@ public class FollowTarget extends CommandBase {
   private Limelight vision;
   private RevDrivetrain drive;
 
-  private PIDController distanceCorrector 
-    = new PIDController(distanceCorrection.kP, distanceCorrection.kI, distanceCorrection.kD);
-
   private PIDController angleCorrector 
     = new PIDController(angleCorrection.kP, angleCorrection.kI, angleCorrection.kD);
   
@@ -35,15 +32,12 @@ public class FollowTarget extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(vision, drive);
 
-
-    distanceCorrector.setTolerance(0.5);
-    angleCorrector.setTolerance(1);
+    angleCorrector.setTolerance(0.2);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    distanceCorrector.setSetpoint(shooterDistanceFromTargetMeters);
     angleCorrector.setSetpoint(0);
     vision.lightOn();
     vision.visionMode();
@@ -52,14 +46,9 @@ public class FollowTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Passing PID outputs to the drive
+    // Passing aim PID output to the drive
     drive.getDifferentialDrive().arcadeDrive(
-      // Distance Correction
-      MathUtil.clamp(
-        // Calculate what to do based off measurement
-        0, //distanceCorrector.calculate(vision.getTargetDistanceMeasured(cameraToBallTargetHeight, cameraAngle)),
-        // Min, Max output
-        -0.5, 0.5), 
+      0,
       // Angle Correction
       MathUtil.clamp(
         // Calculate what to do based off measurement
@@ -71,7 +60,6 @@ public class FollowTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    distanceCorrector.reset();
     angleCorrector.reset();
   }
 
