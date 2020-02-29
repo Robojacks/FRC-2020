@@ -48,12 +48,6 @@ public class Update {
     SmartDashboard.putNumber("P value(angle)", angleCorrection.kP);
     SmartDashboard.putNumber("I value(angle)", angleCorrection.kI);
     SmartDashboard.putNumber("D value(angle)", angleCorrection.kD);
-
-    // Display PID values (distance)
-    SmartDashboard.putNumber("P value(distance)", distanceCorrection.kP);
-    SmartDashboard.putNumber("I value(distance)", distanceCorrection.kI);
-    SmartDashboard.putNumber("D value(distance)", distanceCorrection.kD);
-
    
     // Put up color sense data
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());
@@ -78,12 +72,6 @@ public class Update {
     return position;
   }
 
-
-
-
-
-
-
   public void periodic() {
     // Update left and right shooter velocities
     SmartDashboard.putNumber("Shooter RPM", m_shooter.getVelocity());
@@ -93,14 +81,13 @@ public class Update {
     SmartDashboard.putNumber("Proximity", colorSense.getProximity());
     SmartDashboard.putString("Detected Color", colorSense.getColorString());
 
-    // Updat color related value
-
+    // Update frc color sensing
     SmartDashboard.putString("colorFRC", colorSense.getColorString());
     SmartDashboard.putNumber("confidence", colorSense.getConfidence());
-    SmartDashboard.putNumber("Red", colorSense.detectedColor.red);
+    SmartDashboard.putNumber("red", colorSense.detectedColor.red);
     SmartDashboard.putNumber("green", colorSense.detectedColor.green);
     SmartDashboard.putNumber("blue", colorSense.detectedColor.blue);
-    SmartDashboard.putNumber("Rotatinos",m_spinner.getColorSwitches());
+    SmartDashboard.putNumber("rotations", m_spinner.getColorSwitches());
     SmartDashboard.putString("colorkey", m_spinner.getCountColor().toString());
     
     // Change PID values for angle correction
@@ -114,21 +101,13 @@ public class Update {
 
     if (angleCorrection.kD != SmartDashboard.getNumber("D value(angle)", angleCorrection.kD))  {
       angleCorrection.kD = SmartDashboard.getNumber("D value(angle)", angleCorrection.kD);
-    } 
-
-    // Change PID values for distance correction
-    if (distanceCorrection.kP != SmartDashboard.getNumber("P value(distance)", distanceCorrection.kP))  {
-      distanceCorrection.kP = SmartDashboard.getNumber("P value(distance)", distanceCorrection.kP);
     }
-
-    if (distanceCorrection.kI != SmartDashboard.getNumber("I value(distance)", distanceCorrection.kI))  {
-      distanceCorrection.kI = SmartDashboard.getNumber("I value(distance)", distanceCorrection.kI);
-    }
-
-    if (distanceCorrection.kD != SmartDashboard.getNumber("D value(distance)", distanceCorrection.kD))  {
-      distanceCorrection.kD = SmartDashboard.getNumber("D value(distance)", distanceCorrection.kD);
-    } 
-
     
+    // Change values for rotations
+    /*
+    if (m_spinner.getColorSwitches() != SmartDashboard.getNumber("rotations", m_spinner.getColorSwitches()))  {
+      m_spinner.changeMaxSwitches(Math.round(SmartDashboard.getNumber("rotations", m_spinner.getColorSwitches())));
+    }
+    */
   }
 }

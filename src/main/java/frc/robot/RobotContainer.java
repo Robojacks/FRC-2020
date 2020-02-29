@@ -82,7 +82,7 @@ public class RobotContainer {
   );
 
   private Command assistedDrive = new RunCommand(
-    () -> rDrive.arcadeDriveWithGyro(
+    () -> rDrive.tankDriveWithGyro(
       drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
       drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
       ), 

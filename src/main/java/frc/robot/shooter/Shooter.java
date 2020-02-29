@@ -36,9 +36,6 @@ public class Shooter extends SubsystemBase {
   // Create toggle for shooting
   private boolean engaged = false;
 
-  // Conversion factor from minutes to milliseconds
-  private double minToMS = 600;
-
   public Shooter(ChangePosition changePosition) {
     // Makes changePosition instance the same as in RobotContainer
     goalMover = changePosition;

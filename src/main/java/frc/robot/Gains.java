@@ -35,33 +35,8 @@ public class Gains {
 		public static double kI = 0;
 		public static double kD = 10;
 		public static double kF = 0;
-
-		public static double tolerance = 20;
 	}
 
-	public static class shooterLeftPID {
-		public static double kP = 0.25;
-		public static double kI = 0;
-		public static double kD = 10;
-		public static double kF = 0; // 1023 / 7200
-
-		public static double tolerance = 20;
-	}
-
-	public static class shooterRightPID {
-		public static double kP = 0.25;
-		public static double kI = 0;
-		public static double kD = 0;
-		public static double kF = 0; // 1023 / 7200
-
-		public static double tolerance = 20;
-	}
-
-	public static class distanceCorrection {
-		public static double kP = 0.1;
-		public static double kI = 0;
-		public static double kD = 0;
-	}
 
 	public static class angleCorrection {
 		public static double kP = 0.05;
