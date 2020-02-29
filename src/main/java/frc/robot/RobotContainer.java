@@ -160,7 +160,6 @@ public class RobotContainer {
     .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
     .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts, feedingVolts));
     
-    
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
     .whenPressed(() -> lift.switchMovement(), lift);
@@ -189,6 +188,13 @@ public class RobotContainer {
     
   }
 
+  public void init(){
+    limelight.driverMode();
+    limelight.lightOff();
+    limelight.PiPMainStream();
+
+  } 
+
   public void periodic() {
     update.periodic();
   }
@@ -203,12 +209,6 @@ public class RobotContainer {
     return trajectory;
   }
 
-  public void init(){
-    limelight.driverMode();
-    limelight.lightOff();
-    limelight.PiPMainStream();
-
-  } 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
