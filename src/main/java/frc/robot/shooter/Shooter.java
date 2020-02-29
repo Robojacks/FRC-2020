@@ -33,12 +33,6 @@ public class Shooter extends SubsystemBase {
   
   private CANPIDController launcherController = new CANPIDController(launcher);
 
-  private PIDController shootControl 
-    = new PIDController(shooterPID.kP, shooterPID.kI, shooterPID.kD);
-
-  private SimpleMotorFeedforward feedforward 
-    = new SimpleMotorFeedforward(shooterFeedforward.ks, shooterFeedforward.kv);
-
   // Create toggle for shooting
   private boolean engaged = false;
 
@@ -51,23 +45,18 @@ public class Shooter extends SubsystemBase {
 
     launcherEncoder.setInverted(false);
 
-    // WPILib PID Stuff
-    shootControl.setTolerance(shooterPID.tolerance);
-
     // Spark PID Stuff
     launcherController.setP(shooterPID.kP);
     launcherController.setI(shooterPID.kI);
     launcherController.setD(shooterPID.kD); 
     launcherController.setFF(shooterPID.kF);
 
-    launcherController.setOutputRange(-3000, 3000);
+    launcherController.setOutputRange(-1000, 1000);
     //launcherEncoder.setVelocityConversionFactor(factor)
   }
 
   public void stop() {
     launcher.setVoltage(0);
-
-    shootControl.reset();
     launcherController.setReference(0, ControlType.kVoltage);
 
     engaged = false;
@@ -111,15 +100,15 @@ public class Shooter extends SubsystemBase {
    * intake position. 
    * @param inRPM The velocity in RPM the shooter goes to while in the intake position
    * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
-   * @param beltVolts The voltage sent to the conveyor belt, changing direction
-   * depending on whether the shooter is in the intake or shooting position
    */
   public void setSpeedSpark(double inRPM, double outRPM){
     if (goalMover.getCollecting()) {
       launcherController.setReference(-inRPM, ControlType.kVelocity);
+      engaged = true;
 
     } else {
       launcherController.setReference(outRPM, ControlType.kVelocity);
+      engaged = true;
 
     }
   }
@@ -127,67 +116,20 @@ public class Shooter extends SubsystemBase {
   public void toggleSpeedSpark(double inRPM, double outRPM) {
     if (engaged) {
       stop();
-      engaged = false;
 
     } else {
       setSpeedSpark(inRPM, outRPM);
-      engaged = true;
 
     }
   }
 
   /**
-   * Sets the velocity of the shooter in RPM using two velocity control loops through the roborio.
-   * Also sets a voltage for the conveyor belt, given that it does not have to be as accurate. Must 
-   * be set negative for intake.
-   * @param launchRPM Velocity of the shooter in rotations per minute
-  */ 
-  private void setRPMWPI(double launchRPM) {
-    launcher.setVoltage(
-      MathUtil.clamp(
-        // feedforward
-        feedforward.calculate(launchRPM) +
-        // PID correction
-        shootControl.calculate(getVelocity(), launchRPM), 
-        // min volts, max volts
-        -12, 12
-      )
-    ); 
-  }
-
-  /**
-   * Sets RPM based on whether the robot is in shooting position or 
-   * intake position. 
-   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
-   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
+   * Using a ballistics equation and input distance, converts the output of meters per second
+   * to RPM which can be output by the shooter
+   * @param distance distance from the target
+   * @return Rotations Per Minute (RPM) required to shoot a ball into the goal
    */
-  public void setSpeedWPI(double inRPM, double outRPM){
-    if (goalMover.getCollecting()) {
-      setRPMWPI(-inRPM);
-
-    } else {
-      setRPMWPI(outRPM);
-    }
-  }
-
-  /**
-   * Toggles shooter on and off with the specified RPM
-   * @param inVolts voltage applied with intake
-   * @param outVolts voltage applied with shooting
-   */
-  public void toggleSpeedWPI(double inRPM, double outRPM) {
-    if (engaged) {
-      stop();
-      engaged = false;
-
-    } else {
-      setSpeedWPI(inRPM, outRPM);
-      engaged = true;
-
-    }
-  }
-  
-  public double calculateRPM(double distance) {
+  private double calculateRPM(double distance) {
     // Get the velocity needed to shoot the ball
     double top = Math.sqrt(-4.9 * Math.pow(distance, 2)); 
     double bottom = Math.sqrt(Math.pow(Math.cos(Math.toRadians(shooterAngle)), 2) *
@@ -198,6 +140,35 @@ public class Shooter extends SubsystemBase {
     double radiansPerSecond = metersPerSecond / kShooterWheelRadiusMeters;
 
     return Units.radiansPerSecondToRotationsPerMinute(radiansPerSecond);
+  }
+
+  /**
+   * Sets RPM based on whether the robot is in shooting position or intake position. 
+   * If it is in shooting position, calculates the RPM needed for the shooter to 
+   * hit the target.
+   * @param inRPM the velocity in RPM the shooter goes to while in the intake position
+   * @param distance the distance in meters from the target
+   */
+  public void setRelativeSpeedSpark(double inRPM, double distance){
+    if (goalMover.getCollecting()) {
+      launcherController.setReference(-inRPM, ControlType.kVelocity);
+      engaged = true;
+
+    } else {
+      launcherController.setReference(calculateRPM(distance), ControlType.kVelocity);
+      engaged = true;
+
+    }
+  }
+
+  public void toggleRelativeSpeedSpark(double inRPM, double distance) {
+    if (engaged) {
+      stop();
+
+    } else {
+      setSpeedSpark(inRPM, distance);
+
+    }
   }
 
   public boolean isEngaged() {
