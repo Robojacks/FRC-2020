@@ -66,7 +66,8 @@ public final class Constants {
 	public static final double kTicksPerRev = 4096;
 	public static final double kTrackWidthMeters = Units.inchesToMeters(10);
 	public static final double kGearRatio = 7.29;
-	public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
+	public static final double kDriveWheelRadiusMeters = Units.inchesToMeters(3.0);
+	public static final double kShooterWheelRadiusMeters = Units.inchesToMeters(3.0);
 	public static final double MaxSafeVelocityMeters = Units.feetToMeters(2);
 	public static final double MaxSafeAccelerationMeters = Units.feetToMeters(2);
 	public static final double targetToCameraHeight = 5;
@@ -78,16 +79,17 @@ public final class Constants {
 
 	public static final double highGoalHeight = Units.inchesToMeters(96);
 	
-	public static final double shooterHeight = Units.inchesToMeters(18)
+	public static final double shooterHeight = Units.inchesToMeters(18);
 
 	// Color Value Bounds
-  public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
+	public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
 
-  public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
+	public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
 
-  public final static Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
+	public final static Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   
-  public final static Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+	public final static Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+
 	// Constant Speeds
 	public static final double drivePercentLimit = 1;
 	public static final double rotationMagnitude = 360;

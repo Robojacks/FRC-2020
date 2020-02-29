@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
@@ -186,13 +187,17 @@ public class Shooter extends SubsystemBase {
     }
   }
   
-  public double calcMetricTgSpeed(double distance){
-    double top = Math.sqrt(-4.9* Math.pow(distance,2)); 
+  public double calculateRPM(double distance) {
+    // Get the velocity needed to shoot the ball
+    double top = Math.sqrt(-4.9 * Math.pow(distance, 2)); 
     double bottom = Math.sqrt(Math.pow(Math.cos(Math.toRadians(shooterAngle)), 2) *
-     (highGoalHeight-shooterHeight-Math.tan(shooterAngle)*distance));
+     (highGoalHeight - shooterHeight - Math.tan(shooterAngle) * distance));
 
-    double v = top/bottom;
-    return v;
+    double metersPerSecond = top/bottom;
+
+    double radiansPerSecond = metersPerSecond / kShooterWheelRadiusMeters;
+
+    return Units.radiansPerSecondToRotationsPerMinute(radiansPerSecond);
   }
 
   public boolean isEngaged() {

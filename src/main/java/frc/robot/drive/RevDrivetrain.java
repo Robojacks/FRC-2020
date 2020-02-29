@@ -195,19 +195,19 @@ public class RevDrivetrain extends SubsystemBase {
   
   public double getLeftDistanceMeters() {
     return LFrontWheel.getEncoder().getPosition() / 
-    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
+    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kDriveWheelRadiusMeters;
   }
 
   public double getRightDistanceMeters() {
     return RFrontWheel.getEncoder().getPosition() / 
-    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kWheelRadiusMeters;
+    RFrontWheel.getEncoder().getCountsPerRevolution() * 2 * Math.PI * kDriveWheelRadiusMeters;
       
   }
 
   public DifferentialDriveWheelSpeeds getSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      LFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60,
-      RFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kWheelRadiusMeters / 60
+      LFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kDriveWheelRadiusMeters / 60,
+      RFrontWheel.getEncoder().getVelocity() / kGearRatio * 2 * Math.PI * kDriveWheelRadiusMeters / 60
     );
   }
 
