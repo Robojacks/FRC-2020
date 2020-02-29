@@ -71,8 +71,14 @@ public final class Constants {
 	public static final double MaxSafeAccelerationMeters = Units.feetToMeters(2);
 	public static final double targetToCameraHeight = 5;
 	public static final double cameraAngle = 0;
+
+	public static final double shooterAngle = 57;
 	 
 	public static final double straightDriveDeadband = 0.05;
+
+	public static final double highGoalHeight = Units.inchesToMeters(96);
+	
+	public static final double shooterHeight = Units.inchesToMeters(18)
 
 	// Color Value Bounds
   public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
