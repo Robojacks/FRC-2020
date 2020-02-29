@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import frc.robot.shooter.ChangePosition;
 import frc.robot.shooter.Conveyor;
-import frc.robot.vision.FollowTarget;
+import frc.robot.vision.AimTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
 import frc.robot.wheel.Spinner;
@@ -99,16 +99,15 @@ public class RobotContainer {
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
   
   // Autonomous 
-  
   private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
     .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts, feedingVolts))
-    .andThen(new WaitCommand(4))
+    .andThen(new WaitCommand(4 + shooterRampUpTime))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(0, 0))
-    .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.2, -0.2), rDrive) 
+    .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.1, -0.1), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
   
@@ -168,7 +167,7 @@ public class RobotContainer {
 
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
-    .whileHeld(new FollowTarget(limelight, rDrive))
+    .whileHeld(new AimTarget(limelight, rDrive))
     .whenReleased(() -> limelight.driverMode())
     .whenReleased(() -> limelight.lightOff());
   

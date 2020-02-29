@@ -15,7 +15,7 @@ import frc.robot.drive.RevDrivetrain;
 import static frc.robot.Constants.*;
 import static frc.robot.Gains.*;
 
-public class FollowTarget extends CommandBase {
+public class AimTarget extends CommandBase {
   private Limelight vision;
   private RevDrivetrain drive;
 
@@ -25,7 +25,7 @@ public class FollowTarget extends CommandBase {
   /**
    * Creates a new FollowTarget.
    */
-  public FollowTarget(Limelight limelight, RevDrivetrain rDrive) {
+  public AimTarget(Limelight limelight, RevDrivetrain rDrive) {
     vision = limelight;
     drive = rDrive;
 
@@ -48,13 +48,16 @@ public class FollowTarget extends CommandBase {
   public void execute() {
     // Passing aim PID output to the drive
     drive.getDifferentialDrive().arcadeDrive(
-      0,
+      0, // Stationary while rotating
       // Angle Correction
       MathUtil.clamp(
         // Calculate what to do based off measurement
         angleCorrector.calculate(-vision.getXError()),
         // Min, Max output
-        -0.5, 0.5));
+        -0.5, 0.5),
+      // No squared inputs
+      false 
+    );
   }
 
   // Called once the command ends or is interrupted.
