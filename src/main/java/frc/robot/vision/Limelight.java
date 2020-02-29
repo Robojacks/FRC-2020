@@ -214,5 +214,11 @@ public class Limelight extends SubsystemBase {
     public double getTargetAreaDifference(double areaAtTargetDistance) {
         return areaAtTargetDistance - ta.getDouble(areaAtTargetDistance);
     }
+    
+    public double getTargetDistanceRegression() {
+        double area = ta.getDouble(0.0);
+
+        return (1.1172 * Math.pow(area, 2) + -8.5806 * area + 25.7602); 
+    }
 
 }
