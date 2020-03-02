@@ -40,8 +40,6 @@ public class Shooter extends SubsystemBase {
     // Makes changePosition instance the same as in RobotContainer
     goalMover = changePosition;
 
-    launcherEncoder.setInverted(false);
-
     // Spark PID Stuff
     launcherController.setP(shooterPID.kP);
     launcherController.setI(shooterPID.kI);
