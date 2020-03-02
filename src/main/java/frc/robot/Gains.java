@@ -31,10 +31,10 @@ public class Gains {
 	}
 
 	public static class shooterPID {
-		public static double kP = 0.25;
+		public static double kP = 0.0001;
 		public static double kI = 0;
-		public static double kD = 10;
-		public static double kF = 0;
+		public static double kD = 0;
+		public static double kF = 0.000166;
 	}
 
 
