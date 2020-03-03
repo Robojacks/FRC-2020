@@ -73,7 +73,7 @@ public class RobotContainer {
   private final Gears gears = new Gears();
 
   // Update PID values
-  private final Update update = new Update(colorSense, shooter,spinner);
+  private final Update update = new Update(colorSense, shooter, spinner);
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
@@ -103,6 +103,7 @@ public class RobotContainer {
     .andThen(new WaitCommand(4 + shooterRampUpTime))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(0))
+    .andThen(() -> plucker.setSpeed(0, 0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.1, -0.1), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -152,7 +153,8 @@ public class RobotContainer {
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
     .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts));
+    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts))
+    .whenPressed(() -> plucker.toggleSpeed(inPluckerVolts, outPluckerVolts));
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
