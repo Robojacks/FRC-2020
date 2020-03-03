@@ -53,10 +53,10 @@ public final class Constants {
 	//public static final int kRightShooterWheelPort = 5;
 
 	// Conveyor belt motor port
-	public static final int kConveyorPort = 9;
+	public static final int kConveyorPort = 8;
 
 	// Feeder wheel motor port
-	public static final int kFeederPort = 6;
+	public static final int kPluckerPort = 6;
 
 	// Solenoid controlling gear ports 
 	public static final int leftGearPort = 2;
@@ -97,13 +97,15 @@ public final class Constants {
 	public static final double armPercentSpeed = 0.4;
 
 	public static final double intakeVolts = 4;
-	public static final double shooterVolts = 12; // 9.25
+	public static final double shooterVolts = 12;
+
+	public static final double conveyorVolts = 12;
+	
+	public static final double inPluckerVolts = 12;
+	public static final double outPluckerVolts = 12;
 
 	public static final double intakeRPM = 1000;
 	public static final double shooterRPM = 3000;
-
-	public static final double conveyorVolts = 12;
-	public static final double feedingVolts = 12;
 
 	public static final double colorSwitchSpeed = 0.2;
 	public static final double colorSpeed = 0.1;

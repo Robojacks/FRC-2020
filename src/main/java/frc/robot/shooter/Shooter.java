@@ -49,6 +49,17 @@ public class Shooter extends SubsystemBase {
     //launcherEncoder.setVelocityConversionFactor(factor)
   }
 
+
+  public void collect(double inVolts) {
+    launcher.setVoltage(-inVolts);
+    engaged = true;
+  }
+
+  public void shoot(double outVolts) {
+    launcher.setVoltage(outVolts);
+    engaged = true;
+  }
+
   public void stop() {
     launcher.setVoltage(0);
     launcherController.setReference(0, ControlType.kVoltage);
@@ -65,12 +76,10 @@ public class Shooter extends SubsystemBase {
   public void setSpeedVolts(double inVolts, double outVolts){
     if (goalMover.getCollecting()) {
       // if in intake position, intake
-      launcher.setVoltage(-inVolts);
-      engaged = true;
+      collect(inVolts);
 
     } else {
-      launcher.setVoltage(outVolts);
-      engaged = true;
+      shoot(outVolts);
 
     }
   }

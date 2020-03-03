@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import frc.robot.shooter.ChangePosition;
 import frc.robot.shooter.Conveyor;
+import frc.robot.shooter.Plucker;
 import frc.robot.vision.AimTarget;
 import frc.robot.vision.Limelight;
 import frc.robot.wheel.SenseColor;
@@ -67,6 +68,8 @@ public class RobotContainer {
 
   private final Conveyor conveyor = new Conveyor(goalMover, shooter);
 
+  private final Plucker plucker = new Plucker(goalMover, shooter);
+
   private final Gears gears = new Gears();
 
   // Update PID values
@@ -95,10 +98,11 @@ public class RobotContainer {
     .andThen(new WaitCommand(.25)) 
     .andThen(() -> goalMover.shootPose(), goalMover)
     .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts, feedingVolts))
+    .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts))
+    .andThen(() -> plucker.setSpeed(inPluckerVolts, outPluckerVolts))
     .andThen(new WaitCommand(4 + shooterRampUpTime))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
-    .andThen(() -> conveyor.setSpeedHighGoal(0, 0))
+    .andThen(() -> conveyor.setSpeedHighGoal(0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.1, -0.1), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -142,12 +146,13 @@ public class RobotContainer {
     // Shoot or intake with voltage, aiming for low goal
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts, feedingVolts));
+    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts))
+    .whenPressed(() -> plucker.toggleSpeed(inPluckerVolts, outPluckerVolts));
     
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
     .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts, feedingVolts));
+    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts));
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
