@@ -59,7 +59,7 @@ public class RobotContainer {
 
   private final Spinner spinner = new Spinner(colorSense);
 
-  private ChangePosition goalMover;
+  private ChangePosition goalMover = new ChangePosition();
 
   private final Lift lift = new Lift();
 
@@ -127,9 +127,6 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Instantiate the mover afterwards 
-    goalMover = new ChangePosition(shooter);
-
     // Configure the button bindings
     configureButtonBindings();
 
