@@ -36,19 +36,19 @@ public class Conveyor extends SubsystemBase {
    */
 
   public void shoot(double beltVolts) {
-    conveyor.setVoltage(-beltVolts);
+    conveyor.setVoltage(beltVolts);
   }
 
   public void collect(double beltVolts) {
-    conveyor.setVoltage(beltVolts);
+    conveyor.setVoltage(-beltVolts);
   }
 
   public void setSpeedLowGoal(double beltVolts){
     if (goalMover.getCollecting()) {
-      conveyor.setVoltage(beltVolts);
+      collect(beltVolts);
 
     } else {
-      shoot(-beltVolts);
+      shoot(beltVolts);
     }
   }
 
@@ -60,12 +60,12 @@ public class Conveyor extends SubsystemBase {
    */
   public void setSpeedHighGoal(double beltVolts){
     if (goalMover.getCollecting()) {
-      conveyor.setVoltage(beltVolts);
+      conveyor.setVoltage(-beltVolts);
 
     } else {
       // Delays start up time when in shooting position
       Timer.delay(shooterRampUpTime);
-      conveyor.setVoltage(-beltVolts);
+      conveyor.setVoltage(beltVolts);
     }
   }
 

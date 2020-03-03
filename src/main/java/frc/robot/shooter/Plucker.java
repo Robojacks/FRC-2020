@@ -9,6 +9,7 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
@@ -27,20 +28,38 @@ public class Plucker extends SubsystemBase {
     m_shooter = shooter;
   }
 
-  public void setSpeed(double inVolts, double outVolts){
+  public void setSpeedLowGoal(double inVolts, double outVolts){
     if (goalMover.getCollecting()) {
-      plucker.setVoltage(inVolts);
+      plucker.setVoltage(-inVolts);
 
     } else {
-      plucker.setVoltage(-outVolts);
+      plucker.setVoltage(outVolts);
     }
   }
 
-  public void toggleSpeed(double inPluckerVolts, double outPluckerVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeed(inPluckerVolts, outPluckerVolts);
+  public void setSpeedHighGoal(double inVolts, double outVolts){
+    if (goalMover.getCollecting()) {
+      plucker.setVoltage(-inVolts);
+
     } else {
-      setSpeed(0, 0);
+      Timer.delay(shooterRampUpTime);
+      plucker.setVoltage(outVolts);
+    }
+  }
+
+  public void toggleSpeedLowGoal(double inPluckerVolts, double outPluckerVolts) {
+    if (m_shooter.isEngaged()) {
+      setSpeedLowGoal(inPluckerVolts, outPluckerVolts);
+    } else {
+      setSpeedLowGoal(0, 0);
+    }
+  }
+
+  public void toggleSpeedHighGoal(double inPluckerVolts, double outPluckerVolts) {
+    if (m_shooter.isEngaged()) {
+      setSpeedHighGoal(inPluckerVolts, outPluckerVolts);
+    } else {
+      setSpeedHighGoal(0, 0);
     }
   }
 

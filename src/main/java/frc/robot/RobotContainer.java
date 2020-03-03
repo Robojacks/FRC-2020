@@ -79,7 +79,7 @@ public class RobotContainer {
   private Command manualDrive = new RunCommand(
     () -> rDrive.getDifferentialDrive().tankDrive(
       drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
-      drivePercentLimit * xbox.getRawAxis(Axis.kRightX.value)
+      drivePercentLimit * xbox.getRawAxis(Axis.kRightY.value)
       ), 
     rDrive
   );
@@ -99,11 +99,11 @@ public class RobotContainer {
     .andThen(() -> goalMover.shootPose(), goalMover)
     .andThen(() -> shooter.setSpeedVolts(intakeVolts, shooterVolts), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(conveyorVolts))
-    .andThen(() -> plucker.setSpeed(inPluckerVolts, outPluckerVolts))
+    .andThen(() -> plucker.setSpeedHighGoal(inPluckerVolts, outPluckerVolts))
     .andThen(new WaitCommand(4 + shooterRampUpTime))
     .andThen(() -> shooter.setSpeedVolts(0, 0), shooter)
     .andThen(() -> conveyor.setSpeedHighGoal(0))
-    .andThen(() -> plucker.setSpeed(0, 0))
+    .andThen(() -> plucker.setSpeedHighGoal(0, 0))
     .andThen(() -> rDrive.getDifferentialDrive().tankDrive(-0.1, -0.1), rDrive) 
     .andThen(new WaitCommand(1.5))
     .andThen(()-> rDrive.getDifferentialDrive().tankDrive(0, 0), rDrive);
@@ -147,14 +147,13 @@ public class RobotContainer {
     // Shoot or intake with voltage, aiming for low goal
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts))
-    .whenPressed(() -> plucker.toggleSpeed(inPluckerVolts, outPluckerVolts));
+    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts), shooter)
+    .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
     
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
-    .whenPressed(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedHighGoal(conveyorVolts))
-    .whenPressed(() -> plucker.toggleSpeed(inPluckerVolts, outPluckerVolts));
+    .whileHeld(() -> plucker.setSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker)
+    .whenReleased(() -> plucker.setSpeedLowGoal(0, 0), plucker);
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
@@ -163,9 +162,10 @@ public class RobotContainer {
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
     .whileHeld(new AimTarget(limelight, rDrive))
-    .whenReleased(() -> limelight.driverMode())
-    .whenReleased(() -> limelight.lightOff());
+    .whenReleased(() -> limelight.driverMode(), limelight)
+    .whenReleased(() -> limelight.lightOff(), limelight);
   
+
     // Spins to selected color
     new JoystickButton(xbox, Button.kStart.value)
     .whileHeld(() -> spinner.toSelectedColor
@@ -187,7 +187,7 @@ public class RobotContainer {
   public void init(){
     limelight.driverMode();
     limelight.lightOff();
-    limelight.PiPMainStream();
+    limelight.PiPSecondaryStream();
 
   } 
 

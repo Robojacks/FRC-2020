@@ -44,7 +44,6 @@ public final class Constants {
 
 	// Arm motor ports
 	public static final int leftArmPort = 7;
-	public static final int rightArmPort = 8;
 
 	// Shooter motor port
 	public static final int kShooterPort = 5;

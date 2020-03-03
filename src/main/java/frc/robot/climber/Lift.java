@@ -14,22 +14,18 @@ import static frc.robot.Constants.*;
 
 public class Lift extends SubsystemBase {
   private WPI_TalonSRX leftArm = new WPI_TalonSRX(leftArmPort);
-  private WPI_TalonSRX rightArm = new WPI_TalonSRX(rightArmPort);
 
   private boolean negation = true; // on true for safety, in case arm is accidentally activated
 
   public void move(double speed) {
     leftArm.set(speed);
-    rightArm.set(speed);
   }
 
   public void moveOneAxis(double speed) {
     if (negation) {
       leftArm.set(-speed);
-      rightArm.set(-speed);
     } else {
       leftArm.set(speed);
-      rightArm.set(speed);
     }
   }
 
