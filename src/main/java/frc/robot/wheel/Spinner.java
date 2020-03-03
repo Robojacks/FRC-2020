@@ -20,7 +20,7 @@ public class Spinner extends SubsystemBase {
 
   private final WPI_TalonSRX SpinnerMotor = new WPI_TalonSRX(kSpinnerPort);
   
-  private int colorSwitches = 9;
+  private double colorSwitches = 9;
 
   private Colour pastColor = Colour.YELLOW;
   private Colour countCol= Colour.GREEN; 
@@ -43,12 +43,12 @@ public class Spinner extends SubsystemBase {
     }
   }
 
-  public int getColorSwitches() {
+  public double getColorSwitches() {
     return colorSwitches;
   }
 
-  public void changeMaxSwitches(int maxColorSwitches) {
-    colorSwitches = maxColorSwitches* 2 ;
+  public void changeMaxSwitches(double maxColorSwitches) {
+    colorSwitches = maxColorSwitches * 2 ;
   };
 
 

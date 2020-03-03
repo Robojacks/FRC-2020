@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.shooter.Shooter;
@@ -104,10 +105,10 @@ public class Update {
     }
     
     // Change values for rotations
-    /*
+    
     if (m_spinner.getColorSwitches() != SmartDashboard.getNumber("rotations", m_spinner.getColorSwitches()))  {
-      m_spinner.changeMaxSwitches(Math.round(SmartDashboard.getNumber("rotations", m_spinner.getColorSwitches())));
+      m_spinner.changeMaxSwitches(SmartDashboard.getNumber("rotations", m_spinner.getColorSwitches()));
     }
-    */
+    
   }
 }
