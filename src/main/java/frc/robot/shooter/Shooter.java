@@ -46,7 +46,6 @@ public class Shooter extends SubsystemBase {
     launcherController.setD(shooterPID.kD); 
     launcherController.setFF(shooterPID.kF);
 
-    launcherController.setOutputRange(-5700, 5700);
     //launcherEncoder.setVelocityConversionFactor(factor)
   }
 
