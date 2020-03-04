@@ -106,7 +106,7 @@ public class RobotContainer {
     .andThen(() -> conveyor.stop(), conveyor)
     .andThen(() -> plucker.stop(), plucker)
     .andThen(new RunCommand(() -> rDrive.getDifferentialDrive().tankDrive(0.4, 0.4), rDrive)
-    .withTimeout(2));
+      .withTimeout(2));
   
   private RamseteCommand rbase = new RamseteCommand(
     getMovingTrajectory(), 
