@@ -120,5 +120,6 @@ public final class Constants {
 	public static final double shooterDistanceFromTargetMeters = 5;
 
 	public static final double shooterRampUpTime = 2;
+	public static final double pluckerHoldTime = shooterRampUpTime;
 
 }

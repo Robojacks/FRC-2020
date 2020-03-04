@@ -28,6 +28,10 @@ public class Conveyor extends SubsystemBase {
     m_shooter = shooter;
   }
 
+  public void stop() {
+    setSpeedLowGoal(0);
+  }
+
   /**
    * Sets a voltage based on whether the robot is in low goal shooting position or
    * intake position. 
@@ -78,7 +82,7 @@ public class Conveyor extends SubsystemBase {
     if (m_shooter.isEngaged()) {
       setSpeedLowGoal(beltVolts);
     } else {
-      setSpeedLowGoal(0);
+      stop();
     }
   }
 
@@ -91,7 +95,7 @@ public class Conveyor extends SubsystemBase {
     if (m_shooter.isEngaged()) {
       setSpeedHighGoal(beltVolts);
     } else {
-      setSpeedHighGoal(0);
+      stop();
     }
   }
 

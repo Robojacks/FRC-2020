@@ -81,7 +81,12 @@ public class RevDrivetrain extends SubsystemBase {
   public void setOutputVolts(double leftVolts, double rightVolts) {
     LFrontWheel.setVoltage(leftVolts);
     RFrontWheel.setVoltage(rightVolts);
-  }
+  }  
+
+  public void setOutputPercent(double leftPercent, double rightPercent) {
+    LFrontWheel.set(leftPercent);
+    RFrontWheel.set(rightPercent);
+  }  
 
   public void setOutputFeedforward(double leftVolts, double rightVolts) {
     LFrontWheel.setVoltage(feedforward.calculate(leftVolts));

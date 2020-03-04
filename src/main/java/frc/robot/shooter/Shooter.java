@@ -20,8 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.vision.Limelight;
 
-import static frc.robot.Gains.shooterPID;
-import static frc.robot.Gains.shooterFeedforward;
+import static frc.robot.Gains.shooterPID.*;
 
 import static frc.robot.Constants.*;
 
@@ -34,7 +33,7 @@ public class Shooter extends SubsystemBase {
 
   private CANEncoder launcherEncoder = launcher.getEncoder();
   
-  private CANPIDController launcherController = new CANPIDController(launcher);
+  private CANPIDController launcherController = launcher.getPIDController();
 
   // Create toggle for shooting
   private boolean engaged = false;
@@ -44,10 +43,10 @@ public class Shooter extends SubsystemBase {
     goalMover = changePosition;
     vision = limelight;
     // Spark PID Stuff
-    launcherController.setP(shooterPID.kP);
-    launcherController.setI(shooterPID.kI);
-    launcherController.setD(shooterPID.kD); 
-    launcherController.setFF(shooterPID.kF);
+    launcherController.setP(kP);
+    launcherController.setI(kI);
+    launcherController.setD(kD); 
+    launcherController.setFF(kF);
 
     //launcherEncoder.setVelocityConversionFactor(factor)
   }
@@ -194,9 +193,11 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    /*
     if (goalMover.isSwapping){
       stop();
       goalMover.isSwapping = false;
     }
+    */
   }
 }

@@ -28,6 +28,10 @@ public class Plucker extends SubsystemBase {
     m_shooter = shooter;
   }
 
+  public void stop() {
+    setSpeedLowGoal(0, 0);
+  }
+
   public void setSpeedLowGoal(double inVolts, double outVolts){
     if (goalMover.getCollecting()) {
       plucker.setVoltage(-inVolts);
@@ -42,7 +46,7 @@ public class Plucker extends SubsystemBase {
       plucker.setVoltage(-inVolts);
 
     } else {
-      Timer.delay(shooterRampUpTime);
+      Timer.delay(pluckerHoldTime);
       plucker.setVoltage(outVolts);
     }
   }
@@ -51,7 +55,7 @@ public class Plucker extends SubsystemBase {
     if (m_shooter.isEngaged()) {
       setSpeedLowGoal(inPluckerVolts, outPluckerVolts);
     } else {
-      setSpeedLowGoal(0, 0);
+      stop();
     }
   }
 
@@ -59,7 +63,7 @@ public class Plucker extends SubsystemBase {
     if (m_shooter.isEngaged()) {
       setSpeedHighGoal(inPluckerVolts, outPluckerVolts);
     } else {
-      setSpeedHighGoal(0, 0);
+      stop();
     }
   }
 

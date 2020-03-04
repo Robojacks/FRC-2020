@@ -63,7 +63,7 @@ public class Update {
     SmartDashboard.putNumber("Red", colorSense.detectedColor.red);
     SmartDashboard.putNumber("green", colorSense.detectedColor.green);
     SmartDashboard.putNumber("blue", colorSense.detectedColor.blue);
-    SmartDashboard.putNumber("Rotatinos",m_spinner.getColorSwitches());
+    SmartDashboard.putNumber("rotations",m_spinner.getColorSwitches());
     SmartDashboard.putString("colorkey", m_spinner.getCountColor().toString());
   }
   
