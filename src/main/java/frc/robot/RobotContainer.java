@@ -79,7 +79,8 @@ public class RobotContainer {
   private Command manualDrive = new RunCommand(
     () -> rDrive.getDifferentialDrive().tankDrive(
       drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
-      drivePercentLimit * xbox.getRawAxis(Axis.kRightY.value)
+      drivePercentLimit * xbox.getRawAxis(Axis.kRightY.value),
+      false
       ), 
     rDrive
   );
@@ -128,8 +129,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     rDrive.setDefaultCommand(manualDrive);
-    lift.setDefaultCommand(moveArmOneAxis);
-    spinner.setDefaultCommand(moveSpinner);
+    lift.setDefaultCommand(moveArm);
+    //spinner.setDefaultCommand(moveSpinner);
   }
 
   /**
