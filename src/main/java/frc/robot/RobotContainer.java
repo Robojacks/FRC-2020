@@ -64,7 +64,7 @@ public class RobotContainer {
 
   private final Lift lift = new Lift();
 
-  private final Shooter shooter = new Shooter(goalMover);
+  private final Shooter shooter = new Shooter(goalMover,limelight);
 
   private final Conveyor conveyor = new Conveyor(goalMover, shooter);
 
@@ -161,7 +161,8 @@ public class RobotContainer {
 
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
-    .whileHeld(new AimTarget(limelight, rDrive))
+    .whenPressed(new AimTarget(limelight, rDrive))
+    .whenReleased(() -> shooter.toggleRelativeSpeedSpark(intakeRPM, shooterRPM), shooter )
     .whenReleased(() -> limelight.driverMode(), limelight)
     .whenReleased(() -> limelight.lightOff(), limelight);
   
