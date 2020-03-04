@@ -21,7 +21,7 @@ public class ChangePosition extends SubsystemBase {
   private Solenoid rightPiston = new Solenoid(compressorModule, rightPoseMoverPort);
 
   private boolean collecting = false;
-
+  public boolean isSwapping = false;
   public ChangePosition() {
     airow.start();
   }
@@ -39,6 +39,7 @@ public class ChangePosition extends SubsystemBase {
     } else {
       collectPose();
     } 
+    isSwapping = true;
   }
 
   public void collectPose() {

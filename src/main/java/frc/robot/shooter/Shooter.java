@@ -135,8 +135,9 @@ public class Shooter extends SubsystemBase {
    * @param distance distance from the target
    * @return Rotations Per Minute (RPM) required to shoot a ball into the goal
    */
-  private double calculateRPM(double distance) {
+  private double calculateRPM(double distanceFeet) {
     // Get the velocity needed to shoot the ball
+    double distance = Units.feetToMeters(distanceFeet);
     double top = Math.sqrt(-4.9 * Math.pow(distance, 2)); 
     double bottom = Math.sqrt(Math.pow(Math.cos(Math.toRadians(shooterAngle)), 2) *
      (highGoalHeight - shooterHeight - Math.tan(shooterAngle) * distance));
@@ -193,5 +194,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (goalMover.isSwapping){
+      stop();
+      goalMover.isSwapping = false;
+    }
   }
 }

@@ -64,7 +64,7 @@ public class RobotContainer {
 
   private final Lift lift = new Lift();
 
-  private final Shooter shooter = new Shooter(goalMover,limelight);
+  private final Shooter shooter = new Shooter(goalMover, limelight);
 
   private final Conveyor conveyor = new Conveyor(goalMover, shooter);
 
@@ -163,8 +163,8 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kX.value)
     .whenPressed(new AimTarget(limelight, rDrive))
     .whenReleased(() -> shooter.toggleRelativeSpeedSpark(intakeRPM, shooterRPM), shooter )
-    .whenReleased(() -> limelight.driverMode(), limelight)
-    .whenReleased(() -> limelight.lightOff(), limelight);
+    .whenReleased(() -> conveyor.toggleSpeedHighGoal(conveyorVolts),conveyor)
+    .whenReleased(() -> plucker.toggleSpeedHighGoal(inPluckerVolts, outPluckerVolts),plucker);
   
 
     // Spins to selected color
