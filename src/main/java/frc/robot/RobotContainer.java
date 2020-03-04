@@ -141,11 +141,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     // Switch position between shooting and intake
-    new JoystickButton(xbox, Button.kBumperLeft.value)
+    new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage, aiming for low goal
-    new JoystickButton(xbox, Button.kA.value)
+    new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
     .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts), shooter)
     .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
