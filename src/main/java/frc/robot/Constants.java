@@ -96,7 +96,7 @@ public final class Constants {
 	public static final double armPercentSpeed = 0.4;
 
 	public static final double intakeVolts = 4;
-	public static final double shooterVolts = 12;
+	public static final double shooterVolts = 4;
 
 	public static final double conveyorVolts = 12;
 	

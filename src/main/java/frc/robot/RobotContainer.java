@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -81,7 +85,7 @@ public class RobotContainer {
       drivePercentLimit * xbox.getRawAxis(Axis.kLeftY.value), 
       drivePercentLimit * xbox.getRawAxis(Axis.kRightY.value),
       false
-      ), 
+      ),
     rDrive
   );
   
@@ -123,7 +127,7 @@ public class RobotContainer {
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
+  public RobotContainer() { 
     // Configure the button bindings
     configureButtonBindings();
 
@@ -141,11 +145,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     // Switch position between shooting and intake
-    new JoystickButton(xbox, Button.kBumperLeft.value)
+    new JoystickButton(xbox, Button.kA.value)
     .whenPressed(() -> goalMover.swapHeight(), goalMover);
 
     // Shoot or intake with voltage, aiming for low goal
-    new JoystickButton(xbox, Button.kA.value)
+    new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
     .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts), shooter)
     .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
@@ -163,13 +167,7 @@ public class RobotContainer {
 
     // Vision correction
     new JoystickButton(xbox, Button.kX.value)
-    .whenPressed(new AimTarget(limelight, rDrive));
-    /*
-    .whenReleased(() -> shooter.toggleRelativeSpeedSpark(intakeRPM, shooterRPM), shooter )
-    .whenReleased(() -> conveyor.toggleSpeedHighGoal(conveyorVolts),conveyor)
-    .whenReleased(() -> plucker.toggleSpeedHighGoal(inPluckerVolts, outPluckerVolts),plucker);
-    */
-  
+    .whileHeld(new AimTarget(limelight, rDrive));
 
     // Spins to selected color
     new JoystickButton(xbox, Button.kStart.value)
@@ -193,7 +191,6 @@ public class RobotContainer {
     limelight.driverMode();
     limelight.lightOff();
     limelight.PiPSecondaryStream();
-
   } 
 
   public void periodic() {
