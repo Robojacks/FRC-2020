@@ -91,19 +91,19 @@ public final class Constants {
 
 	// Constant Speeds
 	public static final double drivePercentLimit = 1;
-	public static final double rotationMagnitude = 360;
 
 	public static final double armPercentSpeed = 0.4;
 
-	public static final double intakeVolts = 4;
+	public static final double intakeVolts = -4;
 	public static final double shooterVolts = 12;
 
-	public static final double conveyorVolts = 12;
+	public static final double inConveyorVolts = -12;
+	public static final double outConveyorVolts = 12;
 	
-	public static final double inPluckerVolts = 12;
+	public static final double inPluckerVolts = -12;
 	public static final double outPluckerVolts = 12;
 
-	public static final double intakeRPM = 1000;
+	public static final double intakeRPM = -1000;
 	public static final double shooterRPM = 3000;
 
 	public static final double colorSwitchSpeed = 0.2;

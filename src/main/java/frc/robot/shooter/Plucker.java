@@ -16,54 +16,49 @@ import static frc.robot.Constants.*;
 
 public class Plucker extends SubsystemBase {
   private ChangePosition goalMover;
-  private Shooter m_shooter;
 
   private WPI_TalonSRX plucker = new WPI_TalonSRX(kPluckerPort);
+
+  private boolean engaged = false;
 
   /**
    * Creates a new Plucker.
    */
-  public Plucker(ChangePosition changePosition, Shooter shooter) {
+  public Plucker(ChangePosition changePosition) {
     goalMover = changePosition;
-    m_shooter = shooter;
   }
 
   public void stop() {
-    setSpeedLowGoal(0, 0);
+    plucker.setVoltage(0);
+    engaged = false;
   }
 
-  public void setSpeedLowGoal(double inVolts, double outVolts){
-    if (goalMover.getCollecting()) {
-      plucker.setVoltage(-inVolts);
+  public void collect() {
+    plucker.setVoltage(inPluckerVolts);
+    engaged = true;
+  }
+
+  public void shoot() {
+    plucker.setVoltage(outPluckerVolts);
+    engaged = true;
+  }
+
+  public void setSpeed(){
+    if (goalMover.isCollectingPose()) {
+      collect();
 
     } else {
-      plucker.setVoltage(outVolts);
+      shoot();
     }
   }
 
-  public void setSpeedHighGoal(double inVolts, double outVolts){
-    if (goalMover.getCollecting()) {
-      plucker.setVoltage(-inVolts);
-
-    } else {
-      Timer.delay(pluckerHoldTime);
-      plucker.setVoltage(outVolts);
-    }
-  }
-
-  public void toggleSpeedLowGoal(double inPluckerVolts, double outPluckerVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedLowGoal(inPluckerVolts, outPluckerVolts);
-    } else {
+  public void toggleSpeed() {
+    if (engaged) {
       stop();
-    }
-  }
 
-  public void toggleSpeedHighGoal(double inPluckerVolts, double outPluckerVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedHighGoal(inPluckerVolts, outPluckerVolts);
     } else {
-      stop();
+      setSpeed();
+
     }
   }
 

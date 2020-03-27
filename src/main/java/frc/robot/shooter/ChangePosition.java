@@ -26,7 +26,7 @@ public class ChangePosition extends SubsystemBase {
     airow.start();
   }
 
-  public boolean getCollecting() {
+  public boolean isCollectingPose() {
     return collecting;
   }
 
