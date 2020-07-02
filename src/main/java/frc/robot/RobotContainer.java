@@ -51,7 +51,7 @@ import static frc.robot.Gains.Ramsete.*;
  */
 public class RobotContainer {
   // Drive Controller
-  private XboxController xbox = new XboxController(Constants.kXboxPort);
+  private XboxController xbox = new XboxController(kXboxPort);
 
   // Drive Subsystem
   private final RevDrivetrain rDrive = new RevDrivetrain();
@@ -162,17 +162,17 @@ public class RobotContainer {
 
     // Shoot or intake with voltage, aiming for low goal
     new JoystickButton(xbox, kBumperLeft.value)
-    .whenPressed(() -> shooter.toggleSpeedVolts(), shooter)
-    .whenPressed(() -> conveyor.toggleSpeed(), shooter)
-    .whenPressed(() -> plucker.toggleSpeed(), plucker);
+    .whenPressed(new InstantCommand(() -> shooter.toggleSpeedVolts(), shooter))
+    .whenPressed(new InstantCommand(() -> conveyor.toggleSpeed(), shooter))
+    .whenPressed(new InstantCommand(() -> plucker.toggleSpeed(), plucker));
     
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, kB.value)
-    .whenPressed(() -> plucker.toggleSpeed(), plucker);
+    .whenPressed(new InstantCommand(() -> plucker.toggleSpeed(), plucker));
     
     // Toggles high shooting
     new JoystickButton(xbox, kY.value)
-    .whenPressed(() -> shooter.toggleSpeedSpark())
+    .whenPressed(new InstantCommand(() -> shooter.toggleSpeedSpark()))
     .whenPressed(new ConditionalCommand(waitAndFeed, stopFeeders, shooter::isEngaged));
 
     // Vision correction
@@ -186,10 +186,10 @@ public class RobotContainer {
 
     // Spin number of rotations
     new JoystickButton(xbox, kBack.value)
-    .whenPressed(() -> spinner.setCountColor(), spinner)
-    .whileHeld(() -> spinner.toSelectedColorSwitches(), spinner)
-    .whenReleased(() -> spinner.changeMaxSwitches(4), spinner)
-    .whenReleased(() -> spinner.move(0), spinner);
+    .whenPressed(new InstantCommand(() -> spinner.setCountColor(), spinner))
+    .whileHeld(new RunCommand(() -> spinner.toSelectedColorSwitches(), spinner))
+    .whenReleased(new InstantCommand(() -> spinner.changeMaxSwitches(4), spinner))
+    .whenReleased(new InstantCommand(() -> spinner.move(0), spinner));
 
     // Switch Gears
     new JoystickButton(xbox, kBumperRight.value)
