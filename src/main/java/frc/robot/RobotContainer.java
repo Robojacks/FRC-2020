@@ -158,7 +158,9 @@ public class RobotContainer {
     
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
-    .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
+    .whileHeld(() -> plucker.setSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker)
+    .whenReleased(() -> plucker.stop(), plucker);
+
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
