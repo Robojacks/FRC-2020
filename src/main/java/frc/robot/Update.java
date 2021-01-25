@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.shooter.Plucker;
 import frc.robot.shooter.Shooter;
 import frc.robot.wheel.SenseColor;
 import frc.robot.wheel.Spinner;
@@ -26,6 +27,8 @@ public class Update {
   private Shooter m_shooter;
   private SenseColor colorSense;
   private Spinner m_spinner;
+  private Plucker m_plucker;
+
   // Starting positions
   private final Pose2d left = new Pose2d(-1, 0, Rotation2d.fromDegrees(0));
   private final Pose2d center = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
@@ -33,10 +36,11 @@ public class Update {
 
   private static final SendableChooser choosePosition = new SendableChooser<Pose2d>();
 
-  public Update(SenseColor colorSensing, Shooter shooter, Spinner spinner) {
+  public Update(SenseColor colorSensing, Shooter shooter, Spinner spinner, Plucker plucker) {
     m_shooter = shooter;
     colorSense = colorSensing;
     m_spinner = spinner;
+    m_plucker = plucker;
 
     choosePosition.setDefaultOption("Center", center);
     choosePosition.addOption("Left", left);
@@ -55,6 +59,10 @@ public class Update {
 
     // Display left and right shooter velocities
     SmartDashboard.putNumber("Shooter RPM", m_shooter.getVelocity());
+
+    // Displays whether plucker is engaged
+    SmartDashboard.putBoolean("Plucker Engaged", m_plucker.getEngaged());
+
     // Display color related value
     SmartDashboard.putString("colorFRC", colorSense.getColorString());
     SmartDashboard.putNumber("confidence", colorSense.getConfidence());
@@ -74,6 +82,9 @@ public class Update {
   public void periodic() {
     // Update left and right shooter velocities
     SmartDashboard.putNumber("Shooter RPM", m_shooter.getVelocity());
+
+    // Displays whether plucker is engaged
+    SmartDashboard.putBoolean("Plucker Engaged", m_plucker.getEngaged());
 
     // Update color sense data
     SmartDashboard.putNumber("Raw Color Value", colorSense.getRawColor());

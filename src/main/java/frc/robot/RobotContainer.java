@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -76,7 +80,7 @@ public class RobotContainer {
   private final Gears gears = new Gears();
 
   // Update PID values
-  private final Update update = new Update(colorSense, shooter, spinner);
+  private final Update update = new Update(colorSense, shooter, spinner, plucker);
 
   //  --- Default Commands ---
 
@@ -86,7 +90,7 @@ public class RobotContainer {
       drivePercentLimit * xbox.getRawAxis(kLeftY.value), 
       drivePercentLimit * xbox.getRawAxis(kRightY.value),
       false
-      ), 
+      ),
     rDrive
   );
 
@@ -139,7 +143,7 @@ public class RobotContainer {
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
+  public RobotContainer() { 
     // Configure the button bindings
     configureButtonBindings();
 
@@ -176,8 +180,8 @@ public class RobotContainer {
     .whenPressed(new ConditionalCommand(waitAndFeed, stopFeeders, shooter::isEngaged));
 
     // Vision correction
-    new JoystickButton(xbox, kX.value)
-    .whenPressed(new AimTarget(limelight, rDrive));
+    new JoystickButton(xbox, Button.kX.value)
+    .whileHeld(new AimTarget(limelight, rDrive));
 
     // Spins to selected color
     new JoystickButton(xbox, kStart.value)

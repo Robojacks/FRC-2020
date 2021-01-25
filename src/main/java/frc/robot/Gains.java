@@ -39,9 +39,9 @@ public class Gains {
 
 
 	public static class angleCorrection {
-		public static double kP = 0.05;
+		public static double kP = 0.01;
 		public static double kI = 0;
-		public static double kD = 5;
+		public static double kD = 0;
 	}
 
 	// Ramsete controller constants

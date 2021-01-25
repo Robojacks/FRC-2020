@@ -37,7 +37,7 @@ public class Plucker extends SubsystemBase {
     plucker.setVoltage(inPluckerVolts);
     engaged = true;
   }
-
+  
   public void shoot() {
     plucker.setVoltage(outPluckerVolts);
     engaged = true;
@@ -58,8 +58,11 @@ public class Plucker extends SubsystemBase {
 
     } else {
       setSpeed();
-
     }
+  }
+
+  public boolean getEngaged() {
+    return engaged;
   }
 
   @Override

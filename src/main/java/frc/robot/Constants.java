@@ -97,6 +97,7 @@ public final class Constants {
 	public static final double intakeVolts = -4;
 	public static final double shooterVolts = 12;
 
+
 	public static final double inConveyorVolts = -12;
 	public static final double outConveyorVolts = 12;
 	
