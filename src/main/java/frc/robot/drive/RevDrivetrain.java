@@ -65,8 +65,8 @@ public class RevDrivetrain extends SubsystemBase {
 
   private SlewRateLimiter speedLimiter = new SlewRateLimiter(3);
 
-  private SlewRateLimiter leftLimiter = new SlewRateLimiter(3);
-  private SlewRateLimiter rightLimiter = new SlewRateLimiter(3);
+  private SlewRateLimiter leftLimiter = new SlewRateLimiter(0.3);
+  private SlewRateLimiter rightLimiter = new SlewRateLimiter(0.3);
 
   public RevDrivetrain() {
     LRearWheel.follow(LFrontWheel);
@@ -76,6 +76,10 @@ public class RevDrivetrain extends SubsystemBase {
     RFrontWheel.getEncoder().setPosition(0);
 
     gyro.reset();
+  }
+
+  public void limiterDrive(double leftPercent, double rightPercent) {
+    roboDrive.tankDrive(leftLimiter.calculate(leftPercent), rightLimiter.calculate(rightPercent), false);
   }
   
   public void setOutputVolts(double leftVolts, double rightVolts) {

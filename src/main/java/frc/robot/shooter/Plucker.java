@@ -20,6 +20,8 @@ public class Plucker extends SubsystemBase {
 
   private WPI_TalonSRX plucker = new WPI_TalonSRX(kPluckerPort);
 
+  private boolean engaged = false;
+
   /**
    * Creates a new Plucker.
    */
@@ -30,6 +32,7 @@ public class Plucker extends SubsystemBase {
 
   public void stop() {
     setSpeedLowGoal(0, 0);
+    engaged = false;
   }
 
   public void setSpeedLowGoal(double inVolts, double outVolts){
@@ -39,6 +42,8 @@ public class Plucker extends SubsystemBase {
     } else {
       plucker.setVoltage(outVolts);
     }
+
+    engaged = true;
   }
 
   public void setSpeedHighGoal(double inVolts, double outVolts){
@@ -48,23 +53,29 @@ public class Plucker extends SubsystemBase {
     } else {
       Timer.delay(pluckerHoldTime);
       plucker.setVoltage(outVolts);
+
+      engaged = true;
     }
   }
 
   public void toggleSpeedLowGoal(double inPluckerVolts, double outPluckerVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedLowGoal(inPluckerVolts, outPluckerVolts);
-    } else {
+    if (engaged) {
       stop();
+    } else {
+      setSpeedLowGoal(inPluckerVolts, outPluckerVolts);
     }
   }
 
   public void toggleSpeedHighGoal(double inPluckerVolts, double outPluckerVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedHighGoal(inPluckerVolts, outPluckerVolts);
-    } else {
+    if (engaged) {
       stop();
+    } else {
+      setSpeedHighGoal(inPluckerVolts, outPluckerVolts);
     }
+  }
+
+  public boolean getEngaged() {
+    return engaged;
   }
 
   @Override
