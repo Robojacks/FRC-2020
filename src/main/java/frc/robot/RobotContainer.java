@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.Arrays;
@@ -77,7 +78,7 @@ public class RobotContainer {
   private final Gears gears = new Gears();
 
   // Update PID values
-  private final Update update = new Update(colorSense, shooter, spinner);
+  private final Update update = new Update(colorSense, shooter, spinner, plucker);
 
   // Drive with Controller 
   private Command manualDrive = new RunCommand(
@@ -99,19 +100,21 @@ public class RobotContainer {
     spinner.move(xbox.getRawAxis(Axis.kRightTrigger.value)), spinner);
 
   // Autonomous 
-  private Command shootThenGo = new InstantCommand(() -> goalMover.collectPose(), goalMover)
-    .andThen(new WaitCommand(.75)) 
-    .andThen(() -> goalMover.shootPose(), goalMover)
-    .andThen(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter)
-    .andThen(() -> conveyor.toggleSpeedHighGoal(conveyorVolts), conveyor)
-    .andThen(() -> plucker.toggleSpeedHighGoal(inPluckerVolts, outPluckerVolts), plucker)
-    .andThen(new WaitCommand(2 + shooterRampUpTime))
-    .andThen(() -> shooter.stop(), shooter)
-    .andThen(() -> conveyor.stop(), conveyor)
-    .andThen(() -> plucker.stop(), plucker)
-    .andThen(new RunCommand(() -> rDrive.getDifferentialDrive().tankDrive(0.4, 0.4), rDrive)
-      .withTimeout(2));
-  
+  private SequentialCommandGroup shootThenGo = new SequentialCommandGroup(
+    new WaitCommand(2),
+    new InstantCommand(() -> goalMover.collectPose(), goalMover),
+    new WaitCommand(.75), 
+    new InstantCommand(() -> goalMover.shootPose(), goalMover),
+    new InstantCommand(() -> shooter.toggleSpeedSpark(intakeRPM, shooterRPM), shooter),
+    new InstantCommand(() -> conveyor.toggleSpeedHighGoal(conveyorVolts), conveyor),
+    new InstantCommand(() -> plucker.toggleSpeedHighGoal(inPluckerVolts, outPluckerVolts), plucker),
+    new WaitCommand(2 + shooterRampUpTime),
+    new InstantCommand(() -> shooter.stop(), shooter),
+    new InstantCommand(() -> conveyor.stop(), conveyor),
+    new InstantCommand(() -> plucker.stop(), plucker),
+    new RunCommand(() -> rDrive.getDifferentialDrive().tankDrive(0.6, 0.6), rDrive).withTimeout(2)
+  ); 
+
   private RamseteCommand rbase = new RamseteCommand(
     getMovingTrajectory(), 
     rDrive::getPose, 
@@ -151,13 +154,11 @@ public class RobotContainer {
     // Shoot or intake with voltage, aiming for low goal
     new JoystickButton(xbox, Button.kBumperLeft.value)
     .whenPressed(() -> shooter.toggleSpeedVolts(intakeVolts, shooterVolts), shooter)
-    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts), shooter)
-    .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
+    .whenPressed(() -> conveyor.toggleSpeedLowGoal(conveyorVolts), shooter);
     
     // Shoot or intake with set velocity, specifically for high goal
     new JoystickButton(xbox, Button.kB.value)
-    .whileHeld(() -> plucker.setSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker)
-    .whenReleased(() -> plucker.setSpeedLowGoal(0, 0), plucker);
+    .whenPressed(() -> plucker.toggleSpeedLowGoal(inPluckerVolts, outPluckerVolts), plucker);
     
     // Switches arm modes from up to down
     new JoystickButton(xbox, Button.kY.value)
