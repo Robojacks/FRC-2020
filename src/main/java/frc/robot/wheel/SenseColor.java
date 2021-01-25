@@ -21,9 +21,6 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
 public class SenseColor extends SubsystemBase {
-  /**
-   * Creates a new SenseColor.
-   */
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
   private int proximity = m_colorSensor.getProximity();
@@ -51,7 +48,6 @@ public class SenseColor extends SubsystemBase {
 
     GREEN(Constants.kGreenTarget,3,"G");
 
-    
     private final int position;
     private final String capital;
     private final Color target; 
@@ -62,6 +58,7 @@ public class SenseColor extends SubsystemBase {
       this.position = position;
       this.capital = capital;
     }
+
     /**
      * 
      * @param n = number of ofset color counterclockwise
@@ -71,7 +68,6 @@ public class SenseColor extends SubsystemBase {
       n = this.position + n % 4;
 
       if (n == YELLOW.position) {
-    
         return YELLOW;
       }
 
@@ -92,15 +88,11 @@ public class SenseColor extends SubsystemBase {
       }
     
     }
-   
-     
 
-    public String getCapital() {
-      return capital;
-    }
+  public String getCapital() {
+    return capital;
+  }
 
-    
-    
 	public static Colour fromString (final String Ch){
     switch(Ch){
     case("B"):
@@ -119,15 +111,6 @@ public class SenseColor extends SubsystemBase {
 
 }
   
-      
-
-
-
-
- 
-
-
-
   public double getRawColor() {
     IR = m_colorSensor.getIR();
     return IR;

@@ -13,11 +13,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.vision.Limelight;
 
 import static frc.robot.Gains.shooterPID.*;
@@ -52,13 +49,13 @@ public class Shooter extends SubsystemBase {
   }
 
 
-  public void collect(double inVolts) {
-    launcher.setVoltage(-inVolts);
+  public void collect() {
+    launcher.setVoltage(intakeVolts);
     engaged = true;
   }
 
-  public void shoot(double outVolts) {
-    launcher.setVoltage(outVolts);
+  public void shoot() {
+    launcher.setVoltage(shooterVolts);
     engaged = true;
   }
 
@@ -72,58 +69,52 @@ public class Shooter extends SubsystemBase {
   /**
    * Sets a voltage based on whether the robot is in shooting position or
    * intake position. 
-   * @param inVolts The voltage sent to the shooter while in the intake position
-   * @param outVolts The voltage sent to the shooter while in the shooting position
    */
-  public void setSpeedVolts(double inVolts, double outVolts){
-    if (goalMover.getCollecting()) {
+  public void setSpeedVolts() {
+    if (goalMover.isCollectingPose()) {
       // if in intake position, intake
-      collect(inVolts);
+      collect();
 
     } else {
-      shoot(outVolts);
+      shoot();
 
     }
   }
 
   /**
    * Toggles shooter on and off with the specified voltage
-   * @param inVolts voltage applied with intake
-   * @param outVolts voltage applied with shooting
    */
-  public void toggleSpeedVolts(double inVolts, double outVolts) {
+  public void toggleSpeedVolts() {
     if (engaged) {
       stop();
 
     } else {
-      setSpeedVolts(inVolts, outVolts);
+      setSpeedVolts();
     }
   }
 
   /**
    * Sets RPM based on whether the robot is in shooting position or 
-   * intake position. 
-   * @param inRPM The velocity in RPM the shooter goes to while in the intake position
-   * @param outRPM The velocity in RPM the shooter goes to while in the shooting position
+   * intake position.
    */
-  public void setSpeedSpark(double inRPM, double outRPM){
-    if (goalMover.getCollecting()) {
-      launcherController.setReference(-inRPM, ControlType.kVelocity);
-      engaged = true;
+  public void setSpeedSpark() {
+    if (goalMover.isCollectingPose()) {
+      launcherController.setReference(intakeRPM, ControlType.kVelocity);
 
     } else {
-      launcherController.setReference(outRPM, ControlType.kVelocity);
-      engaged = true;
+      launcherController.setReference(shooterRPM, ControlType.kVelocity);
 
     }
+
+    engaged = true;
   }
 
-  public void toggleSpeedSpark(double inRPM, double outRPM) {
+  public void toggleSpeedSpark() {
     if (engaged) {
       stop();
 
     } else {
-      setSpeedSpark(inRPM, outRPM);
+      setSpeedSpark();
 
     }
   }
@@ -155,9 +146,9 @@ public class Shooter extends SubsystemBase {
    * @param inRPM the velocity in RPM the shooter goes to while in the intake position
    * @param distance the distance in meters from the target
    */
-  public void setRelativeSpeedSpark(double inRPM, double distance){
-    if (goalMover.getCollecting()) {
-      launcherController.setReference(-inRPM, ControlType.kVelocity);
+  public void setRelativeSpeedSpark(double distance){
+    if (goalMover.isCollectingPose()) {
+      launcherController.setReference(intakeRPM, ControlType.kVelocity);
       engaged = true;
 
     } else {
@@ -167,14 +158,16 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public void toggleRelativeSpeedSpark(double inRPM, double distance) {
+  public void toggleRelativeSpeedSpark(double distance) {
     if (engaged) {
       stop();
+      
       vision.driverMode();
       vision.lightOff();
 
     } else {
-      setSpeedSpark(inRPM, distance);
+      setRelativeSpeedSpark(distance);
+
       vision.visionMode();
       vision.lightOn();
     }
@@ -194,7 +187,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     /*
-    if (goalMover.isSwapping){
+    if (goalMover.isSwapping) {
       stop();
       goalMover.isSwapping = false;
     }

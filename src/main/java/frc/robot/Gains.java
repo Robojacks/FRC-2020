@@ -46,8 +46,8 @@ public class Gains {
 
 	// Ramsete controller constants
 	public static class Ramsete {
-		public static final double kb = 2;
-		public static final double kzeta = 0.7;
+		public static final double kBeta = 2.0;
+		public static final double kZeta = 0.7;
 	}
 
 	// Feed Forward Constants

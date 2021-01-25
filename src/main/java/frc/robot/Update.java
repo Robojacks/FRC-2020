@@ -36,8 +36,6 @@ public class Update {
 
   private static final SendableChooser choosePosition = new SendableChooser<Pose2d>();
 
-
-
   public Update(SenseColor colorSensing, Shooter shooter, Spinner spinner, Plucker plucker) {
     m_shooter = shooter;
     colorSense = colorSensing;

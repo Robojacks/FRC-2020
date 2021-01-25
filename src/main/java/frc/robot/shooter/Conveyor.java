@@ -9,67 +9,48 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class Conveyor extends SubsystemBase {
   private ChangePosition goalMover;
-  private Shooter m_shooter;
 
   private WPI_TalonSRX conveyor = new WPI_TalonSRX(kConveyorPort);
 
+  private boolean engaged = false;
 
   /**
    * Creates a new Conveyor.
    */
-  public Conveyor(ChangePosition changePosition, Shooter shooter) {
+  public Conveyor(ChangePosition changePosition) {
     goalMover = changePosition;
-    m_shooter = shooter;
   }
 
   public void stop() {
-    setSpeedLowGoal(0);
+    conveyor.setVoltage(0);
+    engaged = false;
   }
 
+  public void collect() {
+    conveyor.setVoltage(inConveyorVolts);
+    engaged = true;
+  }
+
+  public void shoot() {
+    conveyor.setVoltage(outConveyorVolts);
+    engaged = true;
+  }
+  
   /**
    * Sets a voltage based on whether the robot is in low goal shooting position or
    * intake position. 
-   * @param beltVolts The voltage sent to the conveyor belt, changing direction
-   * depending on whether the shooter is in the intake or shooting position
    */
-
-  public void shoot(double beltVolts) {
-    conveyor.setVoltage(beltVolts);
-  }
-
-  public void collect(double beltVolts) {
-    conveyor.setVoltage(-beltVolts);
-  }
-
-  public void setSpeedLowGoal(double beltVolts){
-    if (goalMover.getCollecting()) {
-      collect(beltVolts);
+  public void setSpeed() {
+    if (goalMover.isCollectingPose()) {
+      collect();
 
     } else {
-      shoot(beltVolts);
-    }
-  }
-
-  /**
-   * Sets a voltage based on whether the robot is in high goal shooting position or
-   * intake position. 
-   * @param beltVolts The voltage sent to the conveyor belt, changing direction
-   * depending on whether the shooter is in the intake or shooting position
-   */
-  public void setSpeedHighGoal(double beltVolts){
-    if (goalMover.getCollecting()) {
-      conveyor.setVoltage(-beltVolts);
-
-    } else {
-      // Delays start up time when in shooting position
-      Timer.delay(shooterRampUpTime);
-      conveyor.setVoltage(beltVolts);
+      shoot();
     }
   }
 
@@ -78,24 +59,13 @@ public class Conveyor extends SubsystemBase {
    * with the specified voltage
    * @param beltVolts voltage applied to the conveyor when it is on
    */
-  public void toggleSpeedLowGoal(double beltVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedLowGoal(beltVolts);
-    } else {
+  public void toggleSpeed() {
+    if (engaged) {
       stop();
-    }
-  }
 
-  /**
-   * Relying on the the shooter state, toggles conveyor on and off 
-   * with the specified voltage
-   * @param beltVolts voltage applied to the conveyor when it is on
-   */
-  public void toggleSpeedHighGoal(double beltVolts) {
-    if (m_shooter.isEngaged()) {
-      setSpeedHighGoal(beltVolts);
     } else {
-      stop();
+      setSpeed();
+
     }
   }
 
